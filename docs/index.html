@@ -63,7 +63,10 @@ body.simple .adv{display:none!important}.mode{display:flex}.mode button{border-r
 <div><label>Wertentwicklung % p. a.</label><input id="ws" class="r" value="1"></div>
 <div><label>Verkaufskosten %</label><input id="vk" class="r" value="2"></div>
 <div><label>Ziel-Nettorendite %</label><input id="zr" class="r" value="4"></div>
-<div><label>Ziel-Eigenkapitalrendite (IRR) %</label><input id="zirr" class="r" value="6"></div></div></section>
+<div><label>Ziel-Eigenkapitalrendite (IRR) %</label><input id="zirr" class="r" value="6"></div>
+<div><label>Persönlicher Steuersatz %</label><input id="st" class="r" value="30"></div>
+<div><label>Gebäudeanteil am Preis %</label><input id="gs" class="r" value="80"></div>
+<div><label>Abschreibung (AfA) % p. a.</label><input id="afa" class="r" value="2"></div></div></section>
 </div>
 
 <div>
@@ -81,7 +84,7 @@ const nf=(x,d=0)=>x==null||!isFinite(x)?"–":x.toLocaleString("de-DE",{minimumF
 const num=s=>{s=String(s??"").trim().replace(/\s/g,"");if(!s)return null;if(s.includes(","))s=s.replace(/\./g,"").replace(",",".");const v=parseFloat(s);return isNaN(v)?null:v};
 const BL={"Baden-Württemberg":5,"Bayern":3.5,"Berlin":6,"Brandenburg":6.5,"Bremen":5,"Hamburg":5.5,"Hessen":6,"Mecklenburg-Vorpommern":6,"Niedersachsen":5,"Nordrhein-Westfalen":6.5,"Rheinland-Pfalz":5,"Saarland":6.5,"Sachsen":5.5,"Sachsen-Anhalt":5,"Schleswig-Holstein":6.5,"Thüringen":5};
 $("bl").innerHTML=Object.keys(BL).map(k=>`<option>${k}</option>`).join("");
-const F=["name","kp","wf","san","vgl","vglq","mist","mmar","mq","mmode","lee","nuk","ihr","bl","grest","not","mak","ek","zi","ti","hd","ms","ws","vk","zr","zirr"];
+const F=["name","kp","wf","san","vgl","vglq","mist","mmar","mq","mmode","lee","nuk","ihr","bl","grest","not","mak","ek","zi","ti","hd","ms","ws","vk","zr","zirr","st","gs","afa"];
 try{const o=JSON.parse(localStorage.getItem("kc1")||"null");if(o)F.forEach(f=>{if(o[f]!=null)$(f).value=o[f]})}catch(e){}
 if(!$("grest").value)$("grest").value=nf(BL[$("bl").value],1);
 $("bl").addEventListener("change",()=>{$("grest").value=nf(BL[$("bl").value],1);calc()});
@@ -94,10 +97,11 @@ function model(kp,P){
  const dar=Math.max(0,ges-P.ek),P_=dar*(P.zi+P.ti)/100;
  const cf=[-Math.min(P.ek,ges)];let bal=dar,rows=[],miet=jm;
  for(let y=1;y<=P.hd;y++){const r=(y==1?1:Math.pow(1+P.ms/100,y-1));const ein=(jm-aus)*r-kost;const zins=bal*P.zi/100;const ca=ein-P_;bal=Math.max(0,bal*(1+P.zi/100)-P_);cf.push(ca);rows.push([y,ein,P_,ca,bal])}
+ const afaB=kp*(1+nk)*P.gs/100+sn,afa=afaB*P.afa/100,zins1=dar*P.zi/100,tx=jm-aus-kost-zins1-afa,steuer=tx*P.st/100;
  const wert=(kp+sn)*Math.pow(1+P.ws/100,P.hd),erl=wert*(1-P.vk/100)-bal;cf[cf.length-1]+=erl;
- return{ges,nk,jm,rein,net:rein/ges*100,bru:jm/ges*100,fak:ges/jm,dar,P_,cf0:(rein-P_)/12,cfs:cf,irr:irr(cf),rows,wert,erl,bal,mie,kost,aus};}
+ return{afa,zins1,tx,steuer,cfn:(rein-P_-steuer)/12,ges,nk,jm,rein,net:rein/ges*100,bru:jm/ges*100,fak:ges/jm,dar,P_,cf0:(rein-P_)/12,cfs:cf,irr:irr(cf),rows,wert,erl,bal,mie,kost,aus};}
 function readVals(){const o={};F.forEach(f=>o[f]=$(f).value);return o}
-function parseP(v){return{wf:num(v.wf),san:num(v.san)||0,vgl:num(v.vgl),mist:num(v.mist),mmar:num(v.mmar),mode:v.mmode,lee:num(v.lee)||0,nuk:num(v.nuk)||0,ihr:num(v.ihr)||0,grest:num(v.grest)||0,not:num(v.not)||0,mak:num(v.mak)||0,ek:num(v.ek)||0,zi:num(v.zi)||0,ti:num(v.ti)||0,hd:Math.max(1,Math.min(40,Math.round(num(v.hd)||10))),ms:num(v.ms)||0,ws:num(v.ws)||0,vk:num(v.vk)||0}}
+function parseP(v){return{wf:num(v.wf),san:num(v.san)||0,vgl:num(v.vgl),mist:num(v.mist),mmar:num(v.mmar),mode:v.mmode,lee:num(v.lee)||0,nuk:num(v.nuk)||0,ihr:num(v.ihr)||0,grest:num(v.grest)||0,not:num(v.not)||0,mak:num(v.mak)||0,ek:num(v.ek)||0,zi:num(v.zi)||0,ti:num(v.ti)||0,hd:Math.max(1,Math.min(40,Math.round(num(v.hd)||10))),ms:num(v.ms)||0,ws:num(v.ws)||0,vk:num(v.vk)||0,st:num(v.st)??30,gs:num(v.gs)??80,afa:num(v.afa)??2}}
 function judge(v){const P=parseP(v),kp=num(v.kp),zr=num(v.zr)||0,zirr=num(v.zirr)||0;if(!kp||!P.wf)return{m:null,leer:true};const m=model(kp,P);if(!m)return{m:null};
  const ppm=kp/P.wf,rule=[];const c1=m.net>=zr,c2=m.cf0>=0,c3=m.irr!=null&&m.irr*100>=zirr,c4=P.vgl==null?null:ppm<=P.vgl*1.05;
  rule.push([c1,`Nettorendite ${nf(m.net,2)} % ${c1?"erreicht":"unter"} Ziel ${nf(zr,1)} %`]);rule.push([c2,`Cashflow nach Kapitaldienst ${nf(m.cf0)} € pro Monat ${c2?"(positiv)":"(negativ, du zahlst zu)"}`]);
@@ -113,11 +117,13 @@ function stress(v){const J=judge(v);if(!J.m)return null;const P=J.P,kp=J.kp,mi=(
  const base=J.m;let kz=null,km=null;
  if(base.dar>0){kz=base.rein/base.dar*100-P.ti}
  const cf=x=>{const Q={...P};Q[mi]=x;return model(kp,Q).cf0};let lo=0,hi=P[mi]*3;if(cf(hi)>=0&&cf(lo)<0){for(let i=0;i<60;i++){const mid=(lo+hi)/2;if(cf(mid)>=0)hi=mid;else lo=mid}km=hi}else if(cf(P[mi])>=0&&cf(0)>=0)km=0;
- return{sc,kz,km,mi:P[mi],J}}
+ const cfK=x=>model(x,P).cf0;let kBE=null;{let lo=kp*0.05,hi=kp*5;if(cfK(lo)>=0&&cfK(hi)<0){for(let i=0;i<60;i++){const mid=(lo+hi)/2;if(cfK(mid)>=0)lo=mid;else hi=mid}kBE=lo}}
+ const cfL=x=>model(kp,{...P,lee:x}).cf0;let lBE=null;if(cfL(0)>=0&&cfL(100)<0){let lo=0,hi=100;for(let i=0;i<60;i++){const mid=(lo+hi)/2;if(cfL(mid)>=0)lo=mid;else hi=mid}lBE=lo}
+ return{sc,kz,km,kBE,lBE,mi:P[mi],J}}
 function drawStress(){const S=stress(readVals());const el=$("stress");if(!S){el.innerHTML='<div class="small">Erscheint, sobald ein Ergebnis berechnet ist.</div>';return}
  let h="<tr><th>Szenario</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th><th></th></tr>";
  S.sc.forEach(x=>{const m=x.m,ok=m.cf0>=0&&m.net>=S.J.zr;h+=`<tr><td>${x.n}</td><td class="n">${nf(m.net,2)} %</td><td class="n">${nf(m.cf0)} €</td><td class="n">${m.irr==null?"–":nf(m.irr*100,1)+" %"}</td><td>${m.cf0<0?"🔴":(ok?"🟢":"🟡")}</td></tr>`});
- let k="";if(S.kz!=null)k+=`Der Cashflow wird negativ ab einem Zins von <b>${nf(S.kz,2)} %</b> (aktuell ${nf(S.J.P.zi,2)} %). `;
+ let k="";if(S.kBE!=null)k+=`Break-even-Kaufpreis (Cashflow ±0): <b>${nf(S.kBE)} €</b> (${nf((S.kBE/S.J.kp-1)*100,1)} % zum Angebot). `;if(S.lBE!=null)k+=`Leerstand darf bis <b>${nf(S.lBE,1)} %</b> steigen. `;if(S.kz!=null)k+=`Der Cashflow wird negativ ab einem Zins von <b>${nf(S.kz,2)} %</b> (aktuell ${nf(S.J.P.zi,2)} %). `;
  if(S.km!=null)k+=`Die Miete darf bis <b>${nf(S.km,2)} €/m²</b> sinken, bevor der Cashflow negativ wird (aktuell ${nf(S.mi,2)} €/m²).`;
  $("stress").innerHTML="<table>"+h+"</table>"+(k?`<div class="note" style="margin-top:8px">${k}</div>`:"")}
 let OBJ=[];try{OBJ=JSON.parse(localStorage.getItem("kcobj")||"[]")}catch(e){}
@@ -145,8 +151,8 @@ function calc(){
  +(cls!="ok"&&maxkp>0?`<div style="margin-top:8px"><b>Verhandlungsziel:</b> Für ${nf(zr,1)} % Nettorendite dürfte der Kaufpreis höchstens <b>${nf(maxkp)} €</b> betragen (${nf((1-maxkp/kp)*100,1)} % unter Angebot).</div>`:"");
  $("kz").innerHTML=[["Gesamtinvestition",nf(m.ges)+" €",`inkl. ${nf(m.nk*100,1)} % Nebenkosten und Sanierung`],["Nettorendite",nf(m.net,2)+" %",`Brutto ${nf(m.bru,2)} % · Faktor ${nf(m.fak,1)}`],
   ["Cashflow / Monat",nf(m.cf0)+" €",`Reinertrag ${nf(m.rein)} €/Jahr · Kapitaldienst ${nf(m.P_)} €/Jahr`],["Eigenkapitalrendite (IRR)",m.irr==null?"–":nf(m.irr*100,1)+" %",`nach ${P.hd} Jahren Verkauf`],
-  ["Kaufpreis pro m²",nf(ppm)+" €",P.vgl?`Vergleich ${nf(P.vgl)} €/m² (${nf((ppm/P.vgl-1)*100,1)} %)`:"kein Vergleichspreis"],["Darlehen",nf(m.dar)+" €",`${nf(m.ges>0?m.dar/m.ges*100:0,0)} % Beleihung`]]
-  .map(([l,v,s])=>`<div class="k"><div class="l">${l}</div><div class="v n">${v}</div><div class="s">${s}</div></div>`).join("");
+  ["Kaufpreis pro m²",nf(ppm)+" €",P.vgl?`Vergleich ${nf(P.vgl)} €/m² (${nf((ppm/P.vgl-1)*100,1)} %)`:"kein Vergleichspreis"],["Darlehen",nf(m.dar)+" €",`${nf(m.ges>0?m.dar/m.ges*100:0,0)} % Beleihung`],["Cashflow nach Steuern / Monat",nf(m.cfn)+" €",`Jahr 1: ${m.steuer>=0?"Steuer "+nf(m.steuer):"Erstattung "+nf(-m.steuer)} € (Überschlag)|adv`]]
+  .map(([l,v,s])=>{const a=s.endsWith("|adv");if(a)s=s.slice(0,-4);return`<div class="k${a?" adv":""}"><div class="l">${l}</div><div class="v n">${v}</div><div class="s">${s}</div></div>`}).join("");
  let h="<tr><th>Kaufpreis</th><th>Preis</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th></tr>";
  [0,-5,-10,-15,-20].forEach(d=>{const k2=kp*(1+d/100),mm=model(k2,P);h+=`<tr><td>${d?d+" %":"Angebot"}</td><td class="n">${nf(k2)} €</td><td class="n">${nf(mm.net,2)} %</td><td class="n">${nf(mm.cf0)} €</td><td class="n">${mm.irr==null?"–":nf(mm.irr*100,1)+" %"}</td></tr>`});
  $("sens").innerHTML=h;drawStress();
@@ -159,7 +165,7 @@ function calc(){
 const HELP={kp:"Der verlangte Kaufpreis ohne Nebenkosten.",wf:"Vermietbare Wohn- oder Nutzfläche in m², nicht die Grundstücksfläche.",mist:"Kaltmiete pro m² und Monat ohne Nebenkosten (Ist-Miete laut Mietvertrag).",ek:"Dein eigenes Geld, das du einbringst. Der Rest wird als Darlehen angesetzt.",
  san:"Kosten, die du direkt nach dem Kauf für Sanierung oder Modernisierung einplanst.",vgl:"Typischer Kaufpreis pro m² in der Gegend, z. B. vom Gutachterausschuss. Dient zum Preis-Check.",mmar:"Aktuelle ortsübliche Miete laut Mietspiegel, falls die Ist-Miete davon abweicht.",lee:"Anteil der Miete, der durch Leerstand oder Zahlungsausfall wegfällt.",nuk:"Kosten, die der Vermieter selbst trägt und nicht auf Mieter umlegen kann (z. B. Verwaltung).",ihr:"Geld, das du jährlich für Reparaturen zurücklegen solltest. Bei älteren Häusern eher mehr.",
  grest:"Steuer beim Kauf, je nach Bundesland. Bitte aktuellen Satz prüfen.",not:"Notar- und Grundbuchkosten, meist rund 1,5 bis 2 %.",mak:"Maklerprovision des Käufers inklusive Mehrwertsteuer, falls ein Makler beteiligt ist.",zi:"Zinssatz des Darlehens pro Jahr.",ti:"Anfängliche Tilgung pro Jahr in Prozent des Darlehens.",hd:"Wie viele Jahre du die Immobilie halten willst, bevor du rechnerisch verkaufst.",ms:"Erwartete jährliche Steigerung der Miete.",ws:"Erwartete jährliche Wertentwicklung der Immobilie.",vk:"Kosten beim späteren Verkauf in Prozent des Erlöses.",zr:"Mindest-Nettorendite, die du erreichen willst. Darunter wird das Urteil schlechter.",zirr:"Mindest-Rendite auf dein eingesetztes Eigenkapital (inkl. Verkauf am Ende). Alles darüber ist gut.",
- ans:"Nur im Baukostenrechner relevant."};
+ st:"Dein persönlicher Grenzsteuersatz auf Mieteinkünfte (grobe Schätzung, frag im Zweifel den Steuerberater).",gs:"Anteil des Kaufpreises, der auf das Gebäude entfällt (Grund und Boden ist nicht abschreibbar). Oft 70 bis 85 %.",afa:"Jährliche steuerliche Abschreibung des Gebäudes. Üblich: 2 % (Neubau ab 2023: 3 %, Altbau vor 1925: 2,5 %).",ans:"Nur im Baukostenrechner relevant."};
 Object.keys(HELP).forEach(id=>{const e=$(id);if(!e)return;const l=e.parentElement.querySelector("label");if(l){const i=document.createElement("i");i.className="hi";i.tabIndex=0;i.textContent="?";i.dataset.t=HELP[id];l.appendChild(i)}});
 function setMode(x){document.body.classList.toggle("simple",!x);$("mE").className=x?"":"on";$("mX").className=x?"on":"";try{localStorage.setItem("kcm",x)}catch(e){}}
 function beispiel(){const v={name:"Beispiel: Mehrfamilienhaus",kp:"330000",wf:"240",mist:"8,5",ek:"100000"};F.forEach(f=>{if(v[f]!=null)$(f).value=v[f]});calc()}
