@@ -19,39 +19,43 @@ button{padding:7px 13px;border:1px solid var(--bd);border-radius:7px;background:
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:12px}
 table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:5px 6px;text-align:right;border-bottom:1px solid var(--bd)}th:first-child,td:first-child{text-align:left}
 .small{font-size:12px;color:var(--mu)}.tag{display:inline-block;font-size:11px;background:var(--ac2);color:var(--ac);border-radius:5px;padding:1px 6px;margin-left:4px}
+body.simple .adv{display:none!important}.mode{display:flex}.mode button{border-radius:0}.mode button:first-child{border-radius:7px 0 0 7px}.mode button:last-child{border-radius:0 7px 7px 0;border-left:0}.mode button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.hi{display:inline-block;width:15px;height:15px;border-radius:50%;background:var(--ac2);color:var(--ac);font-size:10px;text-align:center;line-height:15px;margin-left:4px;cursor:help;position:relative;font-style:normal}
+.hi:hover::after,.hi:focus::after{content:attr(data-t);position:absolute;left:0;top:19px;z-index:9;width:240px;background:var(--tx);color:var(--bg);padding:8px 10px;border-radius:7px;font-size:12px;line-height:1.35;font-weight:400}
+.empty{text-align:center;padding:10px}.empty button{margin-top:10px}
 @media print{header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
 <header><h1>🏠 Kaufcheck Immobilie</h1><span class="small">Angebot rein, Entscheidung raus</span><a href="baukosten.html" class="small" style="color:var(--ac)">→ Baukostenrechner</a><div class="sp"></div>
-<button class="p" onclick="window.print()">Als PDF drucken</button><button onclick="neu()">Neu</button></header>
+<div class="mode"><button id="mE" onclick="setMode(0)">Einfach</button><button id="mX" onclick="setMode(1)">Experte</button></div><button onclick="beispiel()">Beispiel laden</button><button class="p" onclick="window.print()">Als PDF drucken</button><button onclick="neu()">Neu</button></header>
 <main>
 <div>
-<section><h2>1 · Angebot</h2><div class="g">
+<section><h2>1 · Das Angebot <span class="small">(nur diese vier Zahlen sind nötig)</span></h2><div class="g">
 <div style="grid-column:1/-1"><label>Objekt / Adresse</label><input id="name" placeholder="z. B. MFH Musterstr. 5, Melle"></div>
 <div><label>Kaufpreis €</label><input id="kp" class="r" placeholder="450000"></div>
 <div><label>Wohn-/Nutzfläche m²</label><input id="wf" class="r" placeholder="240"></div>
-<div><label>Sanierung/Modernisierung € (sofort)</label><input id="san" class="r" value="0"></div>
-<div><label>Vergleichspreis €/m² (Bodenrichtwert/Marktbericht)</label><input id="vgl" class="r"></div>
-<div style="grid-column:1/-1"><label>Quelle Vergleichspreis</label><input id="vglq" placeholder="z. B. Gutachterausschuss 2025, ImmoScout"></div></div></section>
+<div><label>Ist-Miete netto kalt €/m² Monat</label><input id="mist" class="r" placeholder="8,50"></div>
+<div><label>Eigenkapital €</label><input id="ek" class="r" placeholder="100000"></div>
+<div class="adv"><label>Sanierung/Modernisierung € (sofort)</label><input id="san" class="r" value="0"></div>
+<div class="adv"><label>Vergleichspreis €/m² (Bodenrichtwert/Marktbericht)</label><input id="vgl" class="r"></div>
+<div class="adv" style="grid-column:1/-1"><label>Quelle Vergleichspreis</label><input id="vglq" placeholder="z. B. Gutachterausschuss 2025, ImmoScout"></div></div></section>
 
-<section><h2>2 · Miete und laufende Kosten</h2><div class="g">
-<div><label>Ist-Miete netto kalt €/m² Monat</label><input id="mist" class="r"></div>
-<div><label>Marktmiete €/m² (Mietspiegel)</label><input id="mmar" class="r"></div>
-<div style="grid-column:1/-1"><label>Quelle Marktmiete</label><input id="mq" placeholder="z. B. Mietspiegel Ort/Jahr"></div>
-<div><label>Rechne mit</label><select id="mmode"><option value="ist">Ist-Miete</option><option value="markt">Marktmiete</option></select></div>
-<div><label>Leerstand/Mietausfall %</label><input id="lee" class="r" value="3"></div>
-<div><label>Nicht umlagefähige Kosten €/m² Jahr</label><input id="nuk" class="r" value="12"></div>
-<div><label>Instandhaltungsrücklage €/m² Jahr</label><input id="ihr" class="r" value="12"></div></div>
-<div class="small" style="margin-top:6px">Rücklage und Kosten sind Annahmen: bitte an das Objekt anpassen (Alter, Zustand).</div></section>
+<section class="adv"><h2>2 · Miete und laufende Kosten <span class="small adv">(Annahmen)</span></h2><div class="g">
+<div class="adv"><label>Marktmiete €/m² (Mietspiegel)</label><input id="mmar" class="r"></div>
+<div class="adv" style="grid-column:1/-1"><label>Quelle Marktmiete</label><input id="mq" placeholder="z. B. Mietspiegel Ort/Jahr"></div>
+<div class="adv"><label>Rechne mit</label><select id="mmode"><option value="ist">Ist-Miete</option><option value="markt">Marktmiete</option></select></div>
+<div class="adv"><label>Leerstand/Mietausfall %</label><input id="lee" class="r" value="3"></div>
+<div class="adv"><label>Nicht umlagefähige Kosten €/m² Jahr</label><input id="nuk" class="r" value="12"></div>
+<div class="adv"><label>Instandhaltungsrücklage €/m² Jahr</label><input id="ihr" class="r" value="12"></div></div>
+<div class="small adv" style="margin-top:6px">Rücklage und Kosten sind Annahmen: bitte an das Objekt anpassen (Alter, Zustand).</div></section>
 
-<section><h2>3 · Kaufnebenkosten</h2><div class="g">
+<section class="adv"><h2>3 · Kaufnebenkosten</h2><div class="g">
 <div><label>Bundesland (Grunderwerbsteuer)</label><select id="bl"></select></div>
 <div><label>Grunderwerbsteuer %</label><input id="grest" class="r"></div>
 <div><label>Notar + Grundbuch %</label><input id="not" class="r" value="2"></div>
 <div><label>Makler % (inkl. MwSt.)</label><input id="mak" class="r" value="3,57"></div></div>
 <div class="small" style="margin-top:6px">Steuersätze nach Bundesland bitte aktuell prüfen. Sie können sich ändern.</div></section>
 
-<section><h2>4 · Finanzierung und Annahmen</h2><div class="g">
-<div><label>Eigenkapital €</label><input id="ek" class="r" placeholder="100000"></div>
+<section class="adv"><h2>4 · Finanzierung und Annahmen</h2><div class="g">
 <div><label>Zins % p. a.</label><input id="zi" class="r" value="3,8"></div>
 <div><label>Tilgung % p. a.</label><input id="ti" class="r" value="2"></div>
 <div><label>Haltedauer Jahre</label><input id="hd" class="r" value="10"></div>
@@ -66,7 +70,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:5px 6px;t
 <div id="verdict"></div>
 <div class="cards" id="kz"></div>
 <section><h2>Kaufpreis-Sensitivität (Verhandlungsspielraum)</h2><table id="sens"></table><div class="small" id="maxkp" style="margin-top:8px"></div></section>
-<section><h2>Entwicklung über die Haltedauer</h2><table id="verl"></table></section>
+<section class="adv"><h2>Entwicklung über die Haltedauer</h2><table id="verl"></table></section>
 <div class="small">Überschlagsrechnung vor Steuern, ohne Förderung, Sonderumlagen und Leerstandsrisiken im Einzelfall. Keine Anlage- oder Rechtsberatung. Alle Annahmen stehen links und sind änderbar. Eingaben bleiben nur in deinem Browser.</div>
 </div></main>
 <script>
@@ -97,8 +101,8 @@ function calc(){
  const kp=num($("kp").value),zr=num($("zr").value)||0,zirr=num($("zirr").value)||0;
  try{const o={};F.forEach(f=>o[f]=$(f).value);localStorage.setItem("kc1",JSON.stringify(o))}catch(e){}
  const V=$("verdict");
- if(!kp||!P.wf){V.className="verdict";V.innerHTML='<div class="t">Angebot eingeben</div><div class="small">Kaufpreis und Fläche links eintragen, dann kommt die Entscheidung.</div>';$("kz").innerHTML=$("sens").innerHTML=$("verl").innerHTML=$("maxkp").innerHTML="";return}
- const m=model(kp,P);if(!m){V.className="verdict warn";V.innerHTML='<div class="t">Miete fehlt</div><div class="small">Bitte Ist- oder Marktmiete eintragen.</div>';return}
+ if(!kp||!P.wf){V.className="verdict";V.innerHTML='<div class="empty"><div class="t">Lohnt sich der Kauf?</div><div class="small">Trag links Kaufpreis, Fläche, Miete und Eigenkapital ein. Dann bekommst du sofort ein Urteil mit Begründung.</div><button class="p" onclick="beispiel()">Beispiel ausprobieren</button></div>';$("kz").innerHTML=$("sens").innerHTML=$("verl").innerHTML=$("maxkp").innerHTML="";return}
+ const m=model(kp,P);if(!m){V.className="verdict warn";V.innerHTML='<div class="t">Fast geschafft: Miete fehlt</div><div class="small">Trag die monatliche Nettokaltmiete pro m² ein (oder die Marktmiete im Experten-Modus).</div>';return}
  const ppm=kp/P.wf,rule=[];
  const c1=m.net>=zr,c2=m.cf0>=0,c3=m.irr!=null&&m.irr*100>=zirr,c4=P.vgl==null?null:ppm<=P.vgl*1.05;
  rule.push([c1,`Nettorendite ${nf(m.net,2)} % ${c1?"erreicht":"unter"} Ziel ${nf(zr,1)} %`]);
@@ -124,5 +128,13 @@ function calc(){
  t2+=`<tr><td colspan="5" class="small" style="text-align:left">Verkauf nach ${P.hd} J.: Wert ${nf(m.wert)} € abzgl. Kosten und Restschuld = Erlös ${nf(m.erl)} €</td></tr>`;
  $("verl").innerHTML=t2;
 }
+const HELP={kp:"Der verlangte Kaufpreis ohne Nebenkosten.",wf:"Vermietbare Wohn- oder Nutzfläche in m², nicht die Grundstücksfläche.",mist:"Kaltmiete pro m² und Monat ohne Nebenkosten (Ist-Miete laut Mietvertrag).",ek:"Dein eigenes Geld, das du einbringst. Der Rest wird als Darlehen angesetzt.",
+ san:"Kosten, die du direkt nach dem Kauf für Sanierung oder Modernisierung einplanst.",vgl:"Typischer Kaufpreis pro m² in der Gegend, z. B. vom Gutachterausschuss. Dient zum Preis-Check.",mmar:"Aktuelle ortsübliche Miete laut Mietspiegel, falls die Ist-Miete davon abweicht.",lee:"Anteil der Miete, der durch Leerstand oder Zahlungsausfall wegfällt.",nuk:"Kosten, die der Vermieter selbst trägt und nicht auf Mieter umlegen kann (z. B. Verwaltung).",ihr:"Geld, das du jährlich für Reparaturen zurücklegen solltest. Bei älteren Häusern eher mehr.",
+ grest:"Steuer beim Kauf, je nach Bundesland. Bitte aktuellen Satz prüfen.",not:"Notar- und Grundbuchkosten, meist rund 1,5 bis 2 %.",mak:"Maklerprovision des Käufers inklusive Mehrwertsteuer, falls ein Makler beteiligt ist.",zi:"Zinssatz des Darlehens pro Jahr.",ti:"Anfängliche Tilgung pro Jahr in Prozent des Darlehens.",hd:"Wie viele Jahre du die Immobilie halten willst, bevor du rechnerisch verkaufst.",ms:"Erwartete jährliche Steigerung der Miete.",ws:"Erwartete jährliche Wertentwicklung der Immobilie.",vk:"Kosten beim späteren Verkauf in Prozent des Erlöses.",zr:"Mindest-Nettorendite, die du erreichen willst. Darunter wird das Urteil schlechter.",zirr:"Mindest-Rendite auf dein eingesetztes Eigenkapital (inkl. Verkauf am Ende). Alles darüber ist gut.",
+ ans:"Nur im Baukostenrechner relevant."};
+Object.keys(HELP).forEach(id=>{const e=$(id);if(!e)return;const l=e.parentElement.querySelector("label");if(l){const i=document.createElement("i");i.className="hi";i.tabIndex=0;i.textContent="?";i.dataset.t=HELP[id];l.appendChild(i)}});
+function setMode(x){document.body.classList.toggle("simple",!x);$("mE").className=x?"":"on";$("mX").className=x?"on":"";try{localStorage.setItem("kcm",x)}catch(e){}}
+function beispiel(){const v={name:"Beispiel: Mehrfamilienhaus",kp:"330000",wf:"240",mist:"8,5",ek:"100000"};F.forEach(f=>{if(v[f]!=null)$(f).value=v[f]});calc()}
+let m0=0;try{if(localStorage.getItem("kcm")==="1")m0=1}catch(e){}setMode(m0);
 F.forEach(f=>$(f).addEventListener("input",calc));calc();
 </script></body></html>
