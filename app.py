@@ -420,6 +420,18 @@ def orientation_block(p: Project, ev: Evaluation) -> None:
                 st.caption(n)
             if ln.hinweis:
                 st.warning(ln.hinweis)
+            key = ln.bezugsgroesse.lower()
+            if ln.menge is None:
+                st.markdown(f"**{ln.bezugsgroesse} selbst eintragen** (z. B. aus der Flächenberechnung des Plans)")
+                c_a, c_b = st.columns([2, 1])
+                txt = c_a.text_input(f"{ln.bezugsgroesse} in {ln.mengeneinheit}", key=f"man_{key}", placeholder="z. B. 96,00")
+                if c_b.button("Übernehmen", key=f"manb_{key}") and parse_num(txt) is not None:
+                    p.set_override(key, value=parse_num(txt), note="Eingabe in der App (Quelle: Nutzer)")
+                    st.rerun()
+            elif key in p.state.overrides:
+                if st.button(f"{ln.bezugsgroesse}-Eingabe zurücknehmen", key=f"manu_{key}"):
+                    p.clear_override(key)
+                    st.rerun()
             if val is not None:
                 key_evs = [e for i in (calc.inputs if calc else []) for e in uniq(i.evidence, 3)]
                 evidence_button(p, key_evs or val.evidence, f"Belege {ln.bezugsgroesse} (je Eingangswert die ersten Fundstellen)",
