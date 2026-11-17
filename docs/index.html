@@ -58,6 +58,20 @@ table{width:100%;border-collapse:collapse}th{font-size:12px;color:var(--mu);text
 <select id="vor" style="width:auto"><option value="">Vorlage einfügen …</option><option>322|Bodenplatte|m²</option><option>334|Fenster|m²</option><option>334|Außentür|Stk</option><option>335|Äußere Bekleidung|m²</option><option>363|Dachbelag|m²</option><option>330|Außenwände|m²</option><option>340|Innenwände|m²</option><option>350|Decken|m²</option></select></div>
 <div class="cards" style="margin-top:12px"><div class="k"><div class="l">Bepreiste Teilkosten</div><div class="v n" id="bsum">–</div><div class="s" id="bs"></div></div></div>
 <div class="small" style="margin-top:6px">Diese Summe umfasst nur die erfassten Bauteile und wird nicht zur BKI-Orientierung addiert. Keine Gesamtprojektkosten aus lückenhaften Angaben.</div></section>
+<section><h2><span>5</span>Wirtschaftlichkeit (Vermietung)</h2>
+<div class="small" style="margin-bottom:8px">Die Miete trägst du aus dem örtlichen Mietspiegel oder Marktbericht selbst ein (mit Quelle), das Tool erfindet keine Mietwerte. Prozentwerte sind Annahmen und frei änderbar.</div>
+<div class="g g2">
+<div><label>Wohn-/Nutzfläche vermietbar m²</label><input id="wf" class="r"></div>
+<div><label>Nettokaltmiete €/m² und Monat</label><input id="mi" class="r"></div>
+<div style="grid-column:span 2"><label>Quelle Miete (Mietspiegel Ort/Jahr, Marktbericht)</label><input id="miq" placeholder="z. B. Mietspiegel Stadt Melle 2025, Baujahr ab 2020"></div>
+<div><label>Kostenansatz Bauwerk (KG 300+400)</label><select id="ans"><option value="BGF5">über BGF · Mittel</option><option value="BGF4">über BGF · Von</option><option value="BGF6">über BGF · Bis</option><option value="BRI8">über BRI · Mittel</option><option value="BRI7">über BRI · Von</option><option value="BRI9">über BRI · Bis</option></select></div>
+<div><label>Baunebenkosten KG 700 (% der Bauwerkskosten, Annahme)</label><input id="bnk" class="r" value="20"></div>
+<div><label>Grundstück inkl. Erwerbsnebenkosten €</label><input id="gru" class="r" value="0"></div>
+<div><label>Außenanlagen KG 500 €</label><input id="aus" class="r" value="0"></div>
+<div><label>Bewirtschaftung/Instandhaltung (% der Jahresmiete, Annahme)</label><input id="bew" class="r" value="25"></div>
+<div><label>Mietausfallwagnis (% der Jahresmiete, Annahme)</label><input id="mau" class="r" value="2"></div>
+<div><label>Ziel-Nettorendite % (Annahme)</label><input id="zr" class="r" value="4"></div></div>
+<div id="wi" class="cards" style="margin-top:12px"></div><div id="wih" class="small" style="margin-top:8px"></div></section>
 <div class="small noprint">Alle Eingaben werden nur lokal in deinem Browser gespeichert. BKI-Werte: aus der BKI-Übersicht grafisch abgelesen, gerundet auf 100 €/m² BGF bzw. 25 €/m³ BRI, Bundesdurchschnitt, brutto, Kostenstand 1. Quartal 2026. Keine Kostengarantie; Grundstück, Außenanlagen, Baunebenkosten sind nicht enthalten.</div>
 </main>
 <script>
@@ -69,7 +83,7 @@ const eur=x=>x==null?"–":"ca. "+(Math.round(x/1000)*1000).toLocaleString("de-D
 const eur2=x=>x==null?"offen":nf(x,2)+" €";
 const FAM=[[/mehrfamil|mfh|\bwe\b|wohneinheit/i,"Mehrfamilienhäuser"],[/gemeinde/i,"Gemeindezentren"],[/kita|kindergarten/i,"Kindergarten"],[/schule/i,"Schulen"],[/büro|verwaltung/i,"Büro und Verwaltung"],[/einfamilien|efh|zfh|wohnhaus/i,"Ein- und Zweifamilienhäuser"],[/sporthalle|turnhalle/i,"Sport"],[/kirche|sakral/i,"Sakralbauten"],[/hotel/i,"Hotels"],[/garage/i,"Garagen"],[/lager/i,"Lager"],[/feuerwehr/i,"Feuerwehrhäuser"]];
 let S={ebenen:[{n:"Erdgeschoss",l:"",b:"",f:"",h:"",q:""}],bt:[],};
-const FIELDS=["bud","name","typ","ort","stand","kat","zus","zusq","reg","fak","fakq"];
+const FIELDS=["wf","mi","miq","ans","bnk","gru","aus","bew","mau","zr","bud","name","typ","ort","stand","kat","zus","zusq","reg","fak","fakq"];
 function save(){try{const o={};FIELDS.forEach(f=>o[f]=$(f).value);o.netto=$("netto").checked;o.ebenen=S.ebenen;o.bt=S.bt;localStorage.setItem("bkr1",JSON.stringify(o))}catch(e){}}
 function load(){try{const o=JSON.parse(localStorage.getItem("bkr1")||"null");if(!o)return;FIELDS.forEach(f=>{if(o[f]!=null)$(f).value=o[f]});$("netto").checked=!!o.netto;S.ebenen=o.ebenen||S.ebenen;S.bt=o.bt||[]}catch(e){}}
 function neu(){if(confirm("Alle Eingaben löschen?")){try{localStorage.removeItem("bkr1")}catch(e){}location.reload()}}
@@ -130,6 +144,21 @@ function calc(){
  // Bauteile
  let sum=0,pr=0,op=0;S.bt.forEach((b,i)=>{const m=num(b.m),p=num(b.p);if(m!=null&&p!=null){const a=Math.round(m*p*100)/100;sum+=a;pr++;$("bb"+i).textContent=nf(a)}else{op++;$("bb"+i).textContent="offen"}});
  $("bsum").textContent=pr?nf(Math.round(sum*100)/100)+" €":"–";$("bs").textContent=S.bt.length?`${pr} bepreist · ${op} offen`:"";
+ // Wirtschaftlichkeit
+ (function(){const t=$("ans").value.slice(0,3),ci=+$("ans").value.slice(3);const q=t=="BGF"?g:r;const wf=num($("wf").value),mi=num($("mi").value);
+  const n0=x=>num(x)||0,bnk=n0($("bnk").value),gru=n0($("gru").value),aus=n0($("aus").value),bew=n0($("bew").value),mau=n0($("mau").value),zr=n0($("zr").value);
+  const el=$("wi");if(!K||q==null||K[ci]==null){el.innerHTML='<div class="note warn" style="grid-column:1/-1">Für die Wirtschaftlichkeit werden Kategorie, '+t+' und der gewählte BKI-Kennwert gebraucht.</div>';$("wih").textContent="";return}
+  const bau=q*K[ci]*f,ges=bau*(1+bnk/100)+gru+aus;
+  let h=`<div class="k"><div class="l">Gesamtkosten (Bauwerk + KG 700 + Grundstück + Außenanlagen)</div><div class="v n">${eur(ges)}</div><div class="s">Bauwerk ${eur(bau)} · Nebenkosten ${eur(bau*bnk/100)}</div></div>`;
+  if(wf!=null&&mi!=null&&wf>0&&mi>0){const jm=wf*mi*12,abz=jm*(bew+mau)/100,rein=jm-abz,bru=jm/ges*100,net=rein/ges*100,fak=ges/jm,am=ges/rein,kdm=ges*zr/100/(1-(bew+mau)/100)/12/wf;
+   const cl=net>=zr?"ok":"warn",ic=net>=zr?"🟢":(net>=zr*0.75?"🟡":"🔴");
+   h+=`<div class="k"><div class="l">Jahresnettokaltmiete</div><div class="v n">${nf(jm,0)} €</div><div class="s">${nf(wf)} m² × ${nf(mi)} €/m² × 12 · Reinertrag ${nf(rein,0)} € nach Abzügen</div></div>
+   <div class="k"><div class="l">Nettorendite (Reinertrag ÷ Gesamtkosten)</div><div class="v n">${nf(net)} %</div><div class="s">Bruttorendite ${nf(bru)} % · Vervielfältiger ${nf(fak,1)}</div></div>
+   <div class="k"><div class="l">Amortisation (Jahre, ohne Zins)</div><div class="v n">${nf(am,1)}</div><div class="s">Gesamtkosten ÷ Reinertrag</div></div>
+   <div class="k"><div class="l">Kostendeckende Miete für ${nf(zr)} % Ziel</div><div class="v n">${nf(kdm)} €/m²</div><div class="s">Eingetragene Miete: ${nf(mi)} €/m²</div></div>
+   <div class="note ${cl}" style="grid-column:1/-1">${ic} Nettorendite ${nf(net)} % ${net>=zr?"erreicht":"liegt unter"} dem Ziel von ${nf(zr)} %. ${net>=zr?"":"Nötig wären "+nf(kdm)+" €/m² Miete oder niedrigere Kosten."}</div>`}
+  else h+='<div class="note" style="grid-column:1/-1">Fläche und Miete eintragen, dann erscheinen Rendite und Amortisation.</div>';
+  el.innerHTML=h;$("wih").innerHTML=`Miete laut: ${$("miq").value||"keine Quelle angegeben"}. Kosten ${$("netto").checked?"netto":"brutto"}, Kostenstand 1. Quartal 2026. Vereinfachte Überschlagsrechnung ohne Finanzierung, Steuern, Förderung und Mietsteigerung; keine Anlageberatung.`})();
  vorschlag();save();
 }
 function csv(){const L=[["Projekt",$("name").value,"Planstand",$("stand").value],[],["Ebene","Länge","Breite","Fläche","Höhe","BGF m²","BRI m³","Beleg"]];
