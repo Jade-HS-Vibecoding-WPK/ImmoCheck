@@ -22,7 +22,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:5px 6px;t
 body.simple .adv{display:none!important}.mode{display:flex}.mode button{border-radius:0}.mode button:first-child{border-radius:7px 0 0 7px}.mode button:last-child{border-radius:0 7px 7px 0;border-left:0}.mode button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
 .hi{display:inline-block;width:15px;height:15px;border-radius:50%;background:var(--ac2);color:var(--ac);font-size:10px;text-align:center;line-height:15px;margin-left:4px;cursor:help;position:relative;font-style:normal}
 .hi:hover::after,.hi:focus::after{content:attr(data-t);position:absolute;left:0;top:19px;z-index:9;width:240px;background:var(--tx);color:var(--bg);padding:8px 10px;border-radius:7px;font-size:12px;line-height:1.35;font-weight:400}
-.empty{text-align:center;padding:10px}.empty button{margin-top:10px}
+.best{background:var(--ok);font-weight:700}.empty{text-align:center;padding:10px}.empty button{margin-top:10px}
 @media print{header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
 <header><h1>🏠 Kaufcheck Immobilie</h1><span class="small">Angebot rein, Entscheidung raus</span><a href="baukosten.html" class="small" style="color:var(--ac)">→ Baukostenrechner</a><div class="sp"></div>
@@ -69,10 +69,12 @@ body.simple .adv{display:none!important}.mode{display:flex}.mode button{border-r
 <div>
 <div id="verdict"></div>
 <div class="cards" id="kz"></div>
+<section><h2>Stresstest: Was, wenn es schlechter läuft?</h2><div id="stress"></div><div class="small" style="margin-top:6px">Zeigt, ob das Objekt auch bei höherem Zins, niedrigerer Miete oder mehr Leerstand trägt.</div></section>
 <section><h2>Kaufpreis-Sensitivität (Verhandlungsspielraum)</h2><table id="sens"></table><div class="small" id="maxkp" style="margin-top:8px"></div></section>
 <section class="adv"><h2>Entwicklung über die Haltedauer</h2><table id="verl"></table></section>
 <div class="small">Überschlagsrechnung vor Steuern, ohne Förderung, Sonderumlagen und Leerstandsrisiken im Einzelfall. Keine Anlage- oder Rechtsberatung. Alle Annahmen stehen links und sind änderbar. Eingaben bleiben nur in deinem Browser.</div>
-</div></main>
+</div><section style="grid-column:1/-1"><h2>Objekte vergleichen <button class="p" style="float:right" onclick="saveObj()">+ Objekt speichern</button></h2><div id="objs"></div></section>
+</main>
 <script>
 const $=id=>document.getElementById(id);
 const nf=(x,d=0)=>x==null||!isFinite(x)?"–":x.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -94,24 +96,50 @@ function model(kp,P){
  for(let y=1;y<=P.hd;y++){const r=(y==1?1:Math.pow(1+P.ms/100,y-1));const ein=(jm-aus)*r-kost;const zins=bal*P.zi/100;const ca=ein-P_;bal=Math.max(0,bal*(1+P.zi/100)-P_);cf.push(ca);rows.push([y,ein,P_,ca,bal])}
  const wert=(kp+sn)*Math.pow(1+P.ws/100,P.hd),erl=wert*(1-P.vk/100)-bal;cf[cf.length-1]+=erl;
  return{ges,nk,jm,rein,net:rein/ges*100,bru:jm/ges*100,fak:ges/jm,dar,P_,cf0:(rein-P_)/12,cfs:cf,irr:irr(cf),rows,wert,erl,bal,mie,kost,aus};}
-function calc(){
- const P={wf:num($("wf").value),san:num($("san").value)||0,vgl:num($("vgl").value),mist:num($("mist").value),mmar:num($("mmar").value),mode:$("mmode").value,lee:num($("lee").value)||0,
-  nuk:num($("nuk").value)||0,ihr:num($("ihr").value)||0,grest:num($("grest").value)||0,not:num($("not").value)||0,mak:num($("mak").value)||0,ek:num($("ek").value)||0,
-  zi:num($("zi").value)||0,ti:num($("ti").value)||0,hd:Math.max(1,Math.min(40,Math.round(num($("hd").value)||10))),ms:num($("ms").value)||0,ws:num($("ws").value)||0,vk:num($("vk").value)||0};
- const kp=num($("kp").value),zr=num($("zr").value)||0,zirr=num($("zirr").value)||0;
- try{const o={};F.forEach(f=>o[f]=$(f).value);localStorage.setItem("kc1",JSON.stringify(o))}catch(e){}
- const V=$("verdict");
- if(!kp||!P.wf){V.className="verdict";V.innerHTML='<div class="empty"><div class="t">Lohnt sich der Kauf?</div><div class="small">Trag links Kaufpreis, Fläche, Miete und Eigenkapital ein. Dann bekommst du sofort ein Urteil mit Begründung.</div><button class="p" onclick="beispiel()">Beispiel ausprobieren</button></div>';$("kz").innerHTML=$("sens").innerHTML=$("verl").innerHTML=$("maxkp").innerHTML="";return}
- const m=model(kp,P);if(!m){V.className="verdict warn";V.innerHTML='<div class="t">Fast geschafft: Miete fehlt</div><div class="small">Trag die monatliche Nettokaltmiete pro m² ein (oder die Marktmiete im Experten-Modus).</div>';return}
- const ppm=kp/P.wf,rule=[];
- const c1=m.net>=zr,c2=m.cf0>=0,c3=m.irr!=null&&m.irr*100>=zirr,c4=P.vgl==null?null:ppm<=P.vgl*1.05;
- rule.push([c1,`Nettorendite ${nf(m.net,2)} % ${c1?"erreicht":"unter"} Ziel ${nf(zr,1)} %`]);
- rule.push([c2,`Cashflow nach Kapitaldienst ${nf(m.cf0)} € pro Monat ${c2?"(positiv)":"(negativ, du zahlst zu)"}`]);
+function readVals(){const o={};F.forEach(f=>o[f]=$(f).value);return o}
+function parseP(v){return{wf:num(v.wf),san:num(v.san)||0,vgl:num(v.vgl),mist:num(v.mist),mmar:num(v.mmar),mode:v.mmode,lee:num(v.lee)||0,nuk:num(v.nuk)||0,ihr:num(v.ihr)||0,grest:num(v.grest)||0,not:num(v.not)||0,mak:num(v.mak)||0,ek:num(v.ek)||0,zi:num(v.zi)||0,ti:num(v.ti)||0,hd:Math.max(1,Math.min(40,Math.round(num(v.hd)||10))),ms:num(v.ms)||0,ws:num(v.ws)||0,vk:num(v.vk)||0}}
+function judge(v){const P=parseP(v),kp=num(v.kp),zr=num(v.zr)||0,zirr=num(v.zirr)||0;if(!kp||!P.wf)return{m:null,leer:true};const m=model(kp,P);if(!m)return{m:null};
+ const ppm=kp/P.wf,rule=[];const c1=m.net>=zr,c2=m.cf0>=0,c3=m.irr!=null&&m.irr*100>=zirr,c4=P.vgl==null?null:ppm<=P.vgl*1.05;
+ rule.push([c1,`Nettorendite ${nf(m.net,2)} % ${c1?"erreicht":"unter"} Ziel ${nf(zr,1)} %`]);rule.push([c2,`Cashflow nach Kapitaldienst ${nf(m.cf0)} € pro Monat ${c2?"(positiv)":"(negativ, du zahlst zu)"}`]);
  rule.push([c3,`Eigenkapitalrendite (IRR) ${m.irr==null?"nicht berechenbar":nf(m.irr*100,1)+" %"} ${c3?"erreicht":"unter"} Ziel ${nf(zirr,1)} %`]);
  if(c4!=null)rule.push([c4,`Kaufpreis ${nf(ppm)} €/m² ${c4?"im Rahmen":"über"} Vergleich ${nf(P.vgl)} €/m²`]);
- const ok=rule.filter(r=>r[0]).length,tot=rule.length;
- const maxges=m.rein/(zr/100);const maxkp=(maxges-P.san)/(1+m.nk);
- let cls,t;if(ok==tot){cls="ok";t="🟢 Kaufen"}else if(ok>=tot-2&&ok>=1&&maxkp>kp*0.7){cls="warn";t="🟡 Nur mit Verhandlung"}else{cls="bad";t="🔴 Nicht kaufen"}
+ const ok=rule.filter(r=>r[0]).length,tot=rule.length,maxkp=(m.rein/(zr/100)-P.san)/(1+m.nk);let cls,t;
+ if(ok==tot){cls="ok";t="🟢 Kaufen"}else if(ok>=tot-2&&ok>=1&&maxkp>kp*0.7){cls="warn";t="🟡 Nur mit Verhandlung"}else{cls="bad";t="🔴 Nicht kaufen"}
+ return{m,rule,ok,tot,cls,t,maxkp,P,kp,zr,zirr}}
+function stress(v){const J=judge(v);if(!J.m)return null;const P=J.P,kp=J.kp,mi=(P.mode=="markt"&&P.mmar!=null)?"mmar":"mist";
+ const run=(dz,dm,dl)=>{const Q={...P,zi:P.zi+dz,lee:P.lee+dl};Q[mi]=P[mi]*(1+dm/100);const m=model(kp,Q);return m};
+ const sc=[["Basis",0,0,0],["Zins +1 %",1,0,0],["Zins +2 %",2,0,0],["Miete −10 %",0,-10,0],["Leerstand +5 %-Pkt.",0,0,5],["Alles zusammen (Zins +2, Miete −10, Leerstand +5)",2,-10,5]].map(([n,a,b,c])=>({n,m:run(a,b,c)}));
+ // Kipppunkte: Cashflow = 0
+ const base=J.m;let kz=null,km=null;
+ if(base.dar>0){kz=base.rein/base.dar*100-P.ti}
+ const cf=x=>{const Q={...P};Q[mi]=x;return model(kp,Q).cf0};let lo=0,hi=P[mi]*3;if(cf(hi)>=0&&cf(lo)<0){for(let i=0;i<60;i++){const mid=(lo+hi)/2;if(cf(mid)>=0)hi=mid;else lo=mid}km=hi}else if(cf(P[mi])>=0&&cf(0)>=0)km=0;
+ return{sc,kz,km,mi:P[mi],J}}
+function drawStress(){const S=stress(readVals());const el=$("stress");if(!S){el.innerHTML='<div class="small">Erscheint, sobald ein Ergebnis berechnet ist.</div>';return}
+ let h="<tr><th>Szenario</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th><th></th></tr>";
+ S.sc.forEach(x=>{const m=x.m,ok=m.cf0>=0&&m.net>=S.J.zr;h+=`<tr><td>${x.n}</td><td class="n">${nf(m.net,2)} %</td><td class="n">${nf(m.cf0)} €</td><td class="n">${m.irr==null?"–":nf(m.irr*100,1)+" %"}</td><td>${m.cf0<0?"🔴":(ok?"🟢":"🟡")}</td></tr>`});
+ let k="";if(S.kz!=null)k+=`Der Cashflow wird negativ ab einem Zins von <b>${nf(S.kz,2)} %</b> (aktuell ${nf(S.J.P.zi,2)} %). `;
+ if(S.km!=null)k+=`Die Miete darf bis <b>${nf(S.km,2)} €/m²</b> sinken, bevor der Cashflow negativ wird (aktuell ${nf(S.mi,2)} €/m²).`;
+ $("stress").innerHTML="<table>"+h+"</table>"+(k?`<div class="note" style="margin-top:8px">${k}</div>`:"")}
+let OBJ=[];try{OBJ=JSON.parse(localStorage.getItem("kcobj")||"[]")}catch(e){}
+function saveObj(){const v=readVals();if(!num(v.kp)||!num(v.wf)){alert("Bitte zuerst Kaufpreis und Fläche eintragen.");return}if(!v.name.trim())v.name="Objekt "+(OBJ.length+1);OBJ.push(v);persistObj();drawObj()}
+function persistObj(){try{localStorage.setItem("kcobj",JSON.stringify(OBJ))}catch(e){}}
+function delObj(i){OBJ.splice(i,1);persistObj();drawObj()}
+function loadObj(i){F.forEach(f=>{if(OBJ[i][f]!=null)$(f).value=OBJ[i][f]});calc()}
+function drawObj(){const el=$("objs");if(!OBJ.length){el.innerHTML='<div class="small">Noch keine Objekte gespeichert. Gib ein Angebot ein und klicke auf „Objekt speichern“. So vergleichst du mehrere Angebote nebeneinander.</div>';return}
+ const R=OBJ.map(v=>{const J=judge(v);const S=J.m?stress(v):null;return{v,J,S}});
+ const best=R.map((r,i)=>[r.J.m?r.J.m.net:-1e9,i]).sort((a,b)=>b[0]-a[0])[0][1];
+ const row=(l,fn)=>`<tr><td>${l}</td>${R.map((r,i)=>`<td class="n${i==best&&l=="Nettorendite"?" best":""}">${r.J.m?fn(r):"–"}</td>`).join("")}</tr>`;
+ el.innerHTML=`<div style="overflow-x:auto"><table><tr><th></th>${R.map((r,i)=>`<th>${r.v.name||""}<br><button class="x" onclick="loadObj(${i})">laden</button> <button class="x" onclick="delObj(${i})">✕</button></th>`).join("")}</tr>`
+ +row("Urteil",r=>r.J.t)+row("Kaufpreis",r=>nf(r.J.kp)+" €")+row("Preis pro m²",r=>nf(r.J.kp/r.J.P.wf)+" €")+row("Nettorendite",r=>nf(r.J.m.net,2)+" %")+row("Cashflow / Monat",r=>nf(r.J.m.cf0)+" €")
+ +row("Eigenkapitalrendite",r=>r.J.m.irr==null?"–":nf(r.J.m.irr*100,1)+" %")+row("Cashflow bei Zins +2 %",r=>nf(r.S.sc[2].m.cf0)+" €")+row("Höchstpreis (Ziel-Rendite)",r=>nf(r.J.maxkp)+" €")+"</table></div>"
+ +`<div class="small" style="margin-top:6px">Beste Nettorendite: <b>${R[best].v.name}</b>. Alle Objekte sind mit ihren eigenen Annahmen gerechnet.</div>`}
+function calc(){
+  const rv=readVals(),P=parseP(rv),kp=num(rv.kp),zr=num(rv.zr)||0,zirr=num(rv.zirr)||0;
+ try{const o={};F.forEach(f=>o[f]=$(f).value);localStorage.setItem("kc1",JSON.stringify(o))}catch(e){}
+ const V=$("verdict");
+ if(!kp||!P.wf){V.className="verdict";V.innerHTML='<div class="empty"><div class="t">Lohnt sich der Kauf?</div><div class="small">Trag links Kaufpreis, Fläche, Miete und Eigenkapital ein. Dann bekommst du sofort ein Urteil mit Begründung.</div><button class="p" onclick="beispiel()">Beispiel ausprobieren</button></div>';$("kz").innerHTML=$("sens").innerHTML=$("verl").innerHTML=$("maxkp").innerHTML=$("stress").innerHTML="";return}
+  const J=judge(rv);if(!J.m){V.className="verdict warn";V.innerHTML='<div class="t">Fast geschafft: Miete fehlt</div><div class="small">Trag die monatliche Nettokaltmiete pro m² ein (oder die Marktmiete im Experten-Modus).</div>';return}
+  const m=J.m,rule=J.rule,ok=J.ok,tot=J.tot,cls=J.cls,t=J.t,maxkp=J.maxkp,ppm=kp/P.wf;
  V.className="verdict "+cls;
  V.innerHTML=`<div class="t">${t}</div><div>${$("name").value||"Objekt"} · Kaufpreis ${nf(kp)} € · ${ok} von ${tot} Kriterien erfüllt</div><ul>${rule.map(r=>`<li>${r[0]?"✅":"❌"} ${r[1]}</li>`).join("")}</ul>`
  +(cls!="ok"&&maxkp>0?`<div style="margin-top:8px"><b>Verhandlungsziel:</b> Für ${nf(zr,1)} % Nettorendite dürfte der Kaufpreis höchstens <b>${nf(maxkp)} €</b> betragen (${nf((1-maxkp/kp)*100,1)} % unter Angebot).</div>`:"");
@@ -121,7 +149,7 @@ function calc(){
   .map(([l,v,s])=>`<div class="k"><div class="l">${l}</div><div class="v n">${v}</div><div class="s">${s}</div></div>`).join("");
  let h="<tr><th>Kaufpreis</th><th>Preis</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th></tr>";
  [0,-5,-10,-15,-20].forEach(d=>{const k2=kp*(1+d/100),mm=model(k2,P);h+=`<tr><td>${d?d+" %":"Angebot"}</td><td class="n">${nf(k2)} €</td><td class="n">${nf(mm.net,2)} %</td><td class="n">${nf(mm.cf0)} €</td><td class="n">${mm.irr==null?"–":nf(mm.irr*100,1)+" %"}</td></tr>`});
- $("sens").innerHTML=h;
+ $("sens").innerHTML=h;drawStress();
  $("maxkp").innerHTML=`Höchstpreis für ${nf(zr,1)} % Nettorendite: <b>${nf(maxkp)} €</b>${P.vgl?` · Preis laut Vergleich ${nf(P.vgl*P.wf)} €`:""}`;
  let t2="<tr><th>Jahr</th><th>Überschuss</th><th>Kapitaldienst</th><th>Cashflow</th><th>Restschuld</th></tr>";
  m.rows.forEach(r=>t2+=`<tr><td>${r[0]}</td><td class="n">${nf(r[1])}</td><td class="n">${nf(r[2])}</td><td class="n">${nf(r[3])}</td><td class="n">${nf(r[4])}</td></tr>`);
@@ -136,5 +164,5 @@ Object.keys(HELP).forEach(id=>{const e=$(id);if(!e)return;const l=e.parentElemen
 function setMode(x){document.body.classList.toggle("simple",!x);$("mE").className=x?"":"on";$("mX").className=x?"on":"";try{localStorage.setItem("kcm",x)}catch(e){}}
 function beispiel(){const v={name:"Beispiel: Mehrfamilienhaus",kp:"330000",wf:"240",mist:"8,5",ek:"100000"};F.forEach(f=>{if(v[f]!=null)$(f).value=v[f]});calc()}
 let m0=0;try{if(localStorage.getItem("kcm")==="1")m0=1}catch(e){}setMode(m0);
-F.forEach(f=>$(f).addEventListener("input",calc));calc();
+F.forEach(f=>$(f).addEventListener("input",calc));calc();drawObj();
 </script></body></html>
