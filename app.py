@@ -33,7 +33,7 @@ from baukosten import bki, costs, report  # noqa: E402
 from baukosten.models import FACADE_LABEL, BBox, CatalogEntry, Evidence, Value  # noqa: E402
 from baukosten.pdf_prep import render_marked, render_thumbnail  # noqa: E402
 from baukosten.project import DATA, ENGINES, PROJECTS_DIR, Evaluation, Project, create_demo_project  # noqa: E402
-from baukosten.recognition import ki_engine  # noqa: E402
+from baukosten.recognition import ki_engine, ollama_engine  # noqa: E402
 from baukosten.units import format_de, format_eur  # noqa: E402
 
 st.set_page_config(page_title="Baukostentool", page_icon="🏗️", layout="wide")
@@ -127,10 +127,13 @@ def sidebar() -> Project | None:
         if z is not None and st.button("Importieren"):
             open_project(Project.import_zip(z.getvalue()))
     sb.divider()
-    if ki_engine.api_available():
-        sb.success(f"KI-Erkennung bereit · Modell {ki_engine.configured_model()}", icon="🔑")
+    zustand, text = ollama_engine.status()
+    if zustand == "bereit":
+        sb.success(text, icon="🔒")
     else:
-        sb.info("Kein ANTHROPIC_API_KEY gesetzt: lokale Auswertung digitaler PDFs und Demomodus verfügbar.", icon="ℹ️")
+        sb.info(f"{text}. Ohne lokale KI: Auswertung digitaler PDFs und Demomodus.", icon="ℹ️")
+    if ki_engine.api_available():
+        sb.caption(f"Zusätzlich: Anthropic-API bereit ({ki_engine.configured_model()})")
     return p
 
 
@@ -299,12 +302,15 @@ def step_analyze(p: Project) -> None:
         st.markdown("<div class='demo'>DEMOMODUS – gespeichertes Erkennungsergebnis, keine Live-Planauswertung.</div>",
                     unsafe_allow_html=True)
     else:
-        engines = (["ki"] if ki_engine.api_available() else []) + ["lokal"]
+        engines = (["ollama"] if ollama_engine.available() else []) + (["ki"] if ki_engine.api_available() else []) + ["lokal"]
     cur = p.state.engine if p.state.engine in engines else engines[0]
     engine = st.radio("Erkennungsverfahren", engines, index=engines.index(cur), format_func=lambda e: ENGINES[e])
-    if not ki_engine.api_available() and not p.state.demo:
-        st.info("KI-Erkennung nicht verfügbar: Für Scans, Fotos und fremde Planlayouts ANTHROPIC_API_KEY in der Datei .env "
-                "eintragen (siehe README). Die lokale Auswertung liest nur digitale PDFs mit Text- und Vektorebene.")
+    if "ollama" not in engines and not p.state.demo:
+        zustand, text = ollama_engine.status()
+        st.info(f"Lokale KI nicht bereit: {text}. Einrichtung (einmalig, kostenlos, ohne Schlüssel) steht in der README unter "
+                "„Lokale KI“. Bis dahin liest die lokale Auswertung digitale PDFs mit Text- und Vektorebene.")
+    if engine == "ollama":
+        st.success("Lokale KI: Die Pläne verlassen deinen Rechner nicht. Die Auswertung dauert je Zeichnung einige Minuten.", icon="🔒")
     ok = True
     if engine == "ki":
         st.warning(f"Datenübertragung: Beim Start werden die Planausschnitte von {len(views)} Zeichnung(en) als Bilder samt "

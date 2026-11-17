@@ -275,3 +275,86 @@ def test_ki_pfad_mit_fester_antwort(tmp_path, plan_a):
     bad.beta = bad
     stats = p.analyze("ki", view_ids=[view.id], client=bad)
     assert stats["fehler"] == 1 and p.state.runs[view.id].status == "fehler"
+
+
+# ---------------------------------------------------------------------------------------
+# Lokale KI (Ollama): Ersatz-Server, der wie Ollama antwortet (lückenhaftes JSON wird aufgefüllt)
+# ---------------------------------------------------------------------------------------
+def _fake_ollama(monkeypatch, make_answer, tags=("qwen2.5vl:7b",)):
+    import json
+    import threading
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+
+    seen = {}
+
+    class H(BaseHTTPRequestHandler):
+        def log_message(self, *a):
+            pass
+
+        def _send(self, obj):
+            data = json.dumps(obj).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+
+        def do_GET(self):
+            self._send({"models": [{"name": n} for n in tags]})
+
+        def do_POST(self):
+            body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+            seen["body"] = body
+            self._send({"message": {"role": "assistant", "content": make_answer(body)}})
+
+    srv = HTTPServer(("127.0.0.1", 0), H)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    monkeypatch.setenv("OLLAMA_HOST", f"http://127.0.0.1:{srv.server_port}")
+    return srv, seen
+
+
+def test_ollama_status(monkeypatch):
+    from baukosten.recognition import ollama_engine as oe
+
+    srv, _ = _fake_ollama(monkeypatch, lambda b: "{}")
+    assert oe.status()[0] == "bereit" and oe.available()
+    srv.shutdown()
+    srv2, _ = _fake_ollama(monkeypatch, lambda b: "{}", tags=("llama3:8b",))
+    assert oe.status()[0] == "kein_modell"
+    srv2.shutdown()
+    monkeypatch.setenv("OLLAMA_HOST", "http://127.0.0.1:9")
+    assert oe.status()[0] == "nicht_erreichbar" and not oe.available()
+
+
+def test_ollama_pfad_end_to_end(tmp_path, plan_a, monkeypatch):
+    import json
+    import re
+
+    from baukosten.recognition import ollama_engine as oe
+
+    def answer(body):
+        txt = body["messages"][1]["content"]
+        tid = re.search(r"^(t\d+) \| '12,00'", txt, re.M).group(1)
+        # bewusst lückenhaft: nur die nötigsten Felder, nacktes Zahlenfeld bei der zweiten Kette
+        return json.dumps({"zeichnungsart": "grundriss", "titel": "Grundriss EG",
+                           "ketten": [{"richtung": "horizontal", "lage": "unten", "art": "gesamtmass", "bezug": "gebaeude_aussen",
+                                       "werte": [{"text_id": tid, "original": "12,00"}]}]})
+
+    srv, seen = _fake_ollama(monkeypatch, answer)
+    p = _project(tmp_path)
+    p.add_file("a.pdf", plan_a)
+    view = next(v for _, _, v in p.iter_views(True) if v.view_type == "grundriss")
+    stats = p.analyze("ollama", view_ids=[view.id])
+    assert stats["fehler"] == 0, p.state.runs[view.id].error
+    body = seen["body"]
+    assert body["stream"] is False and body["format"]["title"] == "KIErgebnis" and body["messages"][1]["images"]
+    res = p.cached(p.state.runs[view.id].cache_key)
+    seg = res.chains[0].segments[0]
+    assert seg.value == pytest.approx(12.0) and seg.evidence.source == "pdf_text"
+    assert res.engine.startswith("ollama:")
+    # kaputte Antwort: Fehler bleibt auf diesen Schritt beschränkt
+    srv.shutdown()
+    srv3, _ = _fake_ollama(monkeypatch, lambda b: "kein json")
+    stats = p.analyze("ollama", view_ids=[view.id], force=True)
+    assert stats["fehler"] == 1 and p.state.runs[view.id].status == "fehler"
+    srv3.shutdown()

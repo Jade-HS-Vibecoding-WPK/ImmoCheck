@@ -23,7 +23,7 @@ from . import bki, costs, merge, quantities
 from .models import (BuildingModel, CatalogEntry, CostResult, DocumentInfo, Override, PageInfo, ProjectState, Quantity,
                      ViewRegion, ViewResult, ViewRun)
 from .pdf_prep import page_geometry, store_document
-from .recognition import ki_engine, local_engine
+from .recognition import ki_engine, local_engine, ollama_engine
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -32,6 +32,7 @@ DEMO_DIR = DATA / "demo"
 ANALYZABLE = ("grundriss", "ansicht", "schnitt")
 
 ENGINES = {
+    "ollama": "Lokale KI (Ollama, auf diesem Rechner, ohne Schlüssel und ohne Datenübertragung)",
     "ki": "KI-Erkennung (Claude, Bild + PDF-Text)",
     "lokal": "Lokale PDF-Text-/Vektorauswertung (ohne KI, nur digitale PDFs)",
     "demo": "DEMO – gespeichertes Erkennungsergebnis",
@@ -78,7 +79,8 @@ class Project:
             n += 1
         path.mkdir(parents=True)
         st = ProjectState(name=name, building_type=building_type, slug=path.name, demo=demo,
-                          engine="demo" if demo else ("ki" if ki_engine.api_available() else "lokal"))
+                          engine="demo" if demo else ("ollama" if ollama_engine.available() else
+                                                     "ki" if ki_engine.api_available() else "lokal"))
         p = cls(path, st)
         if catalog_source and catalog_source.exists():
             shutil.copy(catalog_source, p.catalog_path)
@@ -210,6 +212,8 @@ class Project:
     def engine_config(self, engine: str) -> str:
         if engine == "ki":
             return f"{ki_engine.PROMPT_VERSION}|{ki_engine.configured_model()}|{ki_engine.configured_effort()}"
+        if engine == "ollama":
+            return f"{ollama_engine.PROMPT_VERSION}|{ollama_engine.configured_model()}"
         if engine == "lokal":
             return local_engine.ENGINE_VERSION
         return "demo-1"
@@ -267,6 +271,8 @@ class Project:
                     geo = geo_cache[gk]
                     if engine == "lokal":
                         res = local_engine.analyze_view(d, v, geo)
+                    elif engine == "ollama":
+                        res = ollama_engine.analyze_view(pdfs[d.id], d, v, geo)
                     elif engine == "ki":
                         res = ki_engine.analyze_view(pdfs[d.id], d, v, geo, client=client)
                     else:
