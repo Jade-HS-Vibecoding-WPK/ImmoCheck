@@ -42,6 +42,7 @@ body.simple .adv{display:none!important}.mode{display:flex}.mode button{border-r
 .cb{display:inline-grid;place-items:center;width:20px;height:20px;border:1.5px solid var(--mu);border-radius:5px;font-style:normal;font-size:12px;font-weight:700}.cb.d{background:#111;border-color:#111;color:#fff}.cb.d .ic{width:12px;height:12px;margin:0;stroke-width:2.2}.cb.p{border-color:#d04a4a;color:#d04a4a}
 .cli button{padding:3px 5px;border:0;background:transparent}
 @media(prefers-color-scheme:dark){.cb.d{background:#f1f1ef;border-color:#f1f1ef;color:#111}}
+.et{width:100%;border-collapse:collapse}.et td,.et th{padding:7px 8px;border-bottom:1px solid var(--bd)}.et th{text-align:left}.et th:nth-child(n+2),.et td:nth-child(n+2){text-align:right;font-variant-numeric:tabular-nums;width:130px}.et td.m{color:var(--mu);font-size:12px}.et tr.sum td{font-weight:650;border-top:1px solid var(--tx)}
 .empty{text-align:center;padding:10px}.empty button{margin-top:10px}
 
 body{font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:-.005em}
@@ -77,7 +78,7 @@ section{padding:22px 24px}.g{gap:16px}h2{margin-bottom:14px}.cards{gap:14px}.top
 header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
 <div class="shell"><aside class="sb"><div class="logo"><span class="lg">K</span><div><b>Kaufcheck</b><div class="small">Immobilien-Wirtschaftlichkeit</div></div></div>
-<div class="nl">Hauptmenü</div><a href="#" data-nav="ueber" class="on"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg>Überblick</a><a href="#" data-nav="annahmen" class="adv"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h12M2 11h12"/><circle cx="6" cy="5" r="1.6"/><circle cx="10.5" cy="11" r="1.6"/></svg>Annahmen</a><a href="#" data-nav="stress"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h3l2-5 3 10 2-5h4"/></svg>Stresstest</a><a href="#" data-nav="grafik" class="adv"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13V8M8 13V3M13 13V6"/></svg>Grafik und Verlauf</a><a href="#" data-nav="vergleich"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h11l-3-3M14 11H3l3 3"/></svg>Objekte vergleichen</a><a href="#" data-nav="check"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8l2 2 4-4"/></svg>Checkliste</a><a href="#" onclick="showReport();return false"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h6l3 3v9H4z"/><path d="M10 2v3h3"/></svg>Bericht / PDF</a>
+<div class="nl">Hauptmenü</div><a href="#" data-nav="ueber" class="on"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg>Überblick</a><a href="#" data-nav="annahmen" class="adv"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h12M2 11h12"/><circle cx="6" cy="5" r="1.6"/><circle cx="10.5" cy="11" r="1.6"/></svg>Annahmen</a><a href="#" data-nav="wert"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13h12M4 13V8M8 13V4M12 13V6"/><path d="M2 5l4-2 3 2 5-3"/></svg>Ertrag und Ertragswert</a><a href="#" data-nav="stress"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h3l2-5 3 10 2-5h4"/></svg>Stresstest</a><a href="#" data-nav="grafik" class="adv"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13V8M8 13V3M13 13V6"/></svg>Grafik und Verlauf</a><a href="#" data-nav="vergleich"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h11l-3-3M14 11H3l3 3"/></svg>Objekte vergleichen</a><a href="#" data-nav="check"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8l2 2 4-4"/></svg>Checkliste</a><a href="#" onclick="showReport();return false"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h6l3 3v9H4z"/><path d="M10 2v3h3"/></svg>Bericht / PDF</a>
 <div class="nl">Werkzeuge</div><a href="baukosten.html"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14V3h7v11M10 7h3v7M5 6h3M5 9h3M5 12h3"/></svg>Baukostenrechner</a><div class="sbfoot small">Alle Eingaben bleiben nur in deinem Browser. Überschlagsrechnung, keine Beratung.</div></aside><div class="content">
 <header><div><div class="small">Kaufcheck › Überblick</div><h1>Lohnt sich der Kauf?</h1></div><div class="sp"></div>
 <div class="mode"><button id="mE" onclick="setMode(0)">Einfach</button><button id="mX" onclick="setMode(1)">Experte</button></div><button onclick="beispiel()">Beispiel laden</button><button class="p" onclick="showReport()"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h6l3 3v9H4z"/><path d="M10 2v3h3"/></svg>Bericht / PDF</button><button onclick="neu()">Neu</button></header>
@@ -94,20 +95,25 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div class="adv"><label>Vergleichspreis €/m² (Bodenrichtwert/Marktbericht)</label><input id="vgl" class="r"></div>
 <div class="adv" style="grid-column:1/-1"><label>Quelle Vergleichspreis</label><input id="vglq" placeholder="z. B. Gutachterausschuss 2025, ImmoScout"></div></div></section>
 
-<section class="adv" data-view="annahmen"><h2>2 · Miete und laufende Kosten <span class="small adv">(Annahmen)</span></h2><div class="g">
+<section class="adv" data-view="annahmen"><h2>2 · Miete und Bewirtschaftungskosten <span class="small adv">(getrennt)</span></h2><div class="g">
 <div class="adv"><label>Marktmiete €/m² (Mietspiegel)</label><input id="mmar" class="r"></div>
 <div class="adv" style="grid-column:1/-1"><label>Quelle Marktmiete</label><input id="mq" placeholder="z. B. Mietspiegel Ort/Jahr"></div>
 <div class="adv"><label>Rechne mit</label><select id="mmode"><option value="ist">Ist-Miete</option><option value="markt">Marktmiete</option></select></div>
-<div class="adv"><label>Leerstand/Mietausfall %</label><input id="lee" class="r" value="3"></div>
-<div class="adv"><label>Nicht umlagefähige Kosten €/m² Jahr</label><input id="nuk" class="r" value="12"></div>
-<div class="adv"><label>Instandhaltungsrücklage €/m² Jahr</label><input id="ihr" class="r" value="12"></div></div>
+<div class="adv"><label>Leerstand %</label><input id="lee" class="r" value="3"></div>
+<div class="adv"><label>Mietausfallwagnis % (Zahlungsausfall)</label><input id="mau" class="r" value="2"></div>
+<div class="adv"><label>Verwaltung €/Einheit und Jahr</label><input id="verw" class="r" value="300"></div>
+<div class="adv"><label>Anzahl Einheiten</label><input id="we" class="r" value="1"></div>
+<div class="adv"><label>Instandhaltung €/m² und Jahr</label><input id="ihr" class="r" value="12"></div>
+<div class="adv"><label>Hausgeld nicht umlagefähig €/Monat (nur ETW)</label><input id="hg" class="r" value="0"></div>
+<div class="adv"><label>Sonstige nicht umlagefähige Kosten €/m² Jahr</label><input id="nuk" class="r" value="0"></div></div>
 <div class="small adv" style="margin-top:6px">Rücklage und Kosten sind Annahmen: bitte an das Objekt anpassen (Alter, Zustand).</div></section>
 
 <section class="adv" data-view="annahmen"><h2>3 · Kaufnebenkosten</h2><div class="g">
 <div><label>Bundesland (Grunderwerbsteuer)</label><select id="bl"></select></div>
 <div><label>Grunderwerbsteuer %</label><input id="grest" class="r"></div>
 <div><label>Notar + Grundbuch %</label><input id="not" class="r" value="2"></div>
-<div><label>Makler % (inkl. MwSt.)</label><input id="mak" class="r" value="3,57"></div></div>
+<div><label>Makler % (inkl. MwSt.)</label><input id="mak" class="r" value="3,57"></div>
+<div><label>Gutachter, Sonstiges € (einmalig)</label><input id="gut" class="r" value="0"></div></div>
 <div class="small" style="margin-top:6px">Steuersätze nach Bundesland bitte aktuell prüfen. Sie können sich ändern.</div></section>
 
 <section class="adv" data-view="annahmen"><h2>4 · Finanzierung und Annahmen</h2><div class="g">
@@ -125,6 +131,20 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 </div>
 
 <div id="rc">
+<section class="adv" data-view="annahmen"><h2>5 · Erbbaurecht (optional)</h2><div class="g">
+<div><label>Grundstück im Erbbaurecht?</label><select id="erb"><option value="nein">Nein, Eigentum</option><option value="ja">Ja, Erbbaurecht</option></select></div>
+<div><label>Erbbauzins € pro Jahr</label><input id="ebz" class="r" value="0"></div>
+<div><label>Restlaufzeit Erbbaurecht Jahre</label><input id="ebl" class="r" value="0"></div>
+<div><label>Erbbauzins-Anpassung % p. a.</label><input id="eba" class="r" value="1,5"></div></div>
+<div class="small" style="margin-top:6px">Bei Erbbaurecht zahlst du Erbbauzins statt Bodenwert zu kaufen. Er mindert den Ertrag. Die Restlaufzeit begrenzt den Wert beim Verkauf.</div></section>
+<section class="adv" data-view="annahmen"><h2>6 · Ertragswert (Bankensicht)</h2><div class="g">
+<div><label>Bodenrichtwert €/m²</label><input id="bw" class="r" value="0"></div>
+<div><label>Grundstücksfläche m²</label><input id="gf" class="r" value="0"></div>
+<div><label>Liegenschaftszins %</label><input id="lz" class="r" value="3"></div>
+<div><label>Restnutzungsdauer Jahre</label><input id="rnd" class="r" value="50"></div></div>
+<div class="small" style="margin-top:6px">Bodenrichtwert und Liegenschaftszins stammen vom örtlichen Gutachterausschuss. Die Standardwerte sind nur Platzhalter.</div></section>
+<section data-view="wert"><h2>Ertragsrechnung im ersten Jahr</h2><div id="ertrag"></div></section>
+<section data-view="wert"><h2>Deckt der Ertrag die Zinsen? Ertragswert</h2><div id="ew"></div></section>
 <section data-view="stress" id="s-stress"><h2>Stresstest: Was, wenn es schlechter läuft?</h2><div id="stress"></div><div class="small" style="margin-top:6px">Zeigt, ob das Objekt auch bei höherem Zins, niedrigerer Miete oder mehr Leerstand trägt.</div></section>
 <section data-view="stress"><h2>Kaufpreis-Sensitivität (Verhandlungsspielraum)</h2><table id="sens"></table><div class="small" id="maxkp" style="margin-top:8px"></div></section>
 <section class="adv" data-view="grafik" id="s-grafik"><h2>Grafik: Vermögen, Restschuld und Cashflow</h2><div id="charts"></div></section>
@@ -142,28 +162,30 @@ const nf=(x,d=0)=>x==null||!isFinite(x)?"–":x.toLocaleString("de-DE",{minimumF
 const num=s=>{s=String(s??"").trim().replace(/\s/g,"");if(!s)return null;if(s.includes(","))s=s.replace(/\./g,"").replace(",",".");const v=parseFloat(s);return isNaN(v)?null:v};
 const BL={"Baden-Württemberg":5,"Bayern":3.5,"Berlin":6,"Brandenburg":6.5,"Bremen":5,"Hamburg":5.5,"Hessen":6,"Mecklenburg-Vorpommern":6,"Niedersachsen":5,"Nordrhein-Westfalen":6.5,"Rheinland-Pfalz":5,"Saarland":6.5,"Sachsen":5.5,"Sachsen-Anhalt":5,"Schleswig-Holstein":6.5,"Thüringen":5};
 $("bl").innerHTML=Object.keys(BL).map(k=>`<option>${k}</option>`).join("");
-const F=["name","kp","wf","san","vgl","vglq","mist","mmar","mq","mmode","lee","nuk","ihr","bl","grest","not","mak","ek","zi","ti","hd","ms","ws","vk","zr","zirr","st","gs","afa"];
+const F=["name","kp","wf","san","vgl","vglq","mist","mmar","mq","mmode","lee","nuk","ihr","bl","grest","not","mak","ek","zi","ti","hd","ms","ws","vk","zr","zirr","st","gs","afa","mau","verw","we","hg","gut","erb","ebz","ebl","eba","bw","gf","lz","rnd"];
 try{const o=JSON.parse(localStorage.getItem("kc1")||"null");if(o)F.forEach(f=>{if(o[f]!=null)$(f).value=o[f]})}catch(e){}
 if(!$("grest").value)$("grest").value=nf(BL[$("bl").value],1);
 $("bl").addEventListener("change",()=>{$("grest").value=nf(BL[$("bl").value],1);calc()});
 function neu(){if(confirm("Alle Eingaben löschen?")){try{localStorage.removeItem("kc1")}catch(e){}location.reload()}}
 function irr(cf){let lo=-0.99,hi=1,v=r=>cf.reduce((s,c,t)=>s+c/Math.pow(1+r,t),0);if(v(lo)*v(hi)>0)return null;for(let i=0;i<100;i++){const m=(lo+hi)/2;if(v(lo)*v(m)<=0)hi=m;else lo=m}return(lo+hi)/2}
 function model(kp,P){
- const wf=P.wf,sn=P.san,nk=(P.grest+P.not+P.mak)/100,ges=kp*(1+nk)+sn;
+ const wf=P.wf,sn=P.san,nk=(P.grest+P.not+P.mak)/100,ges=kp*(1+nk)+sn+P.gut;
  const mie=(P.mode=="markt"&&P.mmar!=null?P.mmar:P.mist);if(mie==null)return null;
- const jm=wf*mie*12,aus=jm*P.lee/100,kost=wf*(P.nuk+P.ihr),rein=jm-aus-kost;
+ const ebz0=P.erb?P.ebz:0;const jm=wf*mie*12,aus=jm*(P.lee+P.mau)/100,kV=P.verw*P.we,kI=wf*P.ihr,kH=P.hg*12,kS=wf*P.nuk,kost=kV+kI+kH+kS+ebz0,rein=jm-aus-kost;
  const dar=Math.max(0,ges-P.ek),P_=dar*(P.zi+P.ti)/100;
  const cf=[-Math.min(P.ek,ges)];let bal=dar,rows=[],miet=jm;
- for(let y=1;y<=P.hd;y++){const r=(y==1?1:Math.pow(1+P.ms/100,y-1));const ein=(jm-aus)*r-kost;const zins=bal*P.zi/100;const ca=ein-P_;bal=Math.max(0,bal*(1+P.zi/100)-P_);cf.push(ca);rows.push([y,ein,P_,ca,bal])}
+ for(let y=1;y<=P.hd;y++){const r=(y==1?1:Math.pow(1+P.ms/100,y-1));const ein=(jm-aus)*r-(kost-ebz0)-ebz0*Math.pow(1+P.eba/100,y-1);const zins=bal*P.zi/100;const ca=ein-P_;bal=Math.max(0,bal*(1+P.zi/100)-P_);cf.push(ca);rows.push([y,ein,P_,ca,bal])}
  const afaB=kp*(1+nk)*P.gs/100+sn,afa=afaB*P.afa/100,zins1=dar*P.zi/100,tx=jm-aus-kost-zins1-afa,steuer=tx*P.st/100;
- const wert=(kp+sn)*Math.pow(1+P.ws/100,P.hd),erl=wert*(1-P.vk/100)-bal;cf[cf.length-1]+=erl;
- return{afa,zins1,tx,steuer,cfn:(rein-P_-steuer)/12,ges,nk,jm,rein,net:rein/ges*100,bru:jm/ges*100,fak:ges/jm,dar,P_,cf0:(rein-P_)/12,cfs:cf,irr:irr(cf),rows,wert,erl,bal,mie,kost,aus};}
+ const ef=P.erb&&P.ebl>0?Math.max(0,(P.ebl-P.hd)/P.ebl):1;const bwv=P.erb?0:P.bw*P.gf,lzs=P.lz/100,vv=lzs>0?(1-Math.pow(1+lzs,-P.rnd))/lzs:P.rnd,rg=rein-bwv*lzs,ew=rg*vv+bwv;
+ const wert=(kp+sn)*Math.pow(1+P.ws/100,P.hd)*ef,erl=wert*(1-P.vk/100)-bal;cf[cf.length-1]+=erl;
+ return{ew,bwv,vv,rg,kV,kI,kH,kS,ebz0,icr:zins1>0?rein/zins1:null,dscr:P_>0?rein/P_:null,afa,zins1,tx,steuer,cfn:(rein-P_-steuer)/12,ges,nk,jm,rein,net:rein/ges*100,bru:jm/ges*100,fak:ges/jm,dar,P_,cf0:(rein-P_)/12,cfs:cf,irr:irr(cf),rows,wert,erl,bal,mie,kost,aus};}
 function readVals(){const o={};F.forEach(f=>o[f]=$(f).value);return o}
-function parseP(v){return{wf:num(v.wf),san:num(v.san)||0,vgl:num(v.vgl),mist:num(v.mist),mmar:num(v.mmar),mode:v.mmode,lee:num(v.lee)||0,nuk:num(v.nuk)||0,ihr:num(v.ihr)||0,grest:num(v.grest)||0,not:num(v.not)||0,mak:num(v.mak)||0,ek:num(v.ek)||0,zi:num(v.zi)||0,ti:num(v.ti)||0,hd:Math.max(1,Math.min(40,Math.round(num(v.hd)||10))),ms:num(v.ms)||0,ws:num(v.ws)||0,vk:num(v.vk)||0,st:num(v.st)??30,gs:num(v.gs)??80,afa:num(v.afa)??2}}
+function parseP(v){return{mau:num(v.mau)??2,verw:num(v.verw)??300,we:Math.max(1,num(v.we)||1),hg:num(v.hg)||0,gut:num(v.gut)||0,erb:v.erb=="ja",ebz:num(v.ebz)||0,ebl:num(v.ebl)||0,eba:num(v.eba)||0,bw:num(v.bw)||0,gf:num(v.gf)||0,lz:num(v.lz)??3,rnd:num(v.rnd)??50,wf:num(v.wf),san:num(v.san)||0,vgl:num(v.vgl),mist:num(v.mist),mmar:num(v.mmar),mode:v.mmode,lee:num(v.lee)||0,nuk:num(v.nuk)||0,ihr:num(v.ihr)||0,grest:num(v.grest)||0,not:num(v.not)||0,mak:num(v.mak)||0,ek:num(v.ek)||0,zi:num(v.zi)||0,ti:num(v.ti)||0,hd:Math.max(1,Math.min(40,Math.round(num(v.hd)||10))),ms:num(v.ms)||0,ws:num(v.ws)||0,vk:num(v.vk)||0,st:num(v.st)??30,gs:num(v.gs)??80,afa:num(v.afa)??2}}
 function judge(v){const P=parseP(v),kp=num(v.kp),zr=num(v.zr)||0,zirr=num(v.zirr)||0;if(!kp||!P.wf)return{m:null,leer:true};const m=model(kp,P);if(!m)return{m:null};
  const ppm=kp/P.wf,rule=[];const c1=m.net>=zr,c2=m.cf0>=0,c3=m.irr!=null&&m.irr*100>=zirr,c4=P.vgl==null?null:ppm<=P.vgl*1.05;
  rule.push([c1,`Nettorendite ${nf(m.net,2)} % ${c1?"erreicht":"unter"} Ziel ${nf(zr,1)} %`]);rule.push([c2,`Cashflow nach Kapitaldienst ${nf(m.cf0)} € pro Monat ${c2?"(positiv)":"(negativ, du zahlst zu)"}`]);
  rule.push([c3,`Eigenkapitalrendite (IRR) ${m.irr==null?"nicht berechenbar":nf(m.irr*100,1)+" %"} ${c3?"erreicht":"unter"} Ziel ${nf(zirr,1)} %`]);
+ if(m.icr!=null){const c5=m.icr>=1;rule.push([c5,`Der Ertrag ${c5?"deckt":"deckt nicht"} die Zinsen (${nf(m.rein)} € Reinertrag zu ${nf(m.zins1)} € Zinsen, ${nf(m.icr,2)}-fach)`])}
  if(c4!=null)rule.push([c4,`Kaufpreis ${nf(ppm)} €/m² ${c4?"im Rahmen":"über"} Vergleich ${nf(P.vgl)} €/m²`]);
  const ok=rule.filter(r=>r[0]).length,tot=rule.length,maxkp=(m.rein/(zr/100)-P.san)/(1+m.nk);let cls,t;
  if(ok==tot){cls="ok";t=DOT.g+"Kaufen"}else if(ok>=tot-2&&ok>=1&&maxkp>kp*0.7){cls="warn";t=DOT.y+"Nur mit Verhandlung"}else{cls="bad";t=DOT.r+"Nicht kaufen"}
@@ -221,11 +243,27 @@ function svgChart(title,years,series,bars){const W=460,H=210,L=58,R=14,T=26,B=28
 function drawCharts(m,P,kp){const ys=m.rows.map(r=>r[0]);const wert=y=>(kp+P.san)*Math.pow(1+P.ws/100,y);
  const rest=m.rows.map(r=>r[4]),verm=m.rows.map(r=>wert(r[0])-r[4]),cf=m.rows.map(r=>r[3]);
  $("charts").innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">${svgChart("Nettovermögen (Wert − Restschuld) und Restschuld, €",ys,[{n:"Nettovermögen",v:verm,c:"#111"},{n:"Restschuld",v:rest,c:"#9a9a94"}])}${svgChart("Cashflow pro Jahr nach Kapitaldienst, €",ys,[],{v:cf})}</div><div class="small" style="margin-top:6px">Vor Steuern. Wert mit der angenommenen jährlichen Wertentwicklung fortgeschrieben, ohne Verkaufskosten.</div>`}
+function drawEW(m,P,kp){const jm=m.jm,pc=x=>jm?nf(x/jm*100,1)+" %":"";
+ const r=(l,v,o={})=>`<tr class="${o.sum?"sum":""}"><td>${l}</td><td>${o.neg?"−":""}${nf(Math.abs(v))} €</td><td class="m">${pc(Math.abs(v))}</td></tr>`;
+ let h='<table class="et"><tr><th>Position</th><th>€ pro Jahr</th><th>% der Miete</th></tr>'+r("Nettokaltmiete",jm)+r("Leerstand ("+nf(P.lee,1)+" %)",jm*P.lee/100,{neg:1})+r("Mietausfallwagnis ("+nf(P.mau,1)+" %)",jm*P.mau/100,{neg:1})
+ +r("Verwaltung",m.kV,{neg:1})+r("Instandhaltung",m.kI,{neg:1})+(m.kH?r("Hausgeld nicht umlagefähig",m.kH,{neg:1}):"")+(m.kS?r("Sonstige nicht umlagefähige Kosten",m.kS,{neg:1}):"")+(m.ebz0?r("Erbbauzins",m.ebz0,{neg:1}):"")
+ +r("Reinertrag vor Finanzierung",m.rein,{sum:1})+r("Zinsen im 1. Jahr",m.zins1,{neg:1})+r("Tilgung im 1. Jahr",m.P_-m.zins1,{neg:1})+r("Cashflow vor Steuern",m.rein-m.P_,{sum:1})+"</table>";
+ $("ertrag").innerHTML=h;
+ const dek=m.icr==null?null:m.icr,okz=dek==null||dek>=1,dev=(kp+P.san)>0?(m.ew/(kp+P.san)-1)*100:null;
+ let e='<div class="cards"><div class="k"><div class="l">Zinsdeckung</div><div class="v n">'+(dek==null?"–":nf(dek,2)+"-fach")+'</div><div class="s">Reinertrag ÷ Zinsen im 1. Jahr</div></div>'
+ +'<div class="k"><div class="l">Kapitaldienstdeckung</div><div class="v n">'+(m.dscr==null?"–":nf(m.dscr,2)+"-fach")+'</div><div class="s">Reinertrag ÷ (Zins + Tilgung)</div></div>'
+ +'<div class="k"><div class="l">Ertragswert</div><div class="v n">'+nf(m.ew)+' €</div><div class="s">Bodenwert '+nf(m.bwv)+' € + Gebäudeertragswert</div></div>'
+ +'<div class="k"><div class="l">Kaufpreis plus Sanierung</div><div class="v n">'+nf(kp+P.san)+' €</div><div class="s">'+(dev==null?"":(dev>=0?"Ertragswert liegt "+nf(dev,1)+" % darüber":"Kaufpreis liegt "+nf(-dev,1)+" % über dem Ertragswert"))+'</div></div></div>';
+ e+=dek==null?'<div class="note">Ohne Darlehen gibt es keine Zinsen. Der Ertrag deckt sie vollständig.</div>':`<div class="note ${okz?"ok":"warn"}"><b>${okz?"Der Ertrag deckt die Zinsen.":"Der Ertrag deckt die Zinsen nicht."}</b> Reinertrag ${nf(m.rein)} € gegenüber ${nf(m.zins1)} € Zinsen im ersten Jahr${okz?"":", es fehlen "+nf(m.zins1-m.rein)+" € schon vor der Tilgung"}.</div>`;
+ if(m.dscr!=null&&m.dscr<1)e+=`<div class="note warn">Der Ertrag reicht nicht für Zins und Tilgung zusammen (${nf(m.dscr,2)}-fach). Banken verlangen bei Vermietung meist mehr als 1,0.</div>`;
+ if(!P.erb&&(!P.bw||!P.gf))e+='<div class="note">Bodenwert fehlt: Bodenrichtwert und Grundstücksfläche unter „Annahmen“ eintragen, sonst ist der Ertragswert nur grob.</div>';
+ if(P.erb)e+=`<div class="note ${P.ebl&&P.ebl<40?"warn":""}">Erbbaurecht: Erbbauzins ${nf(m.ebz0)} € pro Jahr, Restlaufzeit ${P.ebl||"?"} Jahre. ${P.ebl&&P.ebl<40?"Bei unter 40 Jahren Restlaufzeit ist die Finanzierung oft schwierig und der Wert sinkt deutlich. ":""}Der Verkaufswert nach ${P.hd} Jahren ist um den Laufzeitverlust gekürzt.</div>`;
+ e+='<div class="small" style="margin-top:8px">Vereinfachtes Ertragswertverfahren. Maßgeblich ist das Gutachten der Bank oder des Gutachterausschusses.</div>';$("ew").innerHTML=e}
 function calc(){
   const rv=readVals(),P=parseP(rv),kp=num(rv.kp),zr=num(rv.zr)||0,zirr=num(rv.zirr)||0;
  try{const o={};F.forEach(f=>o[f]=$(f).value);localStorage.setItem("kc1",JSON.stringify(o))}catch(e){}
  const V=$("verdict");
- if(!kp||!P.wf){V.className="verdict";V.innerHTML='<div class="empty"><div class="t">Lohnt sich der Kauf?</div><div class="small">Trag links Kaufpreis, Fläche, Miete und Eigenkapital ein. Dann bekommst du sofort ein Urteil mit Begründung.</div><button class="p" onclick="beispiel()">Beispiel ausprobieren</button></div>';$("kz").innerHTML=$("sens").innerHTML=$("verl").innerHTML=$("maxkp").innerHTML=$("stress").innerHTML=$("charts").innerHTML="";return}
+ if(!kp||!P.wf){V.className="verdict";V.innerHTML='<div class="empty"><div class="t">Lohnt sich der Kauf?</div><div class="small">Trag links Kaufpreis, Fläche, Miete und Eigenkapital ein. Dann bekommst du sofort ein Urteil mit Begründung.</div><button class="p" onclick="beispiel()">Beispiel ausprobieren</button></div>';$("kz").innerHTML=$("sens").innerHTML=$("verl").innerHTML=$("maxkp").innerHTML=$("stress").innerHTML=$("charts").innerHTML=$("ertrag").innerHTML=$("ew").innerHTML="";return}
   const J=judge(rv);if(!J.m){V.className="verdict warn";V.innerHTML='<div class="t">Fast geschafft: Miete fehlt</div><div class="small">Trag die monatliche Nettokaltmiete pro m² ein (oder die Marktmiete im Experten-Modus).</div>';return}
   const m=J.m,rule=J.rule,ok=J.ok,tot=J.tot,cls=J.cls,t=J.t,maxkp=J.maxkp,ppm=kp/P.wf;
  V.className="verdict "+cls;
@@ -237,7 +275,7 @@ function calc(){
   .map(([l,v,s])=>{const a=s.endsWith("|adv")||l=="Kaufpreis pro m²"||l=="Darlehen";if(a)s=s.slice(0,-4);return`<div class="k${a?" adv":""}"><div class="l">${l}</div><div class="v n">${v}</div><div class="s">${s}</div></div>`}).join("");
  let h="<tr><th>Kaufpreis</th><th>Preis</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th></tr>";
  [0,-5,-10,-15,-20].forEach(d=>{const k2=kp*(1+d/100),mm=model(k2,P);h+=`<tr><td>${d?d+" %":"Angebot"}</td><td class="n">${nf(k2)} €</td><td class="n">${nf(mm.net,2)} %</td><td class="n">${nf(mm.cf0)} €</td><td class="n">${mm.irr==null?"–":nf(mm.irr*100,1)+" %"}</td></tr>`});
- $("sens").innerHTML=h;drawStress();drawCharts(m,P,kp);
+ $("sens").innerHTML=h;drawStress();drawCharts(m,P,kp);drawEW(m,P,kp);
  $("maxkp").innerHTML=`Höchstpreis für ${nf(zr,1)} % Nettorendite: <b>${nf(maxkp)} €</b>${P.vgl?` · Preis laut Vergleich ${nf(P.vgl*P.wf)} €`:""}`;
  let t2="<tr><th>Jahr</th><th>Überschuss</th><th>Kapitaldienst</th><th>Cashflow</th><th>Restschuld</th></tr>";
  m.rows.forEach(r=>t2+=`<tr><td>${r[0]}</td><td class="n">${nf(r[1])}</td><td class="n">${nf(r[2])}</td><td class="n">${nf(r[3])}</td><td class="n">${nf(r[4])}</td></tr>`);
@@ -245,9 +283,9 @@ function calc(){
  $("verl").innerHTML=t2;
 }
 const HELP={kp:"Der verlangte Kaufpreis ohne Nebenkosten.",wf:"Vermietbare Wohn- oder Nutzfläche in m², nicht die Grundstücksfläche.",mist:"Kaltmiete pro m² und Monat ohne Nebenkosten (Ist-Miete laut Mietvertrag).",ek:"Dein eigenes Geld, das du einbringst. Der Rest wird als Darlehen angesetzt.",
- san:"Kosten, die du direkt nach dem Kauf für Sanierung oder Modernisierung einplanst.",vgl:"Typischer Kaufpreis pro m² in der Gegend, z. B. vom Gutachterausschuss. Dient zum Preis-Check.",mmar:"Aktuelle ortsübliche Miete laut Mietspiegel, falls die Ist-Miete davon abweicht.",lee:"Anteil der Miete, der durch Leerstand oder Zahlungsausfall wegfällt.",nuk:"Kosten, die der Vermieter selbst trägt und nicht auf Mieter umlegen kann (z. B. Verwaltung).",ihr:"Geld, das du jährlich für Reparaturen zurücklegen solltest. Bei älteren Häusern eher mehr.",
+ san:"Kosten, die du direkt nach dem Kauf für Sanierung oder Modernisierung einplanst.",vgl:"Typischer Kaufpreis pro m² in der Gegend, z. B. vom Gutachterausschuss. Dient zum Preis-Check.",mmar:"Aktuelle ortsübliche Miete laut Mietspiegel, falls die Ist-Miete davon abweicht.",lee:"Anteil der Miete, der durch Leerstand oder Zahlungsausfall wegfällt.",nuk:"Weitere Kosten, die du selbst trägst und nicht auf Mieter umlegen kannst (ohne Verwaltung und Instandhaltung).",ihr:"Geld für Reparaturen und Instandhaltung pro m² und Jahr. Bei älteren Häusern eher mehr.",
  grest:"Steuer beim Kauf, je nach Bundesland. Bitte aktuellen Satz prüfen.",not:"Notar- und Grundbuchkosten, meist rund 1,5 bis 2 %.",mak:"Maklerprovision des Käufers inklusive Mehrwertsteuer, falls ein Makler beteiligt ist.",zi:"Zinssatz des Darlehens pro Jahr.",ti:"Anfängliche Tilgung pro Jahr in Prozent des Darlehens.",hd:"Wie viele Jahre du die Immobilie halten willst, bevor du rechnerisch verkaufst.",ms:"Erwartete jährliche Steigerung der Miete.",ws:"Erwartete jährliche Wertentwicklung der Immobilie.",vk:"Kosten beim späteren Verkauf in Prozent des Erlöses.",zr:"Mindest-Nettorendite, die du erreichen willst. Darunter wird das Urteil schlechter.",zirr:"Mindest-Rendite auf dein eingesetztes Eigenkapital (inkl. Verkauf am Ende). Alles darüber ist gut.",
- st:"Dein persönlicher Grenzsteuersatz auf Mieteinkünfte (grobe Schätzung, frag im Zweifel den Steuerberater).",gs:"Anteil des Kaufpreises, der auf das Gebäude entfällt (Grund und Boden ist nicht abschreibbar). Oft 70 bis 85 %.",afa:"Jährliche steuerliche Abschreibung des Gebäudes. Üblich: 2 % (Neubau ab 2023: 3 %, Altbau vor 1925: 2,5 %).",ans:"Nur im Baukostenrechner relevant."};
+ st:"Dein persönlicher Grenzsteuersatz auf Mieteinkünfte (grobe Schätzung, frag im Zweifel den Steuerberater).",gs:"Anteil des Kaufpreises, der auf das Gebäude entfällt (Grund und Boden ist nicht abschreibbar). Oft 70 bis 85 %.",afa:"Jährliche steuerliche Abschreibung des Gebäudes. Üblich: 2 % (Neubau ab 2023: 3 %, Altbau vor 1925: 2,5 %).",mau:"Anteil der Miete, der durch zahlungsunfähige Mieter ausfällt. Getrennt vom Leerstand, banküblich 2 %.",verw:"Kosten der Hausverwaltung pro Wohnung und Jahr, bei Eigentumswohnungen über das Hausgeld.",we:"Anzahl der vermieteten Einheiten für die Verwaltungskosten.",hg:"Nur bei Eigentumswohnung: Teil des Hausgelds, der nicht auf Mieter umgelegt werden kann (z. B. Verwaltung, Rücklage).",gut:"Einmalige Kosten wie Gutachter, Finanzierungsgebühren oder Maklerleistungen außerhalb der Provision.",erb:"Bei Erbbaurecht gehört dir nur das Gebäude, das Grundstück bleibt beim Erbbaurechtsgeber.",ebz:"Jährlicher Erbbauzins an den Grundstückseigentümer. Er mindert den Ertrag.",ebl:"Restlaufzeit des Erbbaurechts in Jahren. Kurze Restlaufzeiten drücken Wert und Finanzierbarkeit.",eba:"Erwartete jährliche Erhöhung des Erbbauzinses (Wertsicherung).",bw:"Bodenrichtwert in €/m² vom Gutachterausschuss, Grundlage für den Bodenwert.",gf:"Größe des Grundstücks in m².",lz:"Liegenschaftszins des Gutachterausschusses, Verzinsung des Bodenwerts im Ertragswertverfahren.",rnd:"Wie viele Jahre das Gebäude noch wirtschaftlich nutzbar ist.",ans:"Nur im Baukostenrechner relevant."};
 Object.keys(HELP).forEach(id=>{const e=$(id);if(!e)return;const l=e.parentElement.querySelector("label");if(l){const i=document.createElement("i");i.className="hi";i.tabIndex=0;i.textContent="?";i.dataset.t=HELP[id];l.appendChild(i)}});
 function setMode(x){document.body.classList.toggle("simple",!x);$("mE").className=x?"":"on";$("mX").className=x?"on":"";try{localStorage.setItem("kcm",x)}catch(e){}}
 function beispiel(){const v={name:"Beispiel: Mehrfamilienhaus",kp:"330000",wf:"240",mist:"8,5",ek:"100000"};F.forEach(f=>{if(v[f]!=null)$(f).value=v[f]});calc()}
@@ -268,7 +306,7 @@ function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){alert("Bit
  $("rep").innerHTML=`<div class="bar"><button onclick="window.print()" class="p">Drucken / als PDF sichern</button><button onclick="$('rep').classList.remove('show')">Schließen</button></div><div class="sheet">
  <div class="pg"><div class="meta">Kaufcheck Immobilie · Wirtschaftlichkeitsprüfung</div><h1>${e(rv.name||"Objekt")}</h1><div class="meta">Stand ${d}</div>
   <div style="margin-top:40px">${$("verdict").outerHTML}</div><div class="small" style="margin-top:30px">Überschlagsrechnung vor Steuern. Keine Anlage-, Rechts- oder Steuerberatung.</div></div>
- <div class="pg"><h3>Kennzahlen</h3><div class="cards">${$("kz").innerHTML}</div><h3>Stresstest</h3>${$("stress").innerHTML}<h3>Kaufpreis-Sensitivität</h3><table>${$("sens").innerHTML}</table><div class="small">${$("maxkp").innerHTML}</div></div>
+ <div class="pg"><h3>Kennzahlen</h3><div class="cards">${$("kz").innerHTML}</div><h3>Stresstest</h3>${$("stress").innerHTML}<h3>Ertragsrechnung (Jahr 1)</h3>${$("ertrag").innerHTML}<h3>Ertragswert und Zinsdeckung</h3>${$("ew").innerHTML}<h3>Kaufpreis-Sensitivität</h3><table>${$("sens").innerHTML}</table><div class="small">${$("maxkp").innerHTML}</div></div>
  <div class="pg"><h3>Grafik</h3>${$("charts").innerHTML}<h3>Entwicklung über die Haltedauer</h3><table>${$("verl").innerHTML}</table><h3>Annahmen und Eingaben</h3><table>${ann}</table>${rv.vglq?`<div class="small">Quelle Vergleichspreis: ${e(rv.vglq)}</div>`:""}${rv.mq?`<div class="small">Quelle Marktmiete: ${e(rv.mq)}</div>`:""}</div>
  <div class="pg"><h3>Offene Punkte und Risiken (Objektcheck)</h3><ul>${open||"<li>keine</li>"}</ul>${done?`<h3>Geklärt</h3><ul>${done}</ul>`:""}<div class="small" style="margin-top:20px">Alle Werte sind Annahmen des Nutzers bzw. Standardwerte und vor einer Kaufentscheidung zu prüfen. Steuerliche Angaben sind stark vereinfacht. Dieses Dokument ersetzt keine Beratung durch Steuerberater, Gutachter oder Bank.</div></div></div>`;
  $("rep").classList.add("show");$("rep").scrollTop=0}
