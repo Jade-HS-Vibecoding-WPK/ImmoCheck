@@ -46,6 +46,7 @@ table{width:100%;border-collapse:collapse}th{font-size:12px;color:var(--mu);text
 <section><h2><span>3</span>Bauwerkskosten KG 300+400 · BKI-Orientierung</h2>
 <div class="row"><label style="margin:0"><input type="checkbox" id="netto" style="width:auto"> Netto (brutto ÷ 1,19)</label>
 <div style="width:200px"><label>Region</label><input id="reg" placeholder="Bundesdurchschnitt"></div><div style="width:110px"><label>Faktor</label><input id="fak" placeholder="z. B. 0,95"></div><div style="flex:1;min-width:200px"><label>Beleg Regionalfaktor (BKI S. 1144)</label><input id="fakq"></div></div>
+<div class="row" style="margin-top:10px"><div style="width:220px"><label>Budget für KG 300+400 (€, gleiche Basis wie Anzeige)</label><input id="bud" class="r" placeholder="z. B. 450000"></div><div id="ampel" style="flex:1;min-width:260px"></div></div>
 <div id="regh" class="note" style="display:none"></div>
 <div class="cards" id="orient" style="margin-top:12px"></div>
 <div class="small" id="ohin" style="margin-top:8px"></div></section>
@@ -68,7 +69,7 @@ const eur=x=>x==null?"–":"ca. "+(Math.round(x/1000)*1000).toLocaleString("de-D
 const eur2=x=>x==null?"offen":nf(x,2)+" €";
 const FAM=[[/mehrfamil|mfh|\bwe\b|wohneinheit/i,"Mehrfamilienhäuser"],[/gemeinde/i,"Gemeindezentren"],[/kita|kindergarten/i,"Kindergarten"],[/schule/i,"Schulen"],[/büro|verwaltung/i,"Büro und Verwaltung"],[/einfamilien|efh|zfh|wohnhaus/i,"Ein- und Zweifamilienhäuser"],[/sporthalle|turnhalle/i,"Sport"],[/kirche|sakral/i,"Sakralbauten"],[/hotel/i,"Hotels"],[/garage/i,"Garagen"],[/lager/i,"Lager"],[/feuerwehr/i,"Feuerwehrhäuser"]];
 let S={ebenen:[{n:"Erdgeschoss",l:"",b:"",f:"",h:"",q:""}],bt:[],};
-const FIELDS=["name","typ","ort","stand","kat","zus","zusq","reg","fak","fakq"];
+const FIELDS=["bud","name","typ","ort","stand","kat","zus","zusq","reg","fak","fakq"];
 function save(){try{const o={};FIELDS.forEach(f=>o[f]=$(f).value);o.netto=$("netto").checked;o.ebenen=S.ebenen;o.bt=S.bt;localStorage.setItem("bkr1",JSON.stringify(o))}catch(e){}}
 function load(){try{const o=JSON.parse(localStorage.getItem("bkr1")||"null");if(!o)return;FIELDS.forEach(f=>{if(o[f]!=null)$(f).value=o[f]});$("netto").checked=!!o.netto;S.ebenen=o.ebenen||S.ebenen;S.bt=o.bt||[]}catch(e){}}
 function neu(){if(confirm("Alle Eingaben löschen?")){try{localStorage.removeItem("bkr1")}catch(e){}location.reload()}}
@@ -111,6 +112,20 @@ function calc(){
   <div style="margin:6px 0">Kennwert ${eu}: von <b>${nf(v,0)}</b> · mittel <b>${nf(m,0)}</b> · bis <b>${nf(b,0)}</b></div>
   <div class="small">BKI Gebäude Neubau 2026, Übersicht S. ${K[pg]}, Detailkapitel ab S. ${K[1]} · ca. · aus BKI-Übersicht grafisch abgelesen${v==null||b==null?" · leeres Von/Bis = im Foto nicht auflösbar, kein Nullpreis":""}</div></div>`});
  $("orient").innerHTML=h;
+ // Budget-Ampel: Budget gegen die BKI-Spanne je Rechenweg
+ const bud=num($("bud").value);let am="";
+ if(bud!=null&&K){[["BGF",g,4],["BRI",r,7]].forEach(([nm,q,i0])=>{
+   if(q==null){am+=`<div class="note">${nm}: Menge fehlt, kein Vergleich möglich.</div>`;return}
+   const von=K[i0]==null?null:q*K[i0]*f,mi=q*K[i0+1]*f,bis=K[i0+2]==null?null:q*K[i0+2]*f;
+   let cls,ic,tx;
+   if(von!=null&&bud<von){cls="warn";ic="🔴";tx=`Budget liegt <b>unter</b> der BKI-Spanne (Von ${eur(von)}). Fehlbetrag zum Von-Wert: ${eur(von-bud)}.`}
+   else if(bud<mi){cls="warn";ic="🟡";tx=`Budget liegt im unteren Bereich (zwischen Von und Mittel ${eur(mi)}). Knapp, ${eur(mi-bud)} unter dem Mittelwert.`}
+   else if(bis!=null&&bud>bis){cls="ok";ic="🟢";tx=`Budget liegt <b>über</b> der BKI-Spanne (Bis ${eur(bis)}). Puffer ${eur(bud-bis)}.`}
+   else{cls="ok";ic="🟢";tx=`Budget liegt zwischen Mittelwert (${eur(mi)}) und Bis-Wert. Ausreichend im Rahmen der BKI-Streuung.`}
+   am+=`<div class="note ${cls}"><b>${ic} über ${nm}:</b> ${tx}</div>`});
+   am+='<div class="small">Die Ampel vergleicht mit der BKI-Streuung der Vergleichsobjekte, sie ist keine Kostengarantie.</div>'}
+ else if(bud!=null)am='<div class="note warn">Bitte zuerst eine Kategorie wählen.</div>';
+ $("ampel").innerHTML=am;
  $("ohin").innerHTML=`${hasRf?$("reg").value+" · Faktor "+nf(rf,3)+" ("+$("fakq").value+")":"Bundesdurchschnitt Deutschland"} · ${$("netto").checked?"netto (= brutto ÷ 1,19)":"brutto inkl. 19 % MwSt."} · Kostenstand 1. Quartal 2026<br>BGF- und BRI-Ansatz beschreiben dasselbe Bauwerk: nicht addieren, nicht mitteln. Anzeige gerundet auf Tausend Euro.`;
  // Bauteile
  let sum=0,pr=0,op=0;S.bt.forEach((b,i)=>{const m=num(b.m),p=num(b.p);if(m!=null&&p!=null){const a=Math.round(m*p*100)/100;sum+=a;pr++;$("bb"+i).textContent=nf(a)}else{op++;$("bb"+i).textContent="offen"}});
