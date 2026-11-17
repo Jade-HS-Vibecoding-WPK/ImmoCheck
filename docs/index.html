@@ -36,6 +36,12 @@ body.simple .adv{display:none!important}.mode{display:flex}.mode button{border-r
 .cmp td.res{height:50px}.cmp td.res .n{display:block;font-size:15px;padding-right:10px}.cmp tr.big td.res .n{font-size:16px;font-weight:650}
 .cmp td.res.best{background:var(--ok);font-weight:650}
 .bar{height:6px;background:var(--ac2);border-radius:3px;margin-top:5px;overflow:hidden;direction:rtl}.bar i{display:block;height:100%;background:#9a9a94;border-radius:3px}.bar i.dk{background:#111}.bar i.neg{background:#d04a4a}
+.ic{width:16px;height:16px;vertical-align:-3px;margin-right:9px}.cmp .x .ic,.x .ic{margin:0;vertical-align:-3px}.ico-r .ic{margin:0}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:9px;vertical-align:1px}.dg{background:#2e9e5b}.dy{background:#d9a21b}.dr{background:#d04a4a}
+.verdict ul{list-style:none;margin-left:0!important;padding:0}.verdict li{display:flex;gap:8px;align-items:flex-start}.verdict li .ic{margin:3px 0 0;flex:none}
+.cb{display:inline-grid;place-items:center;width:20px;height:20px;border:1.5px solid var(--mu);border-radius:5px;font-style:normal;font-size:12px;font-weight:700}.cb.d{background:#111;border-color:#111;color:#fff}.cb.d .ic{width:12px;height:12px;margin:0;stroke-width:2.2}.cb.p{border-color:#d04a4a;color:#d04a4a}
+.cli button{padding:3px 5px;border:0;background:transparent}
+@media(prefers-color-scheme:dark){.cb.d{background:#f1f1ef;border-color:#f1f1ef;color:#111}}
 .empty{text-align:center;padding:10px}.empty button{margin-top:10px}
 
 body{font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:-.005em}
@@ -71,10 +77,10 @@ section{padding:22px 24px}.g{gap:16px}h2{margin-bottom:14px}.cards{gap:14px}.top
 header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
 <div class="shell"><aside class="sb"><div class="logo"><span class="lg">K</span><div><b>Kaufcheck</b><div class="small">Immobilien-Wirtschaftlichkeit</div></div></div>
-<div class="nl">Hauptmenü</div><a href="#" data-nav="ueber" class="on">▣ Überblick</a><a href="#" data-nav="annahmen" class="adv">⌂ Annahmen</a><a href="#" data-nav="stress">⚡ Stresstest</a><a href="#" data-nav="grafik" class="adv">◔ Grafik und Verlauf</a><a href="#" data-nav="vergleich">⇄ Objekte vergleichen</a><a href="#" data-nav="check">☑ Checkliste</a><a href="#" onclick="showReport();return false">⎙ Bericht / PDF</a>
-<div class="nl">Werkzeuge</div><a href="baukosten.html">▤ Baukostenrechner</a><div class="sbfoot small">Alle Eingaben bleiben nur in deinem Browser. Überschlagsrechnung, keine Beratung.</div></aside><div class="content">
+<div class="nl">Hauptmenü</div><a href="#" data-nav="ueber" class="on"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg>Überblick</a><a href="#" data-nav="annahmen" class="adv"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h12M2 11h12"/><circle cx="6" cy="5" r="1.6"/><circle cx="10.5" cy="11" r="1.6"/></svg>Annahmen</a><a href="#" data-nav="stress"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h3l2-5 3 10 2-5h4"/></svg>Stresstest</a><a href="#" data-nav="grafik" class="adv"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13V8M8 13V3M13 13V6"/></svg>Grafik und Verlauf</a><a href="#" data-nav="vergleich"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h11l-3-3M14 11H3l3 3"/></svg>Objekte vergleichen</a><a href="#" data-nav="check"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8l2 2 4-4"/></svg>Checkliste</a><a href="#" onclick="showReport();return false"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h6l3 3v9H4z"/><path d="M10 2v3h3"/></svg>Bericht / PDF</a>
+<div class="nl">Werkzeuge</div><a href="baukosten.html"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14V3h7v11M10 7h3v7M5 6h3M5 9h3M5 12h3"/></svg>Baukostenrechner</a><div class="sbfoot small">Alle Eingaben bleiben nur in deinem Browser. Überschlagsrechnung, keine Beratung.</div></aside><div class="content">
 <header><div><div class="small">Kaufcheck › Überblick</div><h1>Lohnt sich der Kauf?</h1></div><div class="sp"></div>
-<div class="mode"><button id="mE" onclick="setMode(0)">Einfach</button><button id="mX" onclick="setMode(1)">Experte</button></div><button onclick="beispiel()">Beispiel laden</button><button class="p" onclick="showReport()">⎙ Bericht / PDF</button><button onclick="neu()">Neu</button></header>
+<div class="mode"><button id="mE" onclick="setMode(0)">Einfach</button><button id="mX" onclick="setMode(1)">Experte</button></div><button onclick="beispiel()">Beispiel laden</button><button class="p" onclick="showReport()"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h6l3 3v9H4z"/><path d="M10 2v3h3"/></svg>Bericht / PDF</button><button onclick="neu()">Neu</button></header>
 <main id="top">
 <div class="top" data-view="ueber"><div id="verdict"></div><div class="cards" id="kz"></div></div>
 <div id="s-angebot">
@@ -125,11 +131,13 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <section class="adv" data-view="grafik"><h2>Entwicklung über die Haltedauer</h2><table id="verl"></table></section>
 <div class="small">Überschlagsrechnung vor Steuern, ohne Förderung, Sonderumlagen und Leerstandsrisiken im Einzelfall. Keine Anlage- oder Rechtsberatung. Alle Annahmen sind im Experten-Modus änderbar. Eingaben bleiben nur in deinem Browser.</div>
 </div><section id="s-vergleich" data-view="vergleich"><h2>Objekte vergleichen <button class="p" style="float:right" onclick="saveObj()">+ Objekt speichern</button></h2><div id="objs"></div><div id="objin"></div><div id="objres" style="margin-top:14px"></div></section>
-<section id="s-check" data-view="check"><h2>Checkliste fürs Objekt <span class="small" id="clsum"></span></h2><div class="small" style="margin-bottom:8px">Klick auf das Symbol wechselt: ⬜ offen → ✅ geklärt → ⚠️ Problem. Offene Punkte und Probleme erscheinen im Bericht.</div><div id="cl"></div></section>
+<section id="s-check" data-view="check"><h2>Checkliste fürs Objekt <span class="small" id="clsum"></span></h2><div class="small" style="margin-bottom:8px">Klick auf das Kästchen wechselt: offen → geklärt → Problem. Offene Punkte und Probleme erscheinen im Bericht.</div><div id="cl"></div></section>
 </main></div></div>
 <div id="rep"></div>
 <script>
 const $=id=>document.getElementById(id);
+const DOT={g:'<span class="dot dg"></span>',y:'<span class="dot dy"></span>',r:'<span class="dot dr"></span>'};const ICO={ok:'<svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg>',no:'<svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>'};
+
 const nf=(x,d=0)=>x==null||!isFinite(x)?"–":x.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d});
 const num=s=>{s=String(s??"").trim().replace(/\s/g,"");if(!s)return null;if(s.includes(","))s=s.replace(/\./g,"").replace(",",".");const v=parseFloat(s);return isNaN(v)?null:v};
 const BL={"Baden-Württemberg":5,"Bayern":3.5,"Berlin":6,"Brandenburg":6.5,"Bremen":5,"Hamburg":5.5,"Hessen":6,"Mecklenburg-Vorpommern":6,"Niedersachsen":5,"Nordrhein-Westfalen":6.5,"Rheinland-Pfalz":5,"Saarland":6.5,"Sachsen":5.5,"Sachsen-Anhalt":5,"Schleswig-Holstein":6.5,"Thüringen":5};
@@ -158,7 +166,7 @@ function judge(v){const P=parseP(v),kp=num(v.kp),zr=num(v.zr)||0,zirr=num(v.zirr
  rule.push([c3,`Eigenkapitalrendite (IRR) ${m.irr==null?"nicht berechenbar":nf(m.irr*100,1)+" %"} ${c3?"erreicht":"unter"} Ziel ${nf(zirr,1)} %`]);
  if(c4!=null)rule.push([c4,`Kaufpreis ${nf(ppm)} €/m² ${c4?"im Rahmen":"über"} Vergleich ${nf(P.vgl)} €/m²`]);
  const ok=rule.filter(r=>r[0]).length,tot=rule.length,maxkp=(m.rein/(zr/100)-P.san)/(1+m.nk);let cls,t;
- if(ok==tot){cls="ok";t="🟢 Kaufen"}else if(ok>=tot-2&&ok>=1&&maxkp>kp*0.7){cls="warn";t="🟡 Nur mit Verhandlung"}else{cls="bad";t="🔴 Nicht kaufen"}
+ if(ok==tot){cls="ok";t=DOT.g+"Kaufen"}else if(ok>=tot-2&&ok>=1&&maxkp>kp*0.7){cls="warn";t=DOT.y+"Nur mit Verhandlung"}else{cls="bad";t=DOT.r+"Nicht kaufen"}
  return{m,rule,ok,tot,cls,t,maxkp,P,kp,zr,zirr}}
 function stress(v){const J=judge(v);if(!J.m)return null;const P=J.P,kp=J.kp,mi=(P.mode=="markt"&&P.mmar!=null)?"mmar":"mist";
  const run=(dz,dm,dl)=>{const Q={...P,zi:P.zi+dz,lee:P.lee+dl};Q[mi]=P[mi]*(1+dm/100);const m=model(kp,Q);return m};
@@ -172,7 +180,7 @@ function stress(v){const J=judge(v);if(!J.m)return null;const P=J.P,kp=J.kp,mi=(
  return{sc,kz,km,kBE,lBE,mi:P[mi],J}}
 function drawStress(){const S=stress(readVals());const el=$("stress");if(!S){el.innerHTML='<div class="small">Erscheint, sobald ein Ergebnis berechnet ist.</div>';return}
  let h="<tr><th>Szenario</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th><th></th></tr>";
- S.sc.forEach(x=>{const m=x.m,ok=m.cf0>=0&&m.net>=S.J.zr;h+=`<tr><td>${x.n}</td><td class="n">${nf(m.net,2)} %</td><td class="n">${nf(m.cf0)} €</td><td class="n">${m.irr==null?"–":nf(m.irr*100,1)+" %"}</td><td>${m.cf0<0?"🔴":(ok?"🟢":"🟡")}</td></tr>`});
+ S.sc.forEach(x=>{const m=x.m,ok=m.cf0>=0&&m.net>=S.J.zr;h+=`<tr><td>${x.n}</td><td class="n">${nf(m.net,2)} %</td><td class="n">${nf(m.cf0)} €</td><td class="n">${m.irr==null?"–":nf(m.irr*100,1)+" %"}</td><td>${m.cf0<0?DOT.r:(ok?DOT.g:DOT.y)}</td></tr>`});
  let k="";if(S.kBE!=null)k+=`Break-even-Kaufpreis (Cashflow ±0): <b>${nf(S.kBE)} €</b> (${nf((S.kBE/S.J.kp-1)*100,1)} % zum Angebot). `;if(S.lBE!=null)k+=`Leerstand darf bis <b>${nf(S.lBE,1)} %</b> steigen. `;if(S.kz!=null)k+=`Der Cashflow wird negativ ab einem Zins von <b>${nf(S.kz,2)} %</b> (aktuell ${nf(S.J.P.zi,2)} %). `;
  if(S.km!=null)k+=`Die Miete darf bis <b>${nf(S.km,2)} €/m²</b> sinken, bevor der Cashflow negativ wird (aktuell ${nf(S.mi,2)} €/m²).`;
  $("stress").innerHTML="<table>"+h+"</table>"+(k?`<div class="note" style="margin-top:8px">${k}</div>`:"")}
@@ -187,7 +195,7 @@ function objEdit(i,f,val){OBJ[i][f]=val;persistObj();drawObjRes()}
 function drawObj(){const el=$("objs");$("objin").innerHTML="";$("objres").innerHTML="";
  if(!OBJ.length){el.innerHTML='<div class="small">Noch keine Objekte. Gib im Überblick ein Angebot ein und klicke oben auf „+ Objekt speichern“. Danach kannst du hier alle Werte direkt ändern und die Objekte nebeneinander vergleichen.</div>';return}
  const n=OBJ.length;let h=`<div class="cmpw"><table class="cmp"><colgroup><col style="width:190px">${OBJ.map(()=>`<col>`).join("")}</colgroup>
- <thead><tr><th></th>${OBJ.map((v,i)=>`<th><button class="x" onclick="dupObj(${i})" title="Als Variante kopieren">⧉</button><button class="x" onclick="loadObj(${i})" title="In den Überblick laden">↗</button><button class="x" onclick="delObj(${i})" title="Löschen">✕</button></th>`).join("")}</tr></thead>
+ <thead><tr><th></th>${OBJ.map((v,i)=>`<th><button class="x" onclick="dupObj(${i})" title="Als Variante kopieren"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10V4a1 1 0 011-1h6"/></svg></button><button class="x" onclick="loadObj(${i})" title="In den Überblick laden"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></button><button class="x" onclick="delObj(${i})" title="Löschen"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></th>`).join("")}</tr></thead>
  <tbody><tr class="sec"><td colspan="${n+1}">Eingaben</td></tr>`;
  EF.forEach(([f,l])=>{h+=`<tr><td class="lb">${l}</td>`+OBJ.map((v,i)=>`<td><input class="r" value="${String(v[f]??"").replace(/"/g,"&quot;")}" oninput="objEdit(${i},'${f}',this.value)"></td>`).join("")+"</tr>"});
  h+=`</tbody><tbody><tr class="sec"><td colspan="${n+1}">Ergebnis (rechnet live)</td></tr></tbody><tbody id="objresb"></tbody></table></div><div class="small" id="objnote" style="margin-top:8px"></div>`;
@@ -221,7 +229,7 @@ function calc(){
   const J=judge(rv);if(!J.m){V.className="verdict warn";V.innerHTML='<div class="t">Fast geschafft: Miete fehlt</div><div class="small">Trag die monatliche Nettokaltmiete pro m² ein (oder die Marktmiete im Experten-Modus).</div>';return}
   const m=J.m,rule=J.rule,ok=J.ok,tot=J.tot,cls=J.cls,t=J.t,maxkp=J.maxkp,ppm=kp/P.wf;
  V.className="verdict "+cls;
- V.innerHTML=`<div class="t">${t}</div><div>${$("name").value||"Objekt"} · Kaufpreis ${nf(kp)} € · ${ok} von ${tot} Kriterien erfüllt</div><ul>${rule.map(r=>`<li>${r[0]?"✅":"❌"} ${r[1]}</li>`).join("")}</ul>`
+ V.innerHTML=`<div class="t">${t}</div><div>${$("name").value||"Objekt"} · Kaufpreis ${nf(kp)} € · ${ok} von ${tot} Kriterien erfüllt</div><ul>${rule.map(r=>`<li>${r[0]?ICO.ok:ICO.no} ${r[1]}</li>`).join("")}</ul>`
  +(cls!="ok"&&maxkp>0?`<div style="margin-top:8px"><b>Verhandlungsziel:</b> Für ${nf(zr,1)} % Nettorendite dürfte der Kaufpreis höchstens <b>${nf(maxkp)} €</b> betragen (${nf((1-maxkp/kp)*100,1)} % unter Angebot).</div>`:"");
  $("kz").innerHTML=[["Gesamtinvestition",nf(m.ges)+" €",`inkl. ${nf(m.nk*100,1)} % Nebenkosten und Sanierung`],["Nettorendite",nf(m.net,2)+" %",`Brutto ${nf(m.bru,2)} % · Faktor ${nf(m.fak,1)}`],
   ["Cashflow / Monat",nf(m.cf0)+" €",`Reinertrag ${nf(m.rein)} €/Jahr · Kapitaldienst ${nf(m.P_)} €/Jahr`],["Eigenkapitalrendite (IRR)",m.irr==null?"–":nf(m.irr*100,1)+" %",`nach ${P.hd} Jahren Verkauf`],
@@ -246,7 +254,7 @@ function beispiel(){const v={name:"Beispiel: Mehrfamilienhaus",kp:"330000",wf:"2
 let m0=0;try{if(localStorage.getItem("kcm")==="1")m0=1}catch(e){}setMode(m0);
 const CL0=[["Unterlagen","Grundbuchauszug (Lasten, Rechte)"],["Unterlagen","Energieausweis"],["Unterlagen","Mietverträge und Mieterliste"],["Unterlagen","Nebenkostenabrechnungen der letzten 3 Jahre"],["Unterlagen","Baugenehmigung und Pläne / Flächenberechnung"],["Unterlagen","Bei Eigentumswohnung: Teilungserklärung, WEG-Protokolle, Rücklage"],["Zustand","Dach und Dämmung"],["Zustand","Heizung (Alter, Art)"],["Zustand","Fenster und Fassade"],["Zustand","Feuchtigkeit, Keller"],["Zustand","Elektrik und Leitungen"],["Zustand","Sanierungsstau grob beziffert (siehe Sanierungskosten)"],["Recht und Finanzierung","Baulasten, Altlasten, Vorkaufsrecht geprüft"],["Recht und Finanzierung","Mietpreisbindung oder Kündigungsbeschränkungen"],["Recht und Finanzierung","Finanzierungszusage der Bank"],["Recht und Finanzierung","Kaufpreis verhandelt (siehe Höchstpreis)"]];
 let CL=CL0.map(([g,t])=>({g,t,s:0,n:""}));try{const o=JSON.parse(localStorage.getItem("kccl")||"null");if(o&&o.length==CL.length)CL=o}catch(e){}
-const SYM=["⬜","✅","⚠️"];
+const SYM=['<i class="cb"></i>','<i class="cb d">'+ICO.ok+'</i>','<i class="cb p">!</i>'];
 function drawCL(){let h="",g="";CL.forEach((c,i)=>{if(c.g!=g){g=c.g;h+=`<div class="cg">${g}</div>`}h+=`<div class="cli"><button onclick="CL[${i}].s=(CL[${i}].s+1)%3;saveCL()">${SYM[c.s]}</button><span>${c.t}</span><input value="${c.n.replace(/"/g,"&quot;")}" placeholder="Notiz" oninput="CL[${i}].n=this.value;persistCL()"></div>`});
  $("cl").innerHTML=h;const ok=CL.filter(c=>c.s==1).length,pr=CL.filter(c=>c.s==2).length;$("clsum").textContent=`· ${ok} von ${CL.length} geklärt${pr?`, ${pr} Problem(e)`:""}`}
 function persistCL(){try{localStorage.setItem("kccl",JSON.stringify(CL))}catch(e){}}
@@ -255,8 +263,8 @@ function labelOf(id){const l=$(id).parentElement.querySelector("label");return l
 function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){alert("Bitte zuerst Kaufpreis, Fläche und Miete eintragen.");return}
  const d=new Date().toLocaleDateString("de-DE"),e=x=>String(x??"").replace(/</g,"&lt;");
  const ann=F.filter(f=>!["name"].includes(f)&&rv[f]!==""&&$(f)).map(f=>`<tr><td>${e(labelOf(f))}</td><td>${e($(f).tagName=="SELECT"?$(f).selectedOptions[0].text:rv[f])}</td></tr>`).join("");
- const open=CL.filter(c=>c.s!=1).map(c=>`<li>${c.s==2?"⚠️ Problem":"⬜ offen"}: ${e(c.t)}${c.n?" – "+e(c.n):""}</li>`).join("");
- const done=CL.filter(c=>c.s==1).map(c=>`<li>✅ ${e(c.t)}${c.n?" – "+e(c.n):""}</li>`).join("");
+ const open=CL.filter(c=>c.s!=1).map(c=>`<li>${c.s==2?"Problem":"Offen"}: ${e(c.t)}${c.n?" – "+e(c.n):""}</li>`).join("");
+ const done=CL.filter(c=>c.s==1).map(c=>`<li>${e(c.t)}${c.n?" – "+e(c.n):""}</li>`).join("");
  $("rep").innerHTML=`<div class="bar"><button onclick="window.print()" class="p">Drucken / als PDF sichern</button><button onclick="$('rep').classList.remove('show')">Schließen</button></div><div class="sheet">
  <div class="pg"><div class="meta">Kaufcheck Immobilie · Wirtschaftlichkeitsprüfung</div><h1>${e(rv.name||"Objekt")}</h1><div class="meta">Stand ${d}</div>
   <div style="margin-top:40px">${$("verdict").outerHTML}</div><div class="small" style="margin-top:30px">Überschlagsrechnung vor Steuern. Keine Anlage-, Rechts- oder Steuerberatung.</div></div>

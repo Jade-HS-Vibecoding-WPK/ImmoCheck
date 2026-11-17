@@ -23,8 +23,9 @@ table{width:100%;border-collapse:collapse}th{font-size:12px;color:var(--mu);text
 .small{font-size:12px;color:var(--mu)}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 #planbox{height:520px;border:1px solid var(--bd);border-radius:8px;width:100%;background:#fff}
 @media print{header button,.noprint,#planwrap{display:none!important}body{background:#fff;color:#000}section{break-inside:avoid;border-color:#bbb}input,select{border:none;background:none;appearance:none;padding:0}}
+.ic{width:14px;height:14px;vertical-align:-2px}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:1px}.dg{background:#2e9e5b}.dy{background:#d9a21b}.dr{background:#d04a4a}
 </style></head><body>
-<header><h1>🏗️ Baukostenrechner</h1><a href="index.html" style="color:var(--ac)">→ Kaufcheck</a> <span class="small">BKI Gebäude Neubau 2026 · KG 300+400 · DIN 276</span><div class="sp"></div>
+<header><h1>Baukostenrechner</h1><a href="index.html" style="color:var(--ac)">→ Kaufcheck</a> <span class="small">BKI Gebäude Neubau 2026 · KG 300+400 · DIN 276</span><div class="sp"></div>
 <button onclick="window.print()" class="p">Bericht als PDF drucken</button><button onclick="csv()">CSV</button><button onclick="neu()">Neu</button></header>
 <main>
 <section><h2><span>1</span>Projekt</h2><div class="g g2">
@@ -97,12 +98,12 @@ function vorschlag(){const t=($("name").value+" "+$("typ").value);const f=FAM.fi
 function rowE(e,i){return `<tr><td><input value="${e.n}" oninput="S.ebenen[${i}].n=this.value;calc()"></td>
 <td><input class="r" value="${e.l}" oninput="S.ebenen[${i}].l=this.value;calc()"></td><td><input class="r" value="${e.b}" oninput="S.ebenen[${i}].b=this.value;calc()"></td>
 <td><input class="r" value="${e.f}" oninput="S.ebenen[${i}].f=this.value;calc()"></td><td><input class="r" value="${e.h}" oninput="S.ebenen[${i}].h=this.value;calc()"></td>
-<td class="r n" id="eg${i}"></td><td class="r n" id="ei${i}"></td><td><input value="${e.q}" placeholder="Beleg" oninput="S.ebenen[${i}].q=this.value;save()"></td><td><button class="x" onclick="S.ebenen.splice(${i},1);drawE();calc()">✕</button></td></tr>`}
+<td class="r n" id="eg${i}"></td><td class="r n" id="ei${i}"></td><td><input value="${e.q}" placeholder="Beleg" oninput="S.ebenen[${i}].q=this.value;save()"></td><td><button class="x" onclick="S.ebenen.splice(${i},1);drawE();calc()"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></td></tr>`}
 function drawE(){$("eb").innerHTML=S.ebenen.map(rowE).join("")}
 function addE(n){S.ebenen.push({n:n||"Obergeschoss",l:"",b:"",f:"",h:"",q:""});drawE();calc()}
 function rowB(b,i){return `<tr><td style="width:70px"><input value="${b.kg}" oninput="S.bt[${i}].kg=this.value;calc()"></td><td><input value="${b.n}" oninput="S.bt[${i}].n=this.value;calc()"></td>
 <td><input class="r" value="${b.m}" oninput="S.bt[${i}].m=this.value;calc()"></td><td style="width:80px"><input value="${b.e}" oninput="S.bt[${i}].e=this.value;calc()"></td>
-<td><input class="r" value="${b.p}" oninput="S.bt[${i}].p=this.value;calc()"></td><td class="r n" id="bb${i}"></td><td><input value="${b.q}" placeholder="Herkunft Menge/Preis" oninput="S.bt[${i}].q=this.value;save()"></td><td><button class="x" onclick="S.bt.splice(${i},1);drawB();calc()">✕</button></td></tr>`}
+<td><input class="r" value="${b.p}" oninput="S.bt[${i}].p=this.value;calc()"></td><td class="r n" id="bb${i}"></td><td><input value="${b.q}" placeholder="Herkunft Menge/Preis" oninput="S.bt[${i}].q=this.value;save()"></td><td><button class="x" onclick="S.bt.splice(${i},1);drawB();calc()"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></td></tr>`}
 function drawB(){$("bt").innerHTML=S.bt.map(rowB).join("")}
 function addB(kg="",n="",e="m²"){S.bt.push({kg,n,m:"",e,p:"",q:""});drawB();calc()}
 $("vor").onchange=function(){if(this.value){const[k,n,e]=this.value.split("|");addB(k,n,e);this.value=""}};
@@ -134,10 +135,10 @@ function calc(){
    if(q==null){am+=`<div class="note">${nm}: Menge fehlt, kein Vergleich möglich.</div>`;return}
    const von=K[i0]==null?null:q*K[i0]*f,mi=q*K[i0+1]*f,bis=K[i0+2]==null?null:q*K[i0+2]*f;
    let cls,ic,tx;
-   if(von!=null&&bud<von){cls="warn";ic="🔴";tx=`Budget liegt <b>unter</b> der BKI-Spanne (Von ${eur(von)}). Fehlbetrag zum Von-Wert: ${eur(von-bud)}.`}
-   else if(bud<mi){cls="warn";ic="🟡";tx=`Budget liegt im unteren Bereich (zwischen Von und Mittel ${eur(mi)}). Knapp, ${eur(mi-bud)} unter dem Mittelwert.`}
-   else if(bis!=null&&bud>bis){cls="ok";ic="🟢";tx=`Budget liegt <b>über</b> der BKI-Spanne (Bis ${eur(bis)}). Puffer ${eur(bud-bis)}.`}
-   else{cls="ok";ic="🟢";tx=`Budget liegt zwischen Mittelwert (${eur(mi)}) und Bis-Wert. Ausreichend im Rahmen der BKI-Streuung.`}
+   if(von!=null&&bud<von){cls="warn";ic="<span class="dot dr"></span>";tx=`Budget liegt <b>unter</b> der BKI-Spanne (Von ${eur(von)}). Fehlbetrag zum Von-Wert: ${eur(von-bud)}.`}
+   else if(bud<mi){cls="warn";ic="<span class="dot dy"></span>";tx=`Budget liegt im unteren Bereich (zwischen Von und Mittel ${eur(mi)}). Knapp, ${eur(mi-bud)} unter dem Mittelwert.`}
+   else if(bis!=null&&bud>bis){cls="ok";ic="<span class="dot dg"></span>";tx=`Budget liegt <b>über</b> der BKI-Spanne (Bis ${eur(bis)}). Puffer ${eur(bud-bis)}.`}
+   else{cls="ok";ic="<span class="dot dg"></span>";tx=`Budget liegt zwischen Mittelwert (${eur(mi)}) und Bis-Wert. Ausreichend im Rahmen der BKI-Streuung.`}
    am+=`<div class="note ${cls}"><b>${ic} über ${nm}:</b> ${tx}</div>`});
    am+='<div class="small">Die Ampel vergleicht mit der BKI-Streuung der Vergleichsobjekte, sie ist keine Kostengarantie.</div>'}
  else if(bud!=null)am='<div class="note warn">Bitte zuerst eine Kategorie wählen.</div>';
@@ -153,7 +154,7 @@ function calc(){
   const bau=q*K[ci]*f,ges=bau*(1+bnk/100)+gru+aus;
   let h=`<div class="k"><div class="l">Gesamtkosten (Bauwerk + KG 700 + Grundstück + Außenanlagen)</div><div class="v n">${eur(ges)}</div><div class="s">Bauwerk ${eur(bau)} · Nebenkosten ${eur(bau*bnk/100)}</div></div>`;
   if(wf!=null&&mi!=null&&wf>0&&mi>0){const jm=wf*mi*12,abz=jm*(bew+mau)/100,rein=jm-abz,bru=jm/ges*100,net=rein/ges*100,fak=ges/jm,am=ges/rein,kdm=ges*zr/100/(1-(bew+mau)/100)/12/wf;
-   const cl=net>=zr?"ok":"warn",ic=net>=zr?"🟢":(net>=zr*0.75?"🟡":"🔴");
+   const cl=net>=zr?"ok":"warn",ic=net>=zr?"<span class="dot dg"></span>":(net>=zr*0.75?"<span class="dot dy"></span>":"<span class="dot dr"></span>");
    h+=`<div class="k"><div class="l">Jahresnettokaltmiete</div><div class="v n">${nf(jm,0)} €</div><div class="s">${nf(wf)} m² × ${nf(mi)} €/m² × 12 · Reinertrag ${nf(rein,0)} € nach Abzügen</div></div>
    <div class="k"><div class="l">Nettorendite (Reinertrag ÷ Gesamtkosten)</div><div class="v n">${nf(net)} %</div><div class="s">Bruttorendite ${nf(bru)} % · Vervielfältiger ${nf(fak,1)}</div></div>
    <div class="k"><div class="l">Amortisation (Jahre, ohne Zins)</div><div class="v n">${nf(am,1)}</div><div class="s">Gesamtkosten ÷ Reinertrag</div></div>
