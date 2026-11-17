@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Baukostenrechner</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--tx:#1d2330;--mu:#667085;--bd:#dde1e8;--ac:#1f5fbf;--ac2:#e8f0fc;--wa:#fff4e0;--ok:#e6f5ec}
+@media(prefers-color-scheme:dark){:root{--bg:#14171d;--card:#1c2029;--tx:#e8ebf0;--mu:#9aa3b2;--bd:#2d3340;--ac:#6ea2f5;--ac2:#1f2b40;--wa:#3a2f18;--ok:#173022}}
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+header{padding:18px 24px;border-bottom:1px solid var(--bd);background:var(--card);display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+header h1{font-size:20px;margin:0}header .sp{flex:1}
+main{max-width:1180px;margin:0 auto;padding:20px 16px 60px;display:grid;gap:16px}
+section{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px 18px}
+h2{font-size:16px;margin:0 0 10px}h2 span{display:inline-block;background:var(--ac);color:#fff;border-radius:50%;width:22px;height:22px;text-align:center;font-size:13px;line-height:22px;margin-right:8px}
+label{display:block;font-size:12px;color:var(--mu);margin-bottom:3px}
+input,select,button{font:inherit;color:inherit}
+input,select{width:100%;padding:7px 9px;border:1px solid var(--bd);border-radius:7px;background:var(--bg)}
+.g{display:grid;gap:12px}.g2{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+button{padding:7px 13px;border:1px solid var(--bd);border-radius:7px;background:var(--card);cursor:pointer}button.p{background:var(--ac);color:#fff;border-color:var(--ac)}button.x{padding:4px 8px}
+table{width:100%;border-collapse:collapse}th{font-size:12px;color:var(--mu);text-align:left;font-weight:600;padding:4px 6px}td{padding:3px 4px}td input,td select{padding:5px 6px}
+.r{text-align:right}.n{font-variant-numeric:tabular-nums}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.k{border:1px solid var(--bd);border-radius:9px;padding:12px 14px}.k .l{font-size:12px;color:var(--mu)}.k .v{font-size:26px;font-weight:650}.k .s{font-size:12px;color:var(--mu)}
+.note{background:var(--ac2);border-radius:8px;padding:8px 12px;font-size:13px;margin:8px 0}.warn{background:var(--wa)}.ok{background:var(--ok)}
+.small{font-size:12px;color:var(--mu)}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#planbox{height:520px;border:1px solid var(--bd);border-radius:8px;width:100%;background:#fff}
+@media print{header button,.noprint,#planwrap{display:none!important}body{background:#fff;color:#000}section{break-inside:avoid;border-color:#bbb}input,select{border:none;background:none;appearance:none;padding:0}}
+</style></head><body>
+<header><h1>🏗️ Baukostenrechner</h1><span class="small">BKI Gebäude Neubau 2026 · KG 300+400 · DIN 276</span><div class="sp"></div>
+<button onclick="window.print()" class="p">Bericht als PDF drucken</button><button onclick="csv()">CSV</button><button onclick="neu()">Neu</button></header>
+<main>
+<section><h2><span>1</span>Projekt</h2><div class="g g2">
+<div><label>Projektname</label><input id="name" placeholder="z. B. Mehrfamilienhaus Tulpenweg"></div>
+<div><label>Gebäudeart / Nutzung (für den Vorschlag)</label><input id="typ" placeholder="z. B. MFH 6 WE, Kita, Gemeindehaus"></div>
+<div><label>Standort</label><input id="ort"></div>
+<div><label>Planstand / Datum</label><input id="stand" placeholder="z. B. 22.09.2026"></div></div>
+<div class="g g2" style="margin-top:12px"><div><label>BKI-Gebäudekategorie</label><select id="kat"></select><div id="vorschlag" class="small" style="margin-top:4px"></div></div>
+<div><label>Hilfe: Plan-PDF anzeigen (bleibt auf deinem Rechner)</label><input type="file" id="pdf" accept="application/pdf"></div></div>
+<div id="planwrap" style="display:none;margin-top:12px"><iframe id="planbox"></iframe></div></section>
+
+<section><h2><span>2</span>Flächen und Höhen je Ebene</h2>
+<div class="small" style="margin-bottom:8px">BGF = Summe der Grundflächen aller Ebenen (äußere Maße). BRI = Summe Fläche × Höhe je Ebene (UK Bodenplatte bis OK Dachbelag) plus Zusatzvolumen. Quelle jeder Zahl kurz notieren (z. B. „EG-Plan, Maßkette oben“).</div>
+<table><thead><tr><th>Ebene</th><th class="r">Länge m</th><th class="r">Breite m</th><th class="r">oder Fläche m²</th><th class="r">Höhe m</th><th class="r">BGF m²</th><th class="r">BRI m³</th><th>Quelle / Beleg</th><th></th></tr></thead><tbody id="eb"></tbody></table>
+<div class="row" style="margin-top:8px"><button onclick="addE()">+ Ebene</button><button onclick="addE('Dachgeschoss')">+ Dachgeschoss</button><button onclick="addE('Keller')">+ Keller</button>
+<span class="small">Zusatzvolumen BRI (Dachraum, Vorsprünge) m³:</span><input id="zus" style="width:110px" class="r" value="0"> <input id="zusq" style="width:220px" placeholder="Beleg"></div>
+<div class="cards" style="margin-top:12px"><div class="k"><div class="l">BGF gesamt</div><div class="v n" id="bgf">–</div><div class="s" id="bgfw"></div></div><div class="k"><div class="l">BRI gesamt</div><div class="v n" id="bri">–</div><div class="s" id="briw"></div></div></div></section>
+
+<section><h2><span>3</span>Bauwerkskosten KG 300+400 · BKI-Orientierung</h2>
+<div class="row"><label style="margin:0"><input type="checkbox" id="netto" style="width:auto"> Netto (brutto ÷ 1,19)</label>
+<div style="width:200px"><label>Region</label><input id="reg" placeholder="Bundesdurchschnitt"></div><div style="width:110px"><label>Faktor</label><input id="fak" placeholder="z. B. 0,95"></div><div style="flex:1;min-width:200px"><label>Beleg Regionalfaktor (BKI S. 1144)</label><input id="fakq"></div></div>
+<div id="regh" class="note" style="display:none"></div>
+<div class="cards" id="orient" style="margin-top:12px"></div>
+<div class="small" id="ohin" style="margin-top:8px"></div></section>
+
+<section><h2><span>4</span>Bauteilpositionen (Menge × Preis)</h2>
+<div class="small" style="margin-bottom:8px">Eigene Preise aus Angebot, Bürokennwerten oder BKI Bauelemente. Fehlender Preis oder Menge = offen, nichts wird geschätzt.</div>
+<table><thead><tr><th>KG</th><th>Bauteil</th><th class="r">Menge</th><th>Einheit</th><th class="r">Preis €</th><th class="r">Betrag €</th><th>Beleg</th><th></th></tr></thead><tbody id="bt"></tbody></table>
+<div class="row" style="margin-top:8px"><button onclick="addB()">+ Position</button>
+<select id="vor" style="width:auto"><option value="">Vorlage einfügen …</option><option>322|Bodenplatte|m²</option><option>334|Fenster|m²</option><option>334|Außentür|Stk</option><option>335|Äußere Bekleidung|m²</option><option>363|Dachbelag|m²</option><option>330|Außenwände|m²</option><option>340|Innenwände|m²</option><option>350|Decken|m²</option></select></div>
+<div class="cards" style="margin-top:12px"><div class="k"><div class="l">Bepreiste Teilkosten</div><div class="v n" id="bsum">–</div><div class="s" id="bs"></div></div></div>
+<div class="small" style="margin-top:6px">Diese Summe umfasst nur die erfassten Bauteile und wird nicht zur BKI-Orientierung addiert. Keine Gesamtprojektkosten aus lückenhaften Angaben.</div></section>
+<div class="small noprint">Alle Eingaben werden nur lokal in deinem Browser gespeichert. BKI-Werte: aus der BKI-Übersicht grafisch abgelesen, gerundet auf 100 €/m² BGF bzw. 25 €/m³ BRI, Bundesdurchschnitt, brutto, Kostenstand 1. Quartal 2026. Keine Kostengarantie; Grundstück, Außenanlagen, Baunebenkosten sind nicht enthalten.</div>
+</main>
+<script>
+const BKI=/*BKI_DATA*/[];
+const $=id=>document.getElementById(id);
+const nf=(x,d=2)=>x==null||isNaN(x)?"–":x.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d});
+const num=s=>{s=String(s??"").trim().replace(/\s/g,"");if(!s)return null;if(s.includes(","))s=s.replace(/\./g,"").replace(",",".");const v=parseFloat(s);return isNaN(v)?null:v};
+const eur=x=>x==null?"–":"ca. "+(Math.round(x/1000)*1000).toLocaleString("de-DE")+" €";
+const eur2=x=>x==null?"offen":nf(x,2)+" €";
+const FAM=[[/mehrfamil|mfh|\bwe\b|wohneinheit/i,"Mehrfamilienhäuser"],[/gemeinde/i,"Gemeindezentren"],[/kita|kindergarten/i,"Kindergarten"],[/schule/i,"Schulen"],[/büro|verwaltung/i,"Büro und Verwaltung"],[/einfamilien|efh|zfh|wohnhaus/i,"Ein- und Zweifamilienhäuser"],[/sporthalle|turnhalle/i,"Sport"],[/kirche|sakral/i,"Sakralbauten"],[/hotel/i,"Hotels"],[/garage/i,"Garagen"],[/lager/i,"Lager"],[/feuerwehr/i,"Feuerwehrhäuser"]];
+let S={ebenen:[{n:"Erdgeschoss",l:"",b:"",f:"",h:"",q:""}],bt:[],};
+const FIELDS=["name","typ","ort","stand","kat","zus","zusq","reg","fak","fakq"];
+function save(){try{const o={};FIELDS.forEach(f=>o[f]=$(f).value);o.netto=$("netto").checked;o.ebenen=S.ebenen;o.bt=S.bt;localStorage.setItem("bkr1",JSON.stringify(o))}catch(e){}}
+function load(){try{const o=JSON.parse(localStorage.getItem("bkr1")||"null");if(!o)return;FIELDS.forEach(f=>{if(o[f]!=null)$(f).value=o[f]});$("netto").checked=!!o.netto;S.ebenen=o.ebenen||S.ebenen;S.bt=o.bt||[]}catch(e){}}
+function neu(){if(confirm("Alle Eingaben löschen?")){try{localStorage.removeItem("bkr1")}catch(e){}location.reload()}}
+function katOptions(){const k=$("kat");k.innerHTML='<option value="">– bitte wählen –</option>'+BKI.map((r,i)=>`<option value="${i}">${r[0]}</option>`).join("")}
+function vorschlag(){const t=($("name").value+" "+$("typ").value);const f=FAM.find(([rx])=>rx.test(t));const el=$("vorschlag");
+ if(!f){el.textContent="";return}const opts=BKI.map((r,i)=>[r[0],i]).filter(([n])=>n.toLowerCase().includes(f[1].toLowerCase()));
+ let hint="Vorschlag für „"+f[1]+"“: ";const six=/\b6\s*(we|wohn)/i.test(t)&&f[1]=="Mehrfamilienhäuser";
+ el.innerHTML=hint+(six?"<b>Genau 6 WE: das Buch führt zwei Kategorien („bis zu 6 WE“ und „6 bis 19 WE“). Bitte passend wählen.</b> ":"")+opts.map(([n,i])=>`<a href="#" onclick="$('kat').value=${i};calc();return false">${n}</a>`).join(" · ")}
+function rowE(e,i){return `<tr><td><input value="${e.n}" oninput="S.ebenen[${i}].n=this.value;calc()"></td>
+<td><input class="r" value="${e.l}" oninput="S.ebenen[${i}].l=this.value;calc()"></td><td><input class="r" value="${e.b}" oninput="S.ebenen[${i}].b=this.value;calc()"></td>
+<td><input class="r" value="${e.f}" oninput="S.ebenen[${i}].f=this.value;calc()"></td><td><input class="r" value="${e.h}" oninput="S.ebenen[${i}].h=this.value;calc()"></td>
+<td class="r n" id="eg${i}"></td><td class="r n" id="ei${i}"></td><td><input value="${e.q}" placeholder="Beleg" oninput="S.ebenen[${i}].q=this.value;save()"></td><td><button class="x" onclick="S.ebenen.splice(${i},1);drawE();calc()">✕</button></td></tr>`}
+function drawE(){$("eb").innerHTML=S.ebenen.map(rowE).join("")}
+function addE(n){S.ebenen.push({n:n||"Obergeschoss",l:"",b:"",f:"",h:"",q:""});drawE();calc()}
+function rowB(b,i){return `<tr><td style="width:70px"><input value="${b.kg}" oninput="S.bt[${i}].kg=this.value;calc()"></td><td><input value="${b.n}" oninput="S.bt[${i}].n=this.value;calc()"></td>
+<td><input class="r" value="${b.m}" oninput="S.bt[${i}].m=this.value;calc()"></td><td style="width:80px"><input value="${b.e}" oninput="S.bt[${i}].e=this.value;calc()"></td>
+<td><input class="r" value="${b.p}" oninput="S.bt[${i}].p=this.value;calc()"></td><td class="r n" id="bb${i}"></td><td><input value="${b.q}" placeholder="Herkunft Menge/Preis" oninput="S.bt[${i}].q=this.value;save()"></td><td><button class="x" onclick="S.bt.splice(${i},1);drawB();calc()">✕</button></td></tr>`}
+function drawB(){$("bt").innerHTML=S.bt.map(rowB).join("")}
+function addB(kg="",n="",e="m²"){S.bt.push({kg,n,m:"",e,p:"",q:""});drawB();calc()}
+$("vor").onchange=function(){if(this.value){const[k,n,e]=this.value.split("|");addB(k,n,e);this.value=""}};
+function calc(){
+ let bgf=0,bri=0,okG=0,okI=0;
+ S.ebenen.forEach((e,i)=>{const l=num(e.l),b=num(e.b),f=num(e.f),h=num(e.h);const A=f!=null?f:(l!=null&&b!=null?l*b:null);
+  $("eg"+i).textContent=A!=null?nf(A):"–";const V=A!=null&&h!=null?A*h:null;$("ei"+i).textContent=V!=null?nf(V):"–";
+  if(A!=null){bgf+=A;okG++}if(V!=null){bri+=V;okI++}});
+ const z=num($("zus").value)||0;bri+=z;
+ const n=S.ebenen.length;const g=okG?bgf:null,r=okI?bri:null;
+ $("bgf").textContent=g!=null?nf(g)+" m²":"–";$("bri").textContent=r!=null?nf(r)+" m³":"–";
+ $("bgfw").textContent=okG<n?`${n-okG} von ${n} Ebenen ohne Fläche`:"";$("briw").textContent=okI<n?`${n-okI} von ${n} Ebenen ohne Höhe/Fläche`:(z?`inkl. Zusatzvolumen ${nf(z)} m³`:"");
+ // Orientierung
+ const ki=$("kat").value,K=ki!==""?BKI[+ki]:null;const rf=num($("fak").value);const hasRf=rf&&$("fakq").value.trim()&&$("reg").value.trim();
+ const f=(hasRf?rf:1)/($("netto").checked?1.19:1);
+ const ort=($("ort").value+" "+$("name").value).toLowerCase();
+ const rh=$("regh");if(ort.includes("bersenbrück")&&!hasRf){rh.style.display="block";rh.textContent="Standort Bersenbrück: maßgeblich ist die Zeile „Landkreis Osnabrück“ der BKI-Regionalfaktoren (ab S. 1144). Ohne Faktor und Beleg gilt der Bundesdurchschnitt."}else rh.style.display="none";
+ let h="";
+ if(!K)h='<div class="note warn" style="grid-column:1/-1">Bitte oben eine BKI-Gebäudekategorie wählen.</div>';
+ else[["BGF",g,"m²","€/m² BGF",4,2],["BRI",r,"m³","€/m³ BRI",7,3]].forEach(([nm,q,u,eu,i0,pg])=>{
+  const [v,m,b]=[K[i0],K[i0+1],K[i0+2]];const c=x=>x==null||q==null?null:q*x*f;
+  h+=`<div class="k"><div class="l">über ${nm} · ${q!=null?nf(q)+" "+u:"offen"}</div><div class="v n">${q!=null?eur(c(m)):"offen"}</div><div class="s">Spanne ${eur(c(v))} – ${eur(c(b))}</div>
+  <div style="margin:6px 0">Kennwert ${eu}: von <b>${nf(v,0)}</b> · mittel <b>${nf(m,0)}</b> · bis <b>${nf(b,0)}</b></div>
+  <div class="small">BKI Gebäude Neubau 2026, Übersicht S. ${K[pg]}, Detailkapitel ab S. ${K[1]} · ca. · aus BKI-Übersicht grafisch abgelesen${v==null||b==null?" · leeres Von/Bis = im Foto nicht auflösbar, kein Nullpreis":""}</div></div>`});
+ $("orient").innerHTML=h;
+ $("ohin").innerHTML=`${hasRf?$("reg").value+" · Faktor "+nf(rf,3)+" ("+$("fakq").value+")":"Bundesdurchschnitt Deutschland"} · ${$("netto").checked?"netto (= brutto ÷ 1,19)":"brutto inkl. 19 % MwSt."} · Kostenstand 1. Quartal 2026<br>BGF- und BRI-Ansatz beschreiben dasselbe Bauwerk: nicht addieren, nicht mitteln. Anzeige gerundet auf Tausend Euro.`;
+ // Bauteile
+ let sum=0,pr=0,op=0;S.bt.forEach((b,i)=>{const m=num(b.m),p=num(b.p);if(m!=null&&p!=null){const a=Math.round(m*p*100)/100;sum+=a;pr++;$("bb"+i).textContent=nf(a)}else{op++;$("bb"+i).textContent="offen"}});
+ $("bsum").textContent=pr?nf(Math.round(sum*100)/100)+" €":"–";$("bs").textContent=S.bt.length?`${pr} bepreist · ${op} offen`:"";
+ vorschlag();save();
+}
+function csv(){const L=[["Projekt",$("name").value,"Planstand",$("stand").value],[],["Ebene","Länge","Breite","Fläche","Höhe","BGF m²","BRI m³","Beleg"]];
+ S.ebenen.forEach((e,i)=>L.push([e.n,e.l,e.b,e.f,e.h,$("eg"+i).textContent,$("ei"+i).textContent,e.q]));
+ L.push([],["BGF",$("bgf").textContent,"BRI",$("bri").textContent],[],["KG","Bauteil","Menge","Einheit","Preis €","Betrag €","Beleg"]);
+ S.bt.forEach((b,i)=>L.push([b.kg,b.n,b.m,b.e,b.p,$("bb"+i).textContent,b.q]));L.push([],["Bepreiste Teilkosten",$("bsum").textContent]);
+ const t="﻿"+L.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(";")).join("\r\n");
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download="Baukosten.csv";a.click()}
+$("pdf").onchange=function(){const f=this.files[0];if(!f)return;$("planbox").src=URL.createObjectURL(f);$("planwrap").style.display="block"};
+katOptions();load();drawE();drawB();FIELDS.forEach(f=>$(f).addEventListener("input",calc));$("netto").addEventListener("change",calc);calc();
+</script></body></html>
