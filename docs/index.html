@@ -2,8 +2,8 @@
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kaufcheck Immobilie</title>
 <style>
-:root{--bg:#f5f6f8;--card:#fff;--tx:#1d2330;--mu:#667085;--bd:#dde1e8;--ac:#1f5fbf;--ac2:#e8f0fc;--wa:#fff4e0;--ok:#e6f5ec;--bad:#fde8e8}
-@media(prefers-color-scheme:dark){:root{--bg:#14171d;--card:#1c2029;--tx:#e8ebf0;--mu:#9aa3b2;--bd:#2d3340;--ac:#6ea2f5;--ac2:#1f2b40;--wa:#3a2f18;--ok:#173022;--bad:#3a1b1b}}
+:root{--bg:#f4f4f2;--card:#fff;--tx:#111;--mu:#7a7a75;--bd:#e7e7e3;--ac:#111;--ac2:#f0f0ed;--wa:#fff6e3;--ok:#eaf6ee;--bad:#fdecec}
+@media(prefers-color-scheme:dark){:root{--bg:#141414;--card:#1d1d1d;--tx:#f1f1ef;--mu:#9a9a94;--bd:#2c2c2a;--ac:#f1f1ef;--ac2:#262624;--wa:#3a2f18;--ok:#173022;--bad:#3a1b1b}}
 *{box-sizing:border-box}body{margin:0;font:15px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
 header{padding:16px 24px;border-bottom:1px solid var(--bd);background:var(--card);display:flex;gap:14px;align-items:center;flex-wrap:wrap}header h1{font-size:20px;margin:0}header .sp{flex:1}
 main{max-width:1180px;margin:0 auto;padding:18px 16px 60px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
@@ -29,13 +29,42 @@ body.simple .adv{display:none!important}.mode{display:flex}.mode button{border-r
 #rep table{margin-bottom:8px}#rep .cards{grid-template-columns:repeat(2,1fr)}
 .cli{display:grid;grid-template-columns:34px 1fr 1.2fr;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid var(--bd)}.cli button{padding:2px 6px;font-size:16px}.cli input{padding:4px 7px}.cg{font-weight:650;margin:10px 0 2px;font-size:13px}
 .empty{text-align:center;padding:10px}.empty button{margin-top:10px}
-@media print{body>header,body>main{display:none!important}#rep{display:block!important;position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}#rep .bar{display:none}#rep .pg{border:none;border-radius:0;padding:0;margin:0;break-after:page;background:#fff;color:#000}#rep .pg:last-child{break-after:auto}
+
+body{font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:-.005em}
+.shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}.content{min-width:0}
+.sb{background:#efefec;border-right:1px solid var(--bd);padding:18px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:2px}
+@media(prefers-color-scheme:dark){.sb{background:#191919}}
+.logo{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px;margin-bottom:14px}
+.lg{width:34px;height:34px;border-radius:10px;background:#111;color:#fff;display:grid;place-items:center;font-weight:700}
+.nl{font-size:11px;color:var(--mu);margin:14px 8px 4px}
+.sb a{display:block;padding:8px 10px;border-radius:10px;color:var(--tx);text-decoration:none;font-size:14px;color:var(--mu)}.sb a:hover{background:var(--card);color:var(--tx)}.sb a.on{background:var(--card);color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.sbfoot{margin-top:auto;padding:10px}
+header{background:transparent;border:0;padding:20px 24px 4px}header h1{font-size:26px;margin:2px 0 0}
+section,.k,.verdict{border-radius:16px;border-color:var(--bd);box-shadow:0 1px 2px rgba(0,0,0,.03)}
+section h2{font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mu)}
+.k{background:var(--card);padding:14px 16px}.k .l{font-size:11px;text-transform:uppercase;letter-spacing:.05em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.k .v{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:22px;letter-spacing:-.02em}
+.cards .k:first-child{background:#111;color:#fff;border-color:#111}.cards .k:first-child .l,.cards .k:first-child .s{color:#bdbdb8}
+.top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.7fr);gap:14px;align-items:stretch}.top .cards{margin:0}.top .verdict{margin:0}
+@media(max-width:1100px){.top{grid-template-columns:1fr}}
+.verdict{background:var(--card);border-width:1px;border-left-width:6px}.verdict .t{font-size:28px}
+button{border-radius:10px;background:var(--card)}button.p{background:#111;color:#fff;border-color:#111}.mode button.on{background:#111;color:#fff;border-color:#111}
+@media(prefers-color-scheme:dark){button.p,.mode button.on{background:#f1f1ef;color:#111}.cards .k:first-child{background:#f1f1ef;color:#111}.cards .k:first-child .l,.cards .k:first-child .s{color:#555}.lg{background:#f1f1ef;color:#111}}
+input,select{border-radius:10px;background:var(--bg)}
+th{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--mu)}
+.note{border-radius:10px}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.sb{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px;padding:10px}.sb .logo,.sb .nl,.sbfoot{display:none}.sb a{padding:6px 10px;font-size:13px}}
+@media print{.shell{display:none!important}#rep{display:block!important;position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}#rep .bar{display:none}#rep .pg{border:none;border-radius:0;padding:0;margin:0;break-after:page;background:#fff;color:#000}#rep .pg:last-child{break-after:auto}
 header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
-<header><h1>🏠 Kaufcheck Immobilie</h1><span class="small">Angebot rein, Entscheidung raus</span><a href="baukosten.html" class="small" style="color:var(--ac)">→ Baukostenrechner</a><div class="sp"></div>
-<div class="mode"><button id="mE" onclick="setMode(0)">Einfach</button><button id="mX" onclick="setMode(1)">Experte</button></div><button onclick="beispiel()">Beispiel laden</button><button class="p" onclick="showReport()">Bericht / PDF</button><button onclick="neu()">Neu</button></header>
-<main>
-<div>
+<div class="shell"><aside class="sb"><div class="logo"><span class="lg">K</span><div><b>Kaufcheck</b><div class="small">Immobilien-Wirtschaftlichkeit</div></div></div>
+<div class="nl">Hauptmenü</div><a href="#top" class="on">▣ Überblick</a><a href="#s-angebot">⌂ Angebot und Annahmen</a><a href="#s-stress">⚡ Stresstest</a><a href="#s-grafik" class="adv">◔ Grafik</a><a href="#s-vergleich">⇄ Objekte vergleichen</a><a href="#s-check">☑ Checkliste</a><a href="#" onclick="showReport();return false">⎙ Bericht / PDF</a>
+<div class="nl">Werkzeuge</div><a href="baukosten.html">▤ Baukostenrechner</a><div class="sbfoot small">Alle Eingaben bleiben nur in deinem Browser. Überschlagsrechnung, keine Beratung.</div></aside><div class="content">
+<header><div><div class="small">Kaufcheck › Überblick</div><h1>Lohnt sich der Kauf?</h1></div><div class="sp"></div>
+<div class="mode"><button id="mE" onclick="setMode(0)">Einfach</button><button id="mX" onclick="setMode(1)">Experte</button></div><button onclick="beispiel()">Beispiel laden</button><button class="p" onclick="showReport()">⎙ Bericht / PDF</button><button onclick="neu()">Neu</button></header>
+<main id="top">
+<div class="top" style="grid-column:1/-1"><div id="verdict"></div><div class="cards" id="kz"></div></div>
+<div id="s-angebot">
 <section><h2>1 · Das Angebot <span class="small">(nur diese vier Zahlen sind nötig)</span></h2><div class="g">
 <div style="grid-column:1/-1"><label>Objekt / Adresse</label><input id="name" placeholder="z. B. MFH Musterstr. 5, Melle"></div>
 <div><label>Kaufpreis €</label><input id="kp" class="r" placeholder="450000"></div>
@@ -77,16 +106,14 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 </div>
 
 <div>
-<div id="verdict"></div>
-<div class="cards" id="kz"></div>
-<section><h2>Stresstest: Was, wenn es schlechter läuft?</h2><div id="stress"></div><div class="small" style="margin-top:6px">Zeigt, ob das Objekt auch bei höherem Zins, niedrigerer Miete oder mehr Leerstand trägt.</div></section>
+<section id="s-stress"><h2>Stresstest: Was, wenn es schlechter läuft?</h2><div id="stress"></div><div class="small" style="margin-top:6px">Zeigt, ob das Objekt auch bei höherem Zins, niedrigerer Miete oder mehr Leerstand trägt.</div></section>
 <section><h2>Kaufpreis-Sensitivität (Verhandlungsspielraum)</h2><table id="sens"></table><div class="small" id="maxkp" style="margin-top:8px"></div></section>
-<section class="adv"><h2>Grafik: Vermögen, Restschuld und Cashflow</h2><div id="charts"></div></section>
+<section class="adv" id="s-grafik"><h2>Grafik: Vermögen, Restschuld und Cashflow</h2><div id="charts"></div></section>
 <section class="adv"><h2>Entwicklung über die Haltedauer</h2><table id="verl"></table></section>
 <div class="small">Überschlagsrechnung vor Steuern, ohne Förderung, Sonderumlagen und Leerstandsrisiken im Einzelfall. Keine Anlage- oder Rechtsberatung. Alle Annahmen stehen links und sind änderbar. Eingaben bleiben nur in deinem Browser.</div>
-</div><section style="grid-column:1/-1"><h2>Objekte vergleichen <button class="p" style="float:right" onclick="saveObj()">+ Objekt speichern</button></h2><div id="objs"></div></section>
-<section style="grid-column:1/-1"><h2>Checkliste fürs Objekt <span class="small" id="clsum"></span></h2><div class="small" style="margin-bottom:8px">Klick auf das Symbol wechselt: ⬜ offen → ✅ geklärt → ⚠️ Problem. Offene Punkte und Probleme erscheinen im Bericht.</div><div id="cl"></div></section>
-</main>
+</div><section id="s-vergleich" style="grid-column:1/-1"><h2>Objekte vergleichen <button class="p" style="float:right" onclick="saveObj()">+ Objekt speichern</button></h2><div id="objs"></div></section>
+<section id="s-check" style="grid-column:1/-1"><h2>Checkliste fürs Objekt <span class="small" id="clsum"></span></h2><div class="small" style="margin-bottom:8px">Klick auf das Symbol wechselt: ⬜ offen → ✅ geklärt → ⚠️ Problem. Offene Punkte und Probleme erscheinen im Bericht.</div><div id="cl"></div></section>
+</main></div></div>
 <div id="rep"></div>
 <script>
 const $=id=>document.getElementById(id);
@@ -160,7 +187,7 @@ function svgChart(title,years,series,bars){const W=460,H=210,L=58,R=14,T=26,B=28
  let lx=L;series.forEach(x=>{o+=`<rect x="${lx}" y="${H-9}" width="9" height="3" fill="${x.c}"/><text x="${lx+12}" y="${H-5}" font-size="9" fill="currentColor">${x.n}</text>`;lx+=90});return o+"</svg>"}
 function drawCharts(m,P,kp){const ys=m.rows.map(r=>r[0]);const wert=y=>(kp+P.san)*Math.pow(1+P.ws/100,y);
  const rest=m.rows.map(r=>r[4]),verm=m.rows.map(r=>wert(r[0])-r[4]),cf=m.rows.map(r=>r[3]);
- $("charts").innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">${svgChart("Nettovermögen (Wert − Restschuld) und Restschuld, €",ys,[{n:"Nettovermögen",v:verm,c:"#1f5fbf"},{n:"Restschuld",v:rest,c:"#d08a2e"}])}${svgChart("Cashflow pro Jahr nach Kapitaldienst, €",ys,[],{v:cf})}</div><div class="small" style="margin-top:6px">Vor Steuern. Wert mit der angenommenen jährlichen Wertentwicklung fortgeschrieben, ohne Verkaufskosten.</div>`}
+ $("charts").innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">${svgChart("Nettovermögen (Wert − Restschuld) und Restschuld, €",ys,[{n:"Nettovermögen",v:verm,c:"#111"},{n:"Restschuld",v:rest,c:"#9a9a94"}])}${svgChart("Cashflow pro Jahr nach Kapitaldienst, €",ys,[],{v:cf})}</div><div class="small" style="margin-top:6px">Vor Steuern. Wert mit der angenommenen jährlichen Wertentwicklung fortgeschrieben, ohne Verkaufskosten.</div>`}
 function calc(){
   const rv=readVals(),P=parseP(rv),kp=num(rv.kp),zr=num(rv.zr)||0,zirr=num(rv.zirr)||0;
  try{const o={};F.forEach(f=>o[f]=$(f).value);localStorage.setItem("kc1",JSON.stringify(o))}catch(e){}
