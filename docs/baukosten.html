@@ -135,10 +135,10 @@ function calc(){
    if(q==null){am+=`<div class="note">${nm}: Menge fehlt, kein Vergleich möglich.</div>`;return}
    const von=K[i0]==null?null:q*K[i0]*f,mi=q*K[i0+1]*f,bis=K[i0+2]==null?null:q*K[i0+2]*f;
    let cls,ic,tx;
-   if(von!=null&&bud<von){cls="warn";ic="<span class="dot dr"></span>";tx=`Budget liegt <b>unter</b> der BKI-Spanne (Von ${eur(von)}). Fehlbetrag zum Von-Wert: ${eur(von-bud)}.`}
-   else if(bud<mi){cls="warn";ic="<span class="dot dy"></span>";tx=`Budget liegt im unteren Bereich (zwischen Von und Mittel ${eur(mi)}). Knapp, ${eur(mi-bud)} unter dem Mittelwert.`}
-   else if(bis!=null&&bud>bis){cls="ok";ic="<span class="dot dg"></span>";tx=`Budget liegt <b>über</b> der BKI-Spanne (Bis ${eur(bis)}). Puffer ${eur(bud-bis)}.`}
-   else{cls="ok";ic="<span class="dot dg"></span>";tx=`Budget liegt zwischen Mittelwert (${eur(mi)}) und Bis-Wert. Ausreichend im Rahmen der BKI-Streuung.`}
+   if(von!=null&&bud<von){cls="warn";ic='<span class="dot dr"></span>';tx=`Budget liegt <b>unter</b> der BKI-Spanne (Von ${eur(von)}). Fehlbetrag zum Von-Wert: ${eur(von-bud)}.`}
+   else if(bud<mi){cls="warn";ic='<span class="dot dy"></span>';tx=`Budget liegt im unteren Bereich (zwischen Von und Mittel ${eur(mi)}). Knapp, ${eur(mi-bud)} unter dem Mittelwert.`}
+   else if(bis!=null&&bud>bis){cls="ok";ic='<span class="dot dg"></span>';tx=`Budget liegt <b>über</b> der BKI-Spanne (Bis ${eur(bis)}). Puffer ${eur(bud-bis)}.`}
+   else{cls="ok";ic='<span class="dot dg"></span>';tx=`Budget liegt zwischen Mittelwert (${eur(mi)}) und Bis-Wert. Ausreichend im Rahmen der BKI-Streuung.`}
    am+=`<div class="note ${cls}"><b>${ic} über ${nm}:</b> ${tx}</div>`});
    am+='<div class="small">Die Ampel vergleicht mit der BKI-Streuung der Vergleichsobjekte, sie ist keine Kostengarantie.</div>'}
  else if(bud!=null)am='<div class="note warn">Bitte zuerst eine Kategorie wählen.</div>';
@@ -154,7 +154,7 @@ function calc(){
   const bau=q*K[ci]*f,ges=bau*(1+bnk/100)+gru+aus;
   let h=`<div class="k"><div class="l">Gesamtkosten (Bauwerk + KG 700 + Grundstück + Außenanlagen)</div><div class="v n">${eur(ges)}</div><div class="s">Bauwerk ${eur(bau)} · Nebenkosten ${eur(bau*bnk/100)}</div></div>`;
   if(wf!=null&&mi!=null&&wf>0&&mi>0){const jm=wf*mi*12,abz=jm*(bew+mau)/100,rein=jm-abz,bru=jm/ges*100,net=rein/ges*100,fak=ges/jm,am=ges/rein,kdm=ges*zr/100/(1-(bew+mau)/100)/12/wf;
-   const cl=net>=zr?"ok":"warn",ic=net>=zr?"<span class="dot dg"></span>":(net>=zr*0.75?"<span class="dot dy"></span>":"<span class="dot dr"></span>");
+   const cl=net>=zr?"ok":"warn",ic=net>=zr?'<span class="dot dg"></span>':(net>=zr*0.75?'<span class="dot dy"></span>':'<span class="dot dr"></span>');
    h+=`<div class="k"><div class="l">Jahresnettokaltmiete</div><div class="v n">${nf(jm,0)} €</div><div class="s">${nf(wf)} m² × ${nf(mi)} €/m² × 12 · Reinertrag ${nf(rein,0)} € nach Abzügen</div></div>
    <div class="k"><div class="l">Nettorendite (Reinertrag ÷ Gesamtkosten)</div><div class="v n">${nf(net)} %</div><div class="s">Bruttorendite ${nf(bru)} % · Vervielfältiger ${nf(fak,1)}</div></div>
    <div class="k"><div class="l">Amortisation (Jahre, ohne Zins)</div><div class="v n">${nf(am,1)}</div><div class="s">Gesamtkosten ÷ Reinertrag</div></div>
