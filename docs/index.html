@@ -74,13 +74,47 @@ section{padding:22px 24px}.g{gap:16px}h2{margin-bottom:14px}.cards{gap:14px}.top
 .verdict{padding:22px 24px}.verdict ul{margin-top:12px;line-height:1.7}
 .top{grid-template-columns:1fr!important}.top .cards{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:900px){.top .cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .k .s{margin-top:3px}
+
+/* Salleist-Look */
+body{background:#f2f2f0}
+.sb{background:#fff;border:0;border-radius:24px;margin:14px 0 14px 14px;height:calc(100vh - 28px);padding:18px 14px;box-shadow:none}
+.logo{background:transparent;border:0;padding:4px 6px 14px}.lg{width:38px;height:38px;border-radius:12px}
+.nl{margin:16px 10px 6px;font-size:12px;color:#9a9a94}
+.sb a{padding:11px 14px;border-radius:12px;font-size:14px;color:#444}.sb a:hover{background:#f4f4f2;color:#111}
+.sb a.on{background:#111;color:#fff;box-shadow:none}.sb a.on .ic{stroke:#fff}
+.upg{background:#111;color:#fff;border-radius:18px;padding:16px;margin-top:auto;display:flex;flex-direction:column;gap:6px}.upg .small{color:#a8a8a2;font-size:12px}
+.upg .uic{width:34px;height:34px;border-radius:9px;background:#fff;color:#111;display:grid;place-items:center;margin-bottom:6px}.upg .uic .ic{margin:0}
+.upg button{margin-top:8px;background:#2c2c2a;border:0;color:#fff;border-radius:10px;padding:10px;font-weight:600}
+.sbfoot{margin-top:10px!important;padding:2px 6px!important;font-size:11px}
+header{padding:26px 28px 6px}header h1{font-size:28px;letter-spacing:-.02em;font-weight:650}header .small{margin-top:2px}
+header button{background:#fff;border:0;border-radius:12px;padding:10px 16px}header button.p{background:#111;color:#fff}.mode button.on{background:#111;color:#fff}.mode{background:#fff;border-radius:12px}
+section,.k,.verdict{border:0;border-radius:20px;box-shadow:none}
+section{padding:24px 26px}
+section h2{font-family:inherit;text-transform:none;letter-spacing:-.01em;font-size:16px;font-weight:600;color:var(--tx);margin-bottom:18px}
+section h2 .small{font-weight:400}
+.k{padding:20px 22px}.kt{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.k .l{font-family:inherit;text-transform:none;letter-spacing:0;font-size:14px;color:var(--tx);font-weight:500}
+.k .v{font-family:inherit;font-size:30px;font-weight:650;letter-spacing:-.02em;margin-top:18px}
+.k .s{margin-top:6px;font-size:12.5px;color:var(--mu)}.kic{width:38px;height:38px;border-radius:11px;background:#f4f4f2;display:grid;place-items:center;flex:none}.kic .ic{margin:0}
+.cards .k:first-child .kic{background:#fff;color:#111}
+.dl{font-weight:600}.dl.up{color:#2e9e5b}.dl.dn{color:#d04a4a}.cards .k:first-child .dl.up{color:#5fd08a}
+.verdict{border-left-width:0;border:0;padding:24px 26px;position:relative}.verdict::before{content:"";position:absolute;left:0;top:22px;bottom:22px;width:5px;border-radius:0 4px 4px 0;background:var(--bd)}
+.verdict.ok{background:#fff}.verdict.ok::before{background:#2e9e5b}.verdict.warn{background:#fff}.verdict.warn::before{background:#d9a21b}.verdict.bad{background:#fff}.verdict.bad::before{background:#d04a4a}
+.verdict .t{font-size:30px;font-weight:650;letter-spacing:-.02em}
+th{font-family:inherit;text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:500;color:#9a9a94}
+table th,table td{border-bottom:1px solid #f0f0ee}.cmp tr.sec td{font-family:inherit;text-transform:none;letter-spacing:0;font-size:13px;font-weight:600;color:var(--tx);border-bottom:1px solid #f0f0ee;padding-top:22px}
+input,select{background:#f6f6f4;border:1px solid #eeeeec;border-radius:12px;padding:9px 12px}
+.note{background:#f6f6f4;border-radius:12px}.note.ok{background:#eaf6ee}.note.warn{background:#fff6e3}
+button.x{border:0;background:#f4f4f2;border-radius:9px}
+.top{gap:16px}.cards{gap:16px}main{gap:16px}
+@media(prefers-color-scheme:dark){body{background:#0f0f0f}.sb,.verdict.ok,.verdict.warn,.verdict.bad{background:#1a1a1a}.kic,input,select,.note,button.x{background:#262624;border-color:#2c2c2a}.sb a{color:#bbb}.sb a:hover{background:#262624;color:#fff}.upg{background:#262624}.upg button{background:#3a3a37}header button,.mode{background:#1a1a1a}}
 @media print{.shell{display:none!important}#rep{display:block!important;position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}#rep .bar{display:none}#rep .pg{border:none;border-radius:0;padding:0;margin:0;break-after:page;background:#fff;color:#000}#rep .pg:last-child{break-after:auto}
 header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
 <div class="shell"><aside class="sb"><div class="logo"><span class="lg">K</span><div><b>Kaufcheck</b><div class="small">Immobilien-Wirtschaftlichkeit</div></div></div>
 <div class="nl">Hauptmenü</div><a href="#" data-nav="ueber" class="on"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg>Überblick</a><a href="#" data-nav="annahmen" class="adv"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h12M2 11h12"/><circle cx="6" cy="5" r="1.6"/><circle cx="10.5" cy="11" r="1.6"/></svg>Annahmen</a><a href="#" data-nav="wert"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13h12M4 13V8M8 13V4M12 13V6"/><path d="M2 5l4-2 3 2 5-3"/></svg>Ertrag und Ertragswert</a><a href="#" data-nav="stress"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h3l2-5 3 10 2-5h4"/></svg>Stresstest</a><a href="#" data-nav="grafik" class="adv"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13V8M8 13V3M13 13V6"/></svg>Grafik und Verlauf</a><a href="#" data-nav="vergleich"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h11l-3-3M14 11H3l3 3"/></svg>Objekte vergleichen</a><a href="#" data-nav="check"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8l2 2 4-4"/></svg>Checkliste</a><a href="#" onclick="showReport();return false"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h6l3 3v9H4z"/><path d="M10 2v3h3"/></svg>Bericht / PDF</a>
-<div class="nl">Werkzeuge</div><a href="baukosten.html"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14V3h7v11M10 7h3v7M5 6h3M5 9h3M5 12h3"/></svg>Baukostenrechner</a><div class="sbfoot small">Alle Eingaben bleiben nur in deinem Browser. Überschlagsrechnung, keine Beratung.</div></aside><div class="content">
-<header><div><div class="small">Kaufcheck › Überblick</div><h1>Lohnt sich der Kauf?</h1></div><div class="sp"></div>
+<div class="nl">Werkzeuge</div><a href="baukosten.html"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14V3h7v11M10 7h3v7M5 6h3M5 9h3M5 12h3"/></svg>Baukostenrechner</a><div class="upg"><div class="uic"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h6l3 3v9H4z"/><path d="M10 2v3h3M6 9h4M6 11.5h4"/></svg></div><b>Bericht erstellen</b><div class="small">Kennzahlen, Stresstest und Checkliste als PDF.</div><button onclick="showReport()">Bericht / PDF</button></div><div class="sbfoot small">Eingaben bleiben nur in deinem Browser. Überschlagsrechnung, keine Beratung.</div></aside><div class="content">
+<header><div><h1>Lohnt sich der Kauf?</h1><div class="small">Deine aktuelle Einschätzung auf einen Blick</div></div><div class="sp"></div>
 <div class="mode"><button id="mE" onclick="setMode(0)">Einfach</button><button id="mX" onclick="setMode(1)">Experte</button></div><button onclick="beispiel()">Beispiel laden</button><button class="p" onclick="showReport()"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h6l3 3v9H4z"/><path d="M10 2v3h3"/></svg>Bericht / PDF</button><button onclick="neu()">Neu</button></header>
 <main id="top">
 <div class="top" data-view="ueber"><div id="verdict"></div><div class="cards" id="kz"></div></div>
@@ -269,10 +303,17 @@ function calc(){
  V.className="verdict "+cls;
  V.innerHTML=`<div class="t">${t}</div><div>${$("name").value||"Objekt"} · Kaufpreis ${nf(kp)} € · ${ok} von ${tot} Kriterien erfüllt</div><ul>${rule.map(r=>`<li>${r[0]?ICO.ok:ICO.no} ${r[1]}</li>`).join("")}</ul>`
  +(cls!="ok"&&maxkp>0?`<div style="margin-top:8px"><b>Verhandlungsziel:</b> Für ${nf(zr,1)} % Nettorendite dürfte der Kaufpreis höchstens <b>${nf(maxkp)} €</b> betragen (${nf((1-maxkp/kp)*100,1)} % unter Angebot).</div>`:"");
- $("kz").innerHTML=[["Gesamtinvestition",nf(m.ges)+" €",`inkl. ${nf(m.nk*100,1)} % Nebenkosten und Sanierung`],["Nettorendite",nf(m.net,2)+" %",`Brutto ${nf(m.bru,2)} % · Faktor ${nf(m.fak,1)}`],
-  ["Cashflow / Monat",nf(m.cf0)+" €",`Reinertrag ${nf(m.rein)} €/Jahr · Kapitaldienst ${nf(m.P_)} €/Jahr`],["Eigenkapitalrendite (IRR)",m.irr==null?"–":nf(m.irr*100,1)+" %",`nach ${P.hd} Jahren Verkauf`],
-  ["Kaufpreis pro m²",nf(ppm)+" €",P.vgl?`Vergleich ${nf(P.vgl)} €/m² (${nf((ppm/P.vgl-1)*100,1)} %)`:"kein Vergleichspreis"],["Darlehen",nf(m.dar)+" €",`${nf(m.ges>0?m.dar/m.ges*100:0,0)} % Beleihung`],["Cashflow nach Steuern / Monat",nf(m.cfn)+" €",`Jahr 1: ${m.steuer>=0?"Steuer "+nf(m.steuer):"Erstattung "+nf(-m.steuer)} € (Überschlag)|adv`]]
-  .map(([l,v,s])=>{const a=s.endsWith("|adv")||l=="Kaufpreis pro m²"||l=="Darlehen";if(a)s=s.slice(0,-4);return`<div class="k${a?" adv":""}"><div class="l">${l}</div><div class="v n">${v}</div><div class="s">${s}</div></div>`}).join("");
+ const dl=(good,txt)=>`<span class="dl ${good?"up":"dn"}">${txt}</span>`;
+ const KI={stack:'<ellipse cx="8" cy="4" rx="5" ry="2"/><path d="M3 4v4c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8v4c0 1.1 2.2 2 5 2s5-.9 5-2V8"/>',pct:'<path d="M3 13L13 3"/><circle cx="4.5" cy="4.5" r="1.8"/><circle cx="11.5" cy="11.5" r="1.8"/>',cf:'<path d="M2 11l4-4 3 3 5-6M10 4h4v4"/>',irr:'<circle cx="8" cy="8" r="6"/><path d="M8 4v4l3 2"/>',ruler:'<rect x="2" y="5" width="12" height="6" rx="1"/><path d="M5 5v3M8 5v2M11 5v3"/>',bank:'<path d="M2 13h12M3 6l5-3 5 3M4 6v6M8 6v6M12 6v6"/>',tax:'<path d="M4 2h6l3 3v9H4z"/><path d="M6 9h4M6 11.5h4"/>'};
+ const ki=k=>`<span class="kic"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">${KI[k]}</svg></span>`;
+ const cards=[["Gesamtinvestition",nf(m.ges)+" €",`inkl. ${nf(m.nk*100,1)} % Nebenkosten und Sanierung`,"stack",0],
+  ["Nettorendite",nf(m.net,2)+" %",dl(m.net>=zr,(m.net>=zr?"+":"−")+nf(Math.abs(m.net-zr),2)+" Pkt.")+` zum Ziel von ${nf(zr,1)} % · Brutto ${nf(m.bru,2)} %`,"pct",0],
+  ["Cashflow pro Monat",nf(m.cf0)+" €",dl(m.cf0>=0,m.cf0>=0?"positiv":"negativ")+" nach Zins und Tilgung","cf",0],
+  ["Eigenkapitalrendite (IRR)",m.irr==null?"–":nf(m.irr*100,1)+" %",m.irr==null?"nicht berechenbar":dl(m.irr*100>=zirr,(m.irr*100>=zirr?"+":"−")+nf(Math.abs(m.irr*100-zirr),1)+" Pkt.")+` zum Ziel von ${nf(zirr,1)} % nach ${P.hd} J.`,"irr",0],
+  ["Kaufpreis pro m²",nf(ppm)+" €",P.vgl?dl(ppm<=P.vgl,(ppm<=P.vgl?"−":"+")+nf(Math.abs(ppm/P.vgl-1)*100,1)+" %")+` zum Vergleich (${nf(P.vgl)} €/m²)`:"kein Vergleichspreis","ruler",1],
+  ["Darlehen",nf(m.dar)+" €",`${nf(m.ges>0?m.dar/m.ges*100:0,0)} % Beleihung`,"bank",1],
+  ["Cashflow nach Steuern pro Monat",nf(m.cfn)+" €",`Jahr 1: ${m.steuer>=0?"Steuer "+nf(m.steuer):"Erstattung "+nf(-m.steuer)} € (Überschlag)`,"tax",1]];
+ $("kz").innerHTML=cards.map(([l,v,sx,ic,a])=>`<div class="k${a?" adv":""}"><div class="kt"><span class="l">${l}</span>${ki(ic)}</div><div class="v n">${v}</div><div class="s">${sx}</div></div>`).join("");
  let h="<tr><th>Kaufpreis</th><th>Preis</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th></tr>";
  [0,-5,-10,-15,-20].forEach(d=>{const k2=kp*(1+d/100),mm=model(k2,P);h+=`<tr><td>${d?d+" %":"Angebot"}</td><td class="n">${nf(k2)} €</td><td class="n">${nf(mm.net,2)} %</td><td class="n">${nf(mm.cf0)} €</td><td class="n">${mm.irr==null?"–":nf(mm.irr*100,1)+" %"}</td></tr>`});
  $("sens").innerHTML=h;drawStress();drawCharts(m,P,kp);drawEW(m,P,kp);
