@@ -1,0 +1,88 @@
+gebaeudekategorie;detailseite_ab;diagrammseite_bgf;diagrammseite_bri;bgf_von;bgf_mittel;bgf_bis;bri_von;bri_mittel;bri_bis
+Büro und Verwaltung – einfacher Standard;164;152;156;1500;1800;2200;450;550;700
+Büro und Verwaltung – mittlerer Standard;170;152;156;2300;2900;3600;625;775;975
+Büro und Verwaltung – hoher Standard;192;152;156;2800;3500;4600;775;950;1200
+Büro und Verwaltung – Holzbauweise;206;152;156;2400;3400;4700;575;875;1175
+Instituts- und Laborgebäude;216;152;156;3200;4400;5800;725;975;1275
+Medizinische Einrichtungen;232;152;156;2500;3100;3900;675;825;975
+Pflegeheime;246;152;156;2200;2800;3600;650;800;975
+Erholungsgebäude;260;152;156;3400;4200;5200;725;1075;1425
+Allgemeinbildende Schulen;268;152;156;2500;3000;3600;575;725;875
+Schulen – Holzbauweise;286;152;156;2300;3100;3800;600;725;900
+Berufliche Schulen;296;152;156;2300;2800;3700;550;725;925
+Förder- und Sonderschulen;304;152;156;2400;2800;3500;575;700;875
+Weiterbildungseinrichtungen;312;152;156;2800;3300;4300;625;800;975
+Kindergarten ohne Keller – einfacher Standard;326;152;156;1800;2300;2800;500;600;725
+Kindergarten ohne Keller – mittlerer Standard;334;152;156;2500;3000;3700;625;775;975
+Kindergarten ohne Keller – hoher Standard;356;152;156;2600;3300;4000;650;800;975
+Kindergarten ohne Keller – Holzbauweise;368;152;156;2700;3300;4200;650;800;1000
+Kindergarten mit Keller;390;152;156;2600;3100;3600;700;800;975
+Sport- und Mehrzweckhallen;400;152;156;2500;3000;3800;400;500;650
+Sporthallen – Einfeldhallen;410;152;156;2500;3000;3600;400;475;650
+Sporthallen – Dreifeldhallen;420;152;156;2000;2700;3400;275;375;500
+Schwimmhallen;432;152;156;3500;4200;5000;675;800;1050
+Ein- und Zweifamilienhäuser mit Keller – einfacher Standard;444;152;156;1300;1400;1500;500;525;550
+Ein- und Zweifamilienhäuser mit Keller – mittlerer Standard;450;152;156;1800;2100;2400;575;650;750
+Ein- und Zweifamilienhäuser mit Keller – hoher Standard;462;152;156;2100;2500;3300;650;800;1025
+Ein- und Zweifamilienhäuser ohne Keller – einfacher Standard;484;152;156;1300;1500;1800;500;550;575
+Ein- und Zweifamilienhäuser ohne Keller – mittlerer Standard;490;152;156;1900;2300;2800;575;700;825
+Ein- und Zweifamilienhäuser ohne Keller – hoher Standard;510;152;156;2200;2700;3400;700;850;1050
+Ein- und Zweifamilienhäuser – Passivhausstandard Massivbau;524;153;157;1900;2100;2500;575;675;750
+Ein- und Zweifamilienhäuser – Passivhausstandard Holzbau;536;153;157;1900;2300;2700;625;750;850
+Ein- und Zweifamilienhäuser in Holzbauweise – mit Keller;550;153;157;2000;2500;3200;650;775;1025
+Ein- und Zweifamilienhäuser in Holzbauweise – ohne Keller;566;153;157;2100;2700;3800;675;850;1125
+Doppel- und Reihenendhäuser – einfacher Standard;586;153;157;1100;1300;1400;425;475;550
+Doppel- und Reihenendhäuser – mittlerer Standard;592;153;157;1600;1800;2000;525;625;700
+Doppel- und Reihenendhäuser – hoher Standard;600;153;157;1800;2100;2500;625;700;850
+Doppel- und Reihenendhäuser – Holzbauweise;608;153;157;1700;2100;3000;575;700;950
+Reihenhäuser – einfacher Standard;620;153;157;;1200;;375;425;450
+Reihenhäuser – mittlerer Standard;626;153;157;1500;1700;2000;500;550;700
+Reihenhäuser – hoher Standard;634;153;157;1900;2200;2900;600;700;875
+Mehrfamilienhäuser bis zu 6 WE – einfacher Standard;646;153;157;1200;1300;1500;400;500;550
+Mehrfamilienhäuser bis zu 6 WE – mittlerer Standard;652;153;157;1600;1900;2400;575;650;775
+Mehrfamilienhäuser bis zu 6 WE – hoher Standard;662;153;157;1900;2300;2900;625;800;1050
+Mehrfamilienhäuser mit 6 bis 19 WE – einfacher Standard;680;153;157;1300;1500;1800;475;525;625
+Mehrfamilienhäuser mit 6 bis 19 WE – mittlerer Standard;688;153;157;1500;1900;2300;500;625;775
+Mehrfamilienhäuser mit 6 bis 19 WE – hoher Standard;706;153;157;1800;2200;2900;625;725;950
+Mehrfamilienhäuser ab 20 WE – einfacher Standard;724;153;157;1300;1500;1600;450;500;525
+Mehrfamilienhäuser ab 20 WE – mittlerer Standard;732;153;157;1700;1900;2100;550;625;725
+Mehrfamilienhäuser ab 20 WE – hoher Standard;750;153;157;2000;2300;2700;625;750;875
+Mehrfamilienhäuser – Passivhäuser;760;153;157;1600;2000;2400;550;625;700
+Mehrfamilienhäuser – Holzbauweise;770;153;157;1800;2300;2800;575;725;900
+Wohnhäuser bis 15 % Mischnutzung – einfacher Standard;786;153;157;1500;1600;1700;;525;
+Wohnhäuser bis 15 % Mischnutzung – mittlerer Standard;792;153;157;1600;1900;2300;525;600;700
+Wohnhäuser bis 15 % Mischnutzung – hoher Standard;802;153;157;2100;2500;3200;625;775;900
+Wohnhäuser mit mehr als 15 % Mischnutzung;814;153;157;1900;2400;3000;600;725;900
+Seniorenwohnungen – mittlerer Standard;832;153;157;1700;2200;3200;575;675;925
+Seniorenwohnungen – hoher Standard;842;153;157;1600;2300;2700;575;700;775
+Wohnheime und Internate;850;153;157;2100;2500;3100;625;775;950
+Hotels;866;153;157;2400;2900;3500;750;900;1025
+Gaststätten, Kantinen und Mensen;874;154;158;3100;4000;5200;700;925;1150
+Industrielle Produktionsgebäude – Massivbauweise;888;154;158;1500;2000;2400;225;325;450
+Industrielle Produktionsgebäude – überwiegend Skelettbauweise;896;154;158;1700;2300;3200;225;375;575
+Betriebs- und Werkstätten – eingeschossig;906;154;158;1400;2200;3100;275;450;800
+Betriebs- und Werkstätten – mehrgeschossig, geringer Hallenanteil;914;154;158;1700;2400;3800;375;525;775
+Betriebs- und Werkstätten – mehrgeschossig, hoher Hallenanteil;924;154;158;1400;1900;2500;200;350;500
+Geschäftshäuser mit Wohnungen;934;154;158;2000;2400;3400;575;700;850
+Geschäftshäuser ohne Wohnungen;942;154;158;1800;2500;3300;550;725;875
+Verbrauchermärkte;948;154;158;1600;1900;2500;275;325;400
+Autohäuser;956;154;158;1900;2100;2300;425;450;575
+Lagergebäude ohne Mischnutzung;962;154;158;800;1300;1900;125;225;350
+Lagergebäude bis 25 % Mischnutzung;974;154;158;1000;1400;1800;125;200;325
+Lagergebäude mit mehr als 25 % Mischnutzung;982;154;158;1500;1900;2300;200;350;475
+Einzel- und Doppelgaragen;990;154;158;500;900;1200;200;350;450
+Mehrfachgaragen;996;154;158;900;1500;2200;200;375;575
+Hochgaragen;1002;154;158;700;900;1200;225;300;400
+Fahrradparkhäuser;1008;154;158;1300;2500;3200;250;550;625
+Carports;1014;154;158;700;1100;1600;250;375;550
+Tiefgaragen;1020;154;158;1200;1500;1900;375;475;600
+Feuerwehrhäuser;1026;154;158;2300;3000;3800;525;650;850
+Öffentliche Bereitschaftsdienste;1044;154;158;1900;2500;3300;300;475;800
+Bibliotheken, Museen und Ausstellungen;1052;154;158;2900;4100;6000;625;925;1250
+Theater;1066;154;158;3400;4600;5800;750;875;1000
+Gemeindezentren – einfacher Standard;1076;154;158;1800;2100;2500;375;500;550
+Gemeindezentren – mittlerer Standard;1082;154;158;2500;3300;4400;650;775;950
+Gemeindezentren – hoher Standard;1096;154;158;3100;3700;4200;650;825;975
+Gemeindezentren – Holzbauweise;1108;154;158;2700;3500;4400;625;775;1025
+Sakralbauten;1118;154;158;3300;4000;4500;650;750;925
+Friedhofsgebäude;1124;154;158;2800;3900;5400;575;825;1175

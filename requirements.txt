@@ -1,0 +1,7 @@
+pymupdf
+pydantic
+pillow
+streamlit
+anthropic
+pandas
+pytest

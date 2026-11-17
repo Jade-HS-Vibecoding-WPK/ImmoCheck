@@ -1,0 +1,8 @@
+.venv/
+projekte/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.claude/
+.DS_Store
