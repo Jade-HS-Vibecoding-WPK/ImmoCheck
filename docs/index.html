@@ -108,6 +108,10 @@ input,select{background:#f6f6f4;border:1px solid #eeeeec;border-radius:12px;padd
 button.x{border:0;background:#f4f4f2;border-radius:9px}
 .top{gap:16px}.cards{gap:16px}main{gap:16px}
 @media(prefers-color-scheme:dark){body{background:#0f0f0f}.sb,.verdict.ok,.verdict.warn,.verdict.bad{background:#1a1a1a}.kic,input,select,.note,button.x{background:#262624;border-color:#2c2c2a}.sb a{color:#bbb}.sb a:hover{background:#262624;color:#fff}.upg{background:#262624}.upg button{background:#3a3a37}header button,.mode{background:#1a1a1a}}
+.pos{color:#17a34a!important;font-weight:800!important}.neg{color:#dc2626!important;font-weight:800!important}
+.k .v.pos,.k .v.neg{font-weight:800!important}.verdict.ok .t{color:#17a34a}.verdict.bad .t{color:#dc2626}.verdict.warn .t{color:#b7791f}
+.verdict li.lp{color:#17803f;font-weight:600}.verdict li.ln{color:#dc2626;font-weight:700}.verdict li.lp .ic{stroke:#17a34a;stroke-width:2.2}.verdict li.ln .ic{stroke:#dc2626;stroke-width:2.2}
+.cmp td.res.best{background:#eaf6ee}.cmp td.res .n.pos,.cmp td.res .n.neg{font-weight:800!important}
 @media print{.shell{display:none!important}#rep{display:block!important;position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}#rep .bar{display:none}#rep .pg{border:none;border-radius:0;padding:0;margin:0;break-after:page;background:#fff;color:#000}#rep .pg:last-child{break-after:auto}
 header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
@@ -236,7 +240,7 @@ function stress(v){const J=judge(v);if(!J.m)return null;const P=J.P,kp=J.kp,mi=(
  return{sc,kz,km,kBE,lBE,mi:P[mi],J}}
 function drawStress(){const S=stress(readVals());const el=$("stress");if(!S){el.innerHTML='<div class="small">Erscheint, sobald ein Ergebnis berechnet ist.</div>';return}
  let h="<tr><th>Szenario</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th><th></th></tr>";
- S.sc.forEach(x=>{const m=x.m,ok=m.cf0>=0&&m.net>=S.J.zr;h+=`<tr><td>${x.n}</td><td class="n">${nf(m.net,2)} %</td><td class="n">${nf(m.cf0)} €</td><td class="n">${m.irr==null?"–":nf(m.irr*100,1)+" %"}</td><td>${m.cf0<0?DOT.r:(ok?DOT.g:DOT.y)}</td></tr>`});
+ S.sc.forEach(x=>{const m=x.m,ok=m.cf0>=0&&m.net>=S.J.zr;h+=`<tr><td>${x.n}</td><td class="n ${m.net>=S.J.zr?"pos":"neg"}">${nf(m.net,2)} %</td><td class="n ${m.cf0>=0?"pos":"neg"}">${nf(m.cf0)} €</td><td class="n ${m.irr==null?"":(m.irr*100>=S.J.zirr?"pos":"neg")}">${m.irr==null?"–":nf(m.irr*100,1)+" %"}</td><td>${m.cf0<0?DOT.r:(ok?DOT.g:DOT.y)}</td></tr>`});
  let k="";if(S.kBE!=null)k+=`Break-even-Kaufpreis (Cashflow ±0): <b>${nf(S.kBE)} €</b> (${nf((S.kBE/S.J.kp-1)*100,1)} % zum Angebot). `;if(S.lBE!=null)k+=`Leerstand darf bis <b>${nf(S.lBE,1)} %</b> steigen. `;if(S.kz!=null)k+=`Der Cashflow wird negativ ab einem Zins von <b>${nf(S.kz,2)} %</b> (aktuell ${nf(S.J.P.zi,2)} %). `;
  if(S.km!=null)k+=`Die Miete darf bis <b>${nf(S.km,2)} €/m²</b> sinken, bevor der Cashflow negativ wird (aktuell ${nf(S.mi,2)} €/m²).`;
  $("stress").innerHTML="<table>"+h+"</table>"+(k?`<div class="note" style="margin-top:8px">${k}</div>`:"")}
@@ -260,10 +264,10 @@ function drawObjRes(){const tb=$("objresb");if(!tb)return;const R=OBJ.map(v=>{co
  const best=ok.length?R.indexOf([...ok].sort((a,b)=>b.J.m.net-a.J.m.net)[0]):-1;
  const bar=(r,val,max,cls)=>{if(val==null||!max)return"";const w=Math.max(2,Math.abs(val)/max*100);return`<div class="bar"><i class="${val<0?"neg":cls||""}" style="width:${w}%"></i></div>`};
  const row=(l,fn,o={})=>{const vals=o.v?R.map(r=>r.J.m?o.v(r):null):null;const mx=vals?Math.max(...vals.filter(x=>x!=null).map(Math.abs),0):0;
-  return`<tr class="${o.big?"big":""}"><td class="lb">${l}</td>${R.map((r,i)=>`<td class="res${o.best&&i==best?" best":""}">${r.J.m?`<span class="n">${fn(r)}</span>`+(vals?bar(r,vals[i],mx,i==best&&o.best?"dk":""):""):"–"}</td>`).join("")}</tr>`};
- tb.innerHTML=row("Urteil",r=>r.J.t,{big:1})+row("Nettorendite",r=>nf(r.J.m.net,2)+" %",{v:r=>r.J.m.net,best:1})+row("Cashflow / Monat",r=>nf(r.J.m.cf0)+" €",{v:r=>r.J.m.cf0})
- +row("Eigenkapitalrendite (IRR)",r=>r.J.m.irr==null?"–":nf(r.J.m.irr*100,1)+" %",{v:r=>r.J.m.irr==null?null:r.J.m.irr*100})+row("Preis pro m²",r=>nf(r.J.kp/r.J.P.wf)+" €",{v:r=>r.J.kp/r.J.P.wf})
- +row("Gesamtinvestition",r=>nf(r.J.m.ges)+" €")+row("Cashflow bei Zins +2 %",r=>nf(r.S.sc[2].m.cf0)+" €")+row("Höchstpreis für Ziel-Rendite",r=>nf(r.J.maxkp)+" €");
+  return`<tr class="${o.big?"big":""}"><td class="lb">${l}</td>${R.map((r,i)=>`<td class="res${o.best&&i==best?" best":""}">${r.J.m?`<span class="n ${o.good?(o.good(r)?"pos":"neg"):""}">${fn(r)}</span>`+(vals?bar(r,vals[i],mx,i==best&&o.best?"dk":""):""):"–"}</td>`).join("")}</tr>`};
+ tb.innerHTML=row("Urteil",r=>r.J.t,{big:1})+row("Nettorendite",r=>nf(r.J.m.net,2)+" %",{v:r=>r.J.m.net,best:1,good:r=>r.J.m.net>=r.J.zr})+row("Cashflow / Monat",r=>nf(r.J.m.cf0)+" €",{v:r=>r.J.m.cf0,good:r=>r.J.m.cf0>=0})
+ +row("Eigenkapitalrendite (IRR)",r=>r.J.m.irr==null?"–":nf(r.J.m.irr*100,1)+" %",{v:r=>r.J.m.irr==null?null:r.J.m.irr*100,good:r=>r.J.m.irr!=null&&r.J.m.irr*100>=r.J.zirr})+row("Preis pro m²",r=>nf(r.J.kp/r.J.P.wf)+" €",{v:r=>r.J.kp/r.J.P.wf})
+ +row("Gesamtinvestition",r=>nf(r.J.m.ges)+" €")+row("Cashflow bei Zins +2 %",r=>nf(r.S.sc[2].m.cf0)+" €",{good:r=>r.S.sc[2].m.cf0>=0})+row("Höchstpreis für Ziel-Rendite",r=>nf(r.J.maxkp)+" €");
  $("objnote").innerHTML=best>=0?`Beste Nettorendite: <b>${R[best].v.name||"Objekt"}</b> (grün markiert). Die Balken zeigen den Vergleich je Zeile. Jede Änderung rechnet sofort neu, alle Objekte nutzen ihre eigenen Annahmen.`:""}
 function svgChart(title,years,series,bars){const W=460,H=210,L=58,R=14,T=26,B=28;const all=series.flatMap(x=>x.v).concat(bars?bars.v:[]);let lo=Math.min(0,...all),hi=Math.max(0,...all);if(hi==lo)hi=lo+1;
  const X=i=>L+(W-L-R)*(years.length==1?0.5:i/(years.length-1)),Y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));let o=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto"><text x="${L}" y="14" font-size="11" fill="currentColor" font-weight="600">${title}</text>`;
@@ -278,15 +282,15 @@ function drawCharts(m,P,kp){const ys=m.rows.map(r=>r[0]);const wert=y=>(kp+P.san
  const rest=m.rows.map(r=>r[4]),verm=m.rows.map(r=>wert(r[0])-r[4]),cf=m.rows.map(r=>r[3]);
  $("charts").innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">${svgChart("Nettovermögen (Wert − Restschuld) und Restschuld, €",ys,[{n:"Nettovermögen",v:verm,c:"#111"},{n:"Restschuld",v:rest,c:"#9a9a94"}])}${svgChart("Cashflow pro Jahr nach Kapitaldienst, €",ys,[],{v:cf})}</div><div class="small" style="margin-top:6px">Vor Steuern. Wert mit der angenommenen jährlichen Wertentwicklung fortgeschrieben, ohne Verkaufskosten.</div>`}
 function drawEW(m,P,kp){const jm=m.jm,pc=x=>jm?nf(x/jm*100,1)+" %":"";
- const r=(l,v,o={})=>`<tr class="${o.sum?"sum":""}"><td>${l}</td><td>${o.neg?"−":""}${nf(Math.abs(v))} €</td><td class="m">${pc(Math.abs(v))}</td></tr>`;
+ const r=(l,v,o={})=>`<tr class="${o.sum?"sum":""}"><td>${l}</td><td${o.sg!=null?` class="${o.sg>=0?"pos":"neg"}"`:""}>${o.neg?"−":""}${nf(Math.abs(v))} €</td><td class="m">${pc(Math.abs(v))}</td></tr>`;
  let h='<table class="et"><tr><th>Position</th><th>€ pro Jahr</th><th>% der Miete</th></tr>'+r("Nettokaltmiete",jm)+r("Leerstand ("+nf(P.lee,1)+" %)",jm*P.lee/100,{neg:1})+r("Mietausfallwagnis ("+nf(P.mau,1)+" %)",jm*P.mau/100,{neg:1})
  +r("Verwaltung",m.kV,{neg:1})+r("Instandhaltung",m.kI,{neg:1})+(m.kH?r("Hausgeld nicht umlagefähig",m.kH,{neg:1}):"")+(m.kS?r("Sonstige nicht umlagefähige Kosten",m.kS,{neg:1}):"")+(m.ebz0?r("Erbbauzins",m.ebz0,{neg:1}):"")
- +r("Reinertrag vor Finanzierung",m.rein,{sum:1})+r("Zinsen im 1. Jahr",m.zins1,{neg:1})+r("Tilgung im 1. Jahr",m.P_-m.zins1,{neg:1})+r("Cashflow vor Steuern",m.rein-m.P_,{sum:1})+"</table>";
+ +r("Reinertrag vor Finanzierung",m.rein,{sum:1,sg:m.rein})+r("Zinsen im 1. Jahr",m.zins1,{neg:1})+r("Tilgung im 1. Jahr",m.P_-m.zins1,{neg:1})+r("Cashflow vor Steuern",m.rein-m.P_,{sum:1,sg:m.rein-m.P_})+"</table>";
  $("ertrag").innerHTML=h;
  const dek=m.icr==null?null:m.icr,okz=dek==null||dek>=1,dev=(kp+P.san)>0?(m.ew/(kp+P.san)-1)*100:null;
- let e='<div class="cards"><div class="k"><div class="l">Zinsdeckung</div><div class="v n">'+(dek==null?"–":nf(dek,2)+"-fach")+'</div><div class="s">Reinertrag ÷ Zinsen im 1. Jahr</div></div>'
- +'<div class="k"><div class="l">Kapitaldienstdeckung</div><div class="v n">'+(m.dscr==null?"–":nf(m.dscr,2)+"-fach")+'</div><div class="s">Reinertrag ÷ (Zins + Tilgung)</div></div>'
- +'<div class="k"><div class="l">Ertragswert</div><div class="v n">'+nf(m.ew)+' €</div><div class="s">Bodenwert '+nf(m.bwv)+' € + Gebäudeertragswert</div></div>'
+ let e='<div class="cards"><div class="k"><div class="l">Zinsdeckung</div><div class="v n '+(dek==null?"":(okz?"pos":"neg"))+'">'+(dek==null?"–":nf(dek,2)+"-fach")+'</div><div class="s">Reinertrag ÷ Zinsen im 1. Jahr</div></div>'
+ +'<div class="k"><div class="l">Kapitaldienstdeckung</div><div class="v n '+(m.dscr==null?"":(m.dscr>=1?"pos":"neg"))+'">'+(m.dscr==null?"–":nf(m.dscr,2)+"-fach")+'</div><div class="s">Reinertrag ÷ (Zins + Tilgung)</div></div>'
+ +'<div class="k"><div class="l">Ertragswert</div><div class="v n '+(m.ew>=kp+P.san?"pos":"neg")+'">'+nf(m.ew)+' €</div><div class="s">Bodenwert '+nf(m.bwv)+' € + Gebäudeertragswert</div></div>'
  +'<div class="k"><div class="l">Kaufpreis plus Sanierung</div><div class="v n">'+nf(kp+P.san)+' €</div><div class="s">'+(dev==null?"":(dev>=0?"Ertragswert liegt "+nf(dev,1)+" % darüber":"Kaufpreis liegt "+nf(-dev,1)+" % über dem Ertragswert"))+'</div></div></div>';
  e+=dek==null?'<div class="note">Ohne Darlehen gibt es keine Zinsen. Der Ertrag deckt sie vollständig.</div>':`<div class="note ${okz?"ok":"warn"}"><b>${okz?"Der Ertrag deckt die Zinsen.":"Der Ertrag deckt die Zinsen nicht."}</b> Reinertrag ${nf(m.rein)} € gegenüber ${nf(m.zins1)} € Zinsen im ersten Jahr${okz?"":", es fehlen "+nf(m.zins1-m.rein)+" € schon vor der Tilgung"}.</div>`;
  if(m.dscr!=null&&m.dscr<1)e+=`<div class="note warn">Der Ertrag reicht nicht für Zins und Tilgung zusammen (${nf(m.dscr,2)}-fach). Banken verlangen bei Vermietung meist mehr als 1,0.</div>`;
@@ -301,21 +305,21 @@ function calc(){
   const J=judge(rv);if(!J.m){V.className="verdict warn";V.innerHTML='<div class="t">Fast geschafft: Miete fehlt</div><div class="small">Trag die monatliche Nettokaltmiete pro m² ein (oder die Marktmiete im Experten-Modus).</div>';return}
   const m=J.m,rule=J.rule,ok=J.ok,tot=J.tot,cls=J.cls,t=J.t,maxkp=J.maxkp,ppm=kp/P.wf;
  V.className="verdict "+cls;
- V.innerHTML=`<div class="t">${t}</div><div>${$("name").value||"Objekt"} · Kaufpreis ${nf(kp)} € · ${ok} von ${tot} Kriterien erfüllt</div><ul>${rule.map(r=>`<li>${r[0]?ICO.ok:ICO.no} ${r[1]}</li>`).join("")}</ul>`
+ V.innerHTML=`<div class="t">${t}</div><div>${$("name").value||"Objekt"} · Kaufpreis ${nf(kp)} € · ${ok} von ${tot} Kriterien erfüllt</div><ul>${rule.map(r=>`<li class="${r[0]?"lp":"ln"}">${r[0]?ICO.ok:ICO.no} ${r[1]}</li>`).join("")}</ul>`
  +(cls!="ok"&&maxkp>0?`<div style="margin-top:8px"><b>Verhandlungsziel:</b> Für ${nf(zr,1)} % Nettorendite dürfte der Kaufpreis höchstens <b>${nf(maxkp)} €</b> betragen (${nf((1-maxkp/kp)*100,1)} % unter Angebot).</div>`:"");
  const dl=(good,txt)=>`<span class="dl ${good?"up":"dn"}">${txt}</span>`;
  const KI={stack:'<ellipse cx="8" cy="4" rx="5" ry="2"/><path d="M3 4v4c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8v4c0 1.1 2.2 2 5 2s5-.9 5-2V8"/>',pct:'<path d="M3 13L13 3"/><circle cx="4.5" cy="4.5" r="1.8"/><circle cx="11.5" cy="11.5" r="1.8"/>',cf:'<path d="M2 11l4-4 3 3 5-6M10 4h4v4"/>',irr:'<circle cx="8" cy="8" r="6"/><path d="M8 4v4l3 2"/>',ruler:'<rect x="2" y="5" width="12" height="6" rx="1"/><path d="M5 5v3M8 5v2M11 5v3"/>',bank:'<path d="M2 13h12M3 6l5-3 5 3M4 6v6M8 6v6M12 6v6"/>',tax:'<path d="M4 2h6l3 3v9H4z"/><path d="M6 9h4M6 11.5h4"/>'};
  const ki=k=>`<span class="kic"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">${KI[k]}</svg></span>`;
- const cards=[["Gesamtinvestition",nf(m.ges)+" €",`inkl. ${nf(m.nk*100,1)} % Nebenkosten und Sanierung`,"stack",0],
-  ["Nettorendite",nf(m.net,2)+" %",dl(m.net>=zr,(m.net>=zr?"+":"−")+nf(Math.abs(m.net-zr),2)+" Pkt.")+` zum Ziel von ${nf(zr,1)} % · Brutto ${nf(m.bru,2)} %`,"pct",0],
-  ["Cashflow pro Monat",nf(m.cf0)+" €",dl(m.cf0>=0,m.cf0>=0?"positiv":"negativ")+" nach Zins und Tilgung","cf",0],
-  ["Eigenkapitalrendite (IRR)",m.irr==null?"–":nf(m.irr*100,1)+" %",m.irr==null?"nicht berechenbar":dl(m.irr*100>=zirr,(m.irr*100>=zirr?"+":"−")+nf(Math.abs(m.irr*100-zirr),1)+" Pkt.")+` zum Ziel von ${nf(zirr,1)} % nach ${P.hd} J.`,"irr",0],
-  ["Kaufpreis pro m²",nf(ppm)+" €",P.vgl?dl(ppm<=P.vgl,(ppm<=P.vgl?"−":"+")+nf(Math.abs(ppm/P.vgl-1)*100,1)+" %")+` zum Vergleich (${nf(P.vgl)} €/m²)`:"kein Vergleichspreis","ruler",1],
-  ["Darlehen",nf(m.dar)+" €",`${nf(m.ges>0?m.dar/m.ges*100:0,0)} % Beleihung`,"bank",1],
-  ["Cashflow nach Steuern pro Monat",nf(m.cfn)+" €",`Jahr 1: ${m.steuer>=0?"Steuer "+nf(m.steuer):"Erstattung "+nf(-m.steuer)} € (Überschlag)`,"tax",1]];
- $("kz").innerHTML=cards.map(([l,v,sx,ic,a])=>`<div class="k${a?" adv":""}"><div class="kt"><span class="l">${l}</span>${ki(ic)}</div><div class="v n">${v}</div><div class="s">${sx}</div></div>`).join("");
+ const cards=[["Gesamtinvestition",nf(m.ges)+" €",`inkl. ${nf(m.nk*100,1)} % Nebenkosten und Sanierung`,"stack",0,""],
+  ["Nettorendite",nf(m.net,2)+" %",dl(m.net>=zr,(m.net>=zr?"+":"−")+nf(Math.abs(m.net-zr),2)+" Pkt.")+` zum Ziel von ${nf(zr,1)} % · Brutto ${nf(m.bru,2)} %`,"pct",0,m.net>=zr?"pos":"neg"],
+  ["Cashflow pro Monat",nf(m.cf0)+" €",dl(m.cf0>=0,m.cf0>=0?"positiv":"negativ")+" nach Zins und Tilgung","cf",0,m.cf0>=0?"pos":"neg"],
+  ["Eigenkapitalrendite (IRR)",m.irr==null?"–":nf(m.irr*100,1)+" %",m.irr==null?"nicht berechenbar":dl(m.irr*100>=zirr,(m.irr*100>=zirr?"+":"−")+nf(Math.abs(m.irr*100-zirr),1)+" Pkt.")+` zum Ziel von ${nf(zirr,1)} % nach ${P.hd} J.`,"irr",0,m.irr==null?"":(m.irr*100>=zirr?"pos":"neg")],
+  ["Kaufpreis pro m²",nf(ppm)+" €",P.vgl?dl(ppm<=P.vgl,(ppm<=P.vgl?"−":"+")+nf(Math.abs(ppm/P.vgl-1)*100,1)+" %")+` zum Vergleich (${nf(P.vgl)} €/m²)`:"kein Vergleichspreis","ruler",1,P.vgl?(ppm<=P.vgl?"pos":"neg"):""],
+  ["Darlehen",nf(m.dar)+" €",`${nf(m.ges>0?m.dar/m.ges*100:0,0)} % Beleihung`,"bank",1,""],
+  ["Cashflow nach Steuern pro Monat",nf(m.cfn)+" €",`Jahr 1: ${m.steuer>=0?"Steuer "+nf(m.steuer):"Erstattung "+nf(-m.steuer)} € (Überschlag)`,"tax",1,m.cfn>=0?"pos":"neg"]];
+ $("kz").innerHTML=cards.map(([l,v,sx,ic,a,cl])=>`<div class="k${a?" adv":""}"><div class="kt"><span class="l">${l}</span>${ki(ic)}</div><div class="v n ${cl}">${v}</div><div class="s">${sx}</div></div>`).join("");
  let h="<tr><th>Kaufpreis</th><th>Preis</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th></tr>";
- [0,-5,-10,-15,-20].forEach(d=>{const k2=kp*(1+d/100),mm=model(k2,P);h+=`<tr><td>${d?d+" %":"Angebot"}</td><td class="n">${nf(k2)} €</td><td class="n">${nf(mm.net,2)} %</td><td class="n">${nf(mm.cf0)} €</td><td class="n">${mm.irr==null?"–":nf(mm.irr*100,1)+" %"}</td></tr>`});
+ [0,-5,-10,-15,-20].forEach(d=>{const k2=kp*(1+d/100),mm=model(k2,P);h+=`<tr><td>${d?d+" %":"Angebot"}</td><td class="n">${nf(k2)} €</td><td class="n ${mm.net>=zr?"pos":"neg"}">${nf(mm.net,2)} %</td><td class="n ${mm.cf0>=0?"pos":"neg"}">${nf(mm.cf0)} €</td><td class="n ${mm.irr==null?"":(mm.irr*100>=zirr?"pos":"neg")}">${mm.irr==null?"–":nf(mm.irr*100,1)+" %"}</td></tr>`});
  $("sens").innerHTML=h;drawStress();drawCharts(m,P,kp);drawEW(m,P,kp);
  $("maxkp").innerHTML=`Höchstpreis für ${nf(zr,1)} % Nettorendite: <b>${nf(maxkp)} €</b>${P.vgl?` · Preis laut Vergleich ${nf(P.vgl*P.wf)} €`:""}`;
  let t2="<tr><th>Jahr</th><th>Überschuss</th><th>Kapitaldienst</th><th>Cashflow</th><th>Restschuld</th></tr>";
