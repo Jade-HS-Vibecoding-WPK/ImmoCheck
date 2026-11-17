@@ -2,8 +2,11 @@
 
 Pläne (PDF) hochladen → auswerten → BKI-Orientierung KG 300+400 (BGF/BRI) und bepreiste Bauteile nach DIN 276, jede Zahl mit Fundstelle.
 
-## Start
-    ./start.command        # oder: .venv/bin/streamlit run app.py
+## Start (Mac und Windows)
+- **Mac:** Doppelklick auf `start.command` (beim ersten Mal Rechtsklick → Öffnen).
+- **Windows:** Doppelklick auf `start.bat`.
+
+Beim ersten Start wird alles automatisch eingerichtet (Python 3.9+ nötig). Danach öffnet sich das Tool im Browser unter http://localhost:8501. Das Fenster offen lassen, Schließen beendet das Tool.
 
 ## Lokale KI (ohne API-Schlüssel, Pläne verlassen den Rechner nicht)
 Einmalig einrichten (ca. 6 GB Platz, 16 GB RAM genügen):
