@@ -106,8 +106,8 @@ def sidebar() -> Project | None:
                     p.save_catalog(costs.read_catalog_csv(up.getvalue()))
                 open_project(p)
     if sb.button("Demoprojekt öffnen (Testbau, ohne KI)", width="stretch"):
-        demo = next((Project.load(x) for x in projects if Project.load(x).state.demo), None)
-        open_project(demo or create_demo_project(), STEPS[2])
+        demo = next((q for q in (Project.load(x) for x in projects) if q.state.demo and q.state.documents), None)
+        open_project(demo or create_demo_project(), STEPS[2])  # leeres/kaputtes Demo wird neu angelegt
 
     p = current_project()
     if p is not None:
