@@ -1,6 +1,0 @@
-id;bauteiltyp;ausfuehrung;kg;leistung;einheit;bezugsgroesse;preis;herkunft;beleg;preisstand;brutto_netto;region;umfasst;kennwert_art;aktiv
-T-322;bodenplatte;Stahlbeton;322;Bodenplatte Stahlbeton inkl. Bewehrung;m²;Plattenfläche;180,00;FIKTIVER TESTPREIS (nur Demo/Abnahmetest);Testkatalog;Test 2026;brutto;keiner;bodenplatte;bauteil;ja
-T-334F;fenster;;334;Fenster Holz/Holz-Alu, Rohbauöffnung;m²;Öffnungsfläche (Rohbaumaß);650,00;FIKTIVER TESTPREIS (nur Demo/Abnahmetest);Testkatalog;Test 2026;brutto;keiner;fenster;bauteil;ja
-T-334T;aussentuer;;334;Außentür Holz, einflügelig;Stk;Stück;900,00;FIKTIVER TESTPREIS (nur Demo/Abnahmetest);Testkatalog;Test 2026;brutto;keiner;aussentuer;bauteil;ja
-T-335;fassadenbekleidung;Holzbekleidung Lärche;335;Holzbekleidung Boden-Deckel-Schalung inkl. Lattung;m²;Bekleidungsfläche abzgl. Öffnungen;120,00;FIKTIVER TESTPREIS (nur Demo/Abnahmetest);Testkatalog;Test 2026;brutto;keiner;bekleidung;bauteil;ja
-T-363;dachbelag;Flachdach;363;Dachbelag Flachdach (Abdichtung, Dämmung, Kies);m²;Dachfläche;85,00;FIKTIVER TESTPREIS (nur Demo/Abnahmetest);Testkatalog;Test 2026;brutto;keiner;abdichtung,daemmung,dachbelag;bauteil;ja
