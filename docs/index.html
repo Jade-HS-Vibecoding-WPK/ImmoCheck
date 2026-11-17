@@ -42,7 +42,7 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div><label>Wohn-/Nutzfläche m²</label><input id="wf" class="r" placeholder="240"></div>
 <div><label>Ist-Miete netto kalt €/m² Monat</label><input id="mist" class="r" placeholder="8,50"></div>
 <div><label>Eigenkapital €</label><input id="ek" class="r" placeholder="100000"></div>
-<div class="adv"><label>Sanierung/Modernisierung € (sofort)</label><input id="san" class="r" value="0"></div>
+<div class="adv"><label>Sanierung/Modernisierung € (sofort)</label><input id="san" class="r" value="0"><div id="sanq" class="small"></div><a class="small" href="baukosten.html" style="color:var(--ac)">→ Kosten mit dem Baukostenrechner schätzen</a></div>
 <div class="adv"><label>Vergleichspreis €/m² (Bodenrichtwert/Marktbericht)</label><input id="vgl" class="r"></div>
 <div class="adv" style="grid-column:1/-1"><label>Quelle Vergleichspreis</label><input id="vglq" placeholder="z. B. Gutachterausschuss 2025, ImmoScout"></div></div></section>
 
@@ -81,6 +81,7 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div class="cards" id="kz"></div>
 <section><h2>Stresstest: Was, wenn es schlechter läuft?</h2><div id="stress"></div><div class="small" style="margin-top:6px">Zeigt, ob das Objekt auch bei höherem Zins, niedrigerer Miete oder mehr Leerstand trägt.</div></section>
 <section><h2>Kaufpreis-Sensitivität (Verhandlungsspielraum)</h2><table id="sens"></table><div class="small" id="maxkp" style="margin-top:8px"></div></section>
+<section class="adv"><h2>Grafik: Vermögen, Restschuld und Cashflow</h2><div id="charts"></div></section>
 <section class="adv"><h2>Entwicklung über die Haltedauer</h2><table id="verl"></table></section>
 <div class="small">Überschlagsrechnung vor Steuern, ohne Förderung, Sonderumlagen und Leerstandsrisiken im Einzelfall. Keine Anlage- oder Rechtsberatung. Alle Annahmen stehen links und sind änderbar. Eingaben bleiben nur in deinem Browser.</div>
 </div><section style="grid-column:1/-1"><h2>Objekte vergleichen <button class="p" style="float:right" onclick="saveObj()">+ Objekt speichern</button></h2><div id="objs"></div></section>
@@ -148,11 +149,23 @@ function drawObj(){const el=$("objs");if(!OBJ.length){el.innerHTML='<div class="
  +row("Urteil",r=>r.J.t)+row("Kaufpreis",r=>nf(r.J.kp)+" €")+row("Preis pro m²",r=>nf(r.J.kp/r.J.P.wf)+" €")+row("Nettorendite",r=>nf(r.J.m.net,2)+" %")+row("Cashflow / Monat",r=>nf(r.J.m.cf0)+" €")
  +row("Eigenkapitalrendite",r=>r.J.m.irr==null?"–":nf(r.J.m.irr*100,1)+" %")+row("Cashflow bei Zins +2 %",r=>nf(r.S.sc[2].m.cf0)+" €")+row("Höchstpreis (Ziel-Rendite)",r=>nf(r.J.maxkp)+" €")+"</table></div>"
  +`<div class="small" style="margin-top:6px">Beste Nettorendite: <b>${R[best].v.name}</b>. Alle Objekte sind mit ihren eigenen Annahmen gerechnet.</div>`}
+function svgChart(title,years,series,bars){const W=460,H=210,L=58,R=14,T=26,B=28;const all=series.flatMap(x=>x.v).concat(bars?bars.v:[]);let lo=Math.min(0,...all),hi=Math.max(0,...all);if(hi==lo)hi=lo+1;
+ const X=i=>L+(W-L-R)*(years.length==1?0.5:i/(years.length-1)),Y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));let o=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto"><text x="${L}" y="14" font-size="11" fill="currentColor" font-weight="600">${title}</text>`;
+ for(let k=0;k<=4;k++){const v=lo+(hi-lo)*k/4;o+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="currentColor" opacity=".12"/><text x="${L-4}" y="${Y(v)+3}" font-size="9" fill="currentColor" opacity=".7" text-anchor="end">${nf(v/1000,0)}k</text>`}
+ if(lo<0)o+=`<line x1="${L}" x2="${W-R}" y1="${Y(0)}" y2="${Y(0)}" stroke="currentColor" opacity=".5"/>`;
+ if(bars){const bw=(W-L-R)/bars.v.length*0.6;bars.v.forEach((v,i)=>{o+=`<rect x="${X(i)-bw/2}" y="${Math.min(Y(v),Y(0))}" width="${bw}" height="${Math.abs(Y(v)-Y(0))}" fill="${v>=0?"#2e9e5b":"#d04a4a"}" opacity=".75"/>`})}
+ series.forEach(x=>{o+=`<polyline fill="none" stroke="${x.c}" stroke-width="2" points="${x.v.map((v,i)=>X(i)+","+Y(v)).join(" ")}"/>`});
+ years.forEach((y,i)=>{if(years.length<=12||i%2==0)o+=`<text x="${X(i)}" y="${H-12}" font-size="9" fill="currentColor" opacity=".7" text-anchor="middle">${y}</text>`});
+ o+=`<text x="${W-R}" y="${H-1}" font-size="9" fill="currentColor" opacity=".6" text-anchor="end">Jahr</text>`;
+ let lx=L;series.forEach(x=>{o+=`<rect x="${lx}" y="${H-9}" width="9" height="3" fill="${x.c}"/><text x="${lx+12}" y="${H-5}" font-size="9" fill="currentColor">${x.n}</text>`;lx+=90});return o+"</svg>"}
+function drawCharts(m,P,kp){const ys=m.rows.map(r=>r[0]);const wert=y=>(kp+P.san)*Math.pow(1+P.ws/100,y);
+ const rest=m.rows.map(r=>r[4]),verm=m.rows.map(r=>wert(r[0])-r[4]),cf=m.rows.map(r=>r[3]);
+ $("charts").innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">${svgChart("Nettovermögen (Wert − Restschuld) und Restschuld, €",ys,[{n:"Nettovermögen",v:verm,c:"#1f5fbf"},{n:"Restschuld",v:rest,c:"#d08a2e"}])}${svgChart("Cashflow pro Jahr nach Kapitaldienst, €",ys,[],{v:cf})}</div><div class="small" style="margin-top:6px">Vor Steuern. Wert mit der angenommenen jährlichen Wertentwicklung fortgeschrieben, ohne Verkaufskosten.</div>`}
 function calc(){
   const rv=readVals(),P=parseP(rv),kp=num(rv.kp),zr=num(rv.zr)||0,zirr=num(rv.zirr)||0;
  try{const o={};F.forEach(f=>o[f]=$(f).value);localStorage.setItem("kc1",JSON.stringify(o))}catch(e){}
  const V=$("verdict");
- if(!kp||!P.wf){V.className="verdict";V.innerHTML='<div class="empty"><div class="t">Lohnt sich der Kauf?</div><div class="small">Trag links Kaufpreis, Fläche, Miete und Eigenkapital ein. Dann bekommst du sofort ein Urteil mit Begründung.</div><button class="p" onclick="beispiel()">Beispiel ausprobieren</button></div>';$("kz").innerHTML=$("sens").innerHTML=$("verl").innerHTML=$("maxkp").innerHTML=$("stress").innerHTML="";return}
+ if(!kp||!P.wf){V.className="verdict";V.innerHTML='<div class="empty"><div class="t">Lohnt sich der Kauf?</div><div class="small">Trag links Kaufpreis, Fläche, Miete und Eigenkapital ein. Dann bekommst du sofort ein Urteil mit Begründung.</div><button class="p" onclick="beispiel()">Beispiel ausprobieren</button></div>';$("kz").innerHTML=$("sens").innerHTML=$("verl").innerHTML=$("maxkp").innerHTML=$("stress").innerHTML=$("charts").innerHTML="";return}
   const J=judge(rv);if(!J.m){V.className="verdict warn";V.innerHTML='<div class="t">Fast geschafft: Miete fehlt</div><div class="small">Trag die monatliche Nettokaltmiete pro m² ein (oder die Marktmiete im Experten-Modus).</div>';return}
   const m=J.m,rule=J.rule,ok=J.ok,tot=J.tot,cls=J.cls,t=J.t,maxkp=J.maxkp,ppm=kp/P.wf;
  V.className="verdict "+cls;
@@ -164,7 +177,7 @@ function calc(){
   .map(([l,v,s])=>{const a=s.endsWith("|adv");if(a)s=s.slice(0,-4);return`<div class="k${a?" adv":""}"><div class="l">${l}</div><div class="v n">${v}</div><div class="s">${s}</div></div>`}).join("");
  let h="<tr><th>Kaufpreis</th><th>Preis</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th></tr>";
  [0,-5,-10,-15,-20].forEach(d=>{const k2=kp*(1+d/100),mm=model(k2,P);h+=`<tr><td>${d?d+" %":"Angebot"}</td><td class="n">${nf(k2)} €</td><td class="n">${nf(mm.net,2)} %</td><td class="n">${nf(mm.cf0)} €</td><td class="n">${mm.irr==null?"–":nf(mm.irr*100,1)+" %"}</td></tr>`});
- $("sens").innerHTML=h;drawStress();
+ $("sens").innerHTML=h;drawStress();drawCharts(m,P,kp);
  $("maxkp").innerHTML=`Höchstpreis für ${nf(zr,1)} % Nettorendite: <b>${nf(maxkp)} €</b>${P.vgl?` · Preis laut Vergleich ${nf(P.vgl*P.wf)} €`:""}`;
  let t2="<tr><th>Jahr</th><th>Überschuss</th><th>Kapitaldienst</th><th>Cashflow</th><th>Restschuld</th></tr>";
  m.rows.forEach(r=>t2+=`<tr><td>${r[0]}</td><td class="n">${nf(r[1])}</td><td class="n">${nf(r[2])}</td><td class="n">${nf(r[3])}</td><td class="n">${nf(r[4])}</td></tr>`);
@@ -196,8 +209,10 @@ function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){alert("Bit
  <div class="pg"><div class="meta">Kaufcheck Immobilie · Wirtschaftlichkeitsprüfung</div><h1>${e(rv.name||"Objekt")}</h1><div class="meta">Stand ${d}</div>
   <div style="margin-top:40px">${$("verdict").outerHTML}</div><div class="small" style="margin-top:30px">Überschlagsrechnung vor Steuern. Keine Anlage-, Rechts- oder Steuerberatung.</div></div>
  <div class="pg"><h3>Kennzahlen</h3><div class="cards">${$("kz").innerHTML}</div><h3>Stresstest</h3>${$("stress").innerHTML}<h3>Kaufpreis-Sensitivität</h3><table>${$("sens").innerHTML}</table><div class="small">${$("maxkp").innerHTML}</div></div>
- <div class="pg"><h3>Entwicklung über die Haltedauer</h3><table>${$("verl").innerHTML}</table><h3>Annahmen und Eingaben</h3><table>${ann}</table>${rv.vglq?`<div class="small">Quelle Vergleichspreis: ${e(rv.vglq)}</div>`:""}${rv.mq?`<div class="small">Quelle Marktmiete: ${e(rv.mq)}</div>`:""}</div>
+ <div class="pg"><h3>Grafik</h3>${$("charts").innerHTML}<h3>Entwicklung über die Haltedauer</h3><table>${$("verl").innerHTML}</table><h3>Annahmen und Eingaben</h3><table>${ann}</table>${rv.vglq?`<div class="small">Quelle Vergleichspreis: ${e(rv.vglq)}</div>`:""}${rv.mq?`<div class="small">Quelle Marktmiete: ${e(rv.mq)}</div>`:""}</div>
  <div class="pg"><h3>Offene Punkte und Risiken (Objektcheck)</h3><ul>${open||"<li>keine</li>"}</ul>${done?`<h3>Geklärt</h3><ul>${done}</ul>`:""}<div class="small" style="margin-top:20px">Alle Werte sind Annahmen des Nutzers bzw. Standardwerte und vor einer Kaufentscheidung zu prüfen. Steuerliche Angaben sind stark vereinfacht. Dieses Dokument ersetzt keine Beratung durch Steuerberater, Gutachter oder Bank.</div></div></div>`;
  $("rep").classList.add("show");$("rep").scrollTop=0}
-F.forEach(f=>$(f).addEventListener("input",calc));calc();drawObj();drawCL();
+F.forEach(f=>$(f).addEventListener("input",calc));
+try{const q=new URLSearchParams(location.search);if(q.get("san")){$("san").value=nf(+q.get("san"),0).replace(/\./g,"");$("sanq").textContent="Übernommen aus dem Baukostenrechner: "+(q.get("sq")||"");setMode(1)}}catch(e){}
+calc();drawObj();drawCL();
 </script></body></html>
