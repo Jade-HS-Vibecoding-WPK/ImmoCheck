@@ -54,18 +54,23 @@ input,select{border-radius:10px;background:var(--bg)}
 th{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--mu)}
 .note{border-radius:10px}
 @media(max-width:900px){.shell{grid-template-columns:1fr}.sb{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px;padding:10px}.sb .logo,.sb .nl,.sbfoot{display:none}.sb a{padding:6px 10px;font-size:13px}}
+#s-angebot,#rc{display:contents}main{grid-template-columns:minmax(0,1fr)!important;max-width:980px;gap:18px;padding-top:10px}
+section{padding:22px 24px}.g{gap:16px}h2{margin-bottom:14px}.cards{gap:14px}.top{gap:18px}
+.verdict{padding:22px 24px}.verdict ul{margin-top:12px;line-height:1.7}
+.top{grid-template-columns:1fr!important}.top .cards{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:900px){.top .cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.k .s{margin-top:3px}
 @media print{.shell{display:none!important}#rep{display:block!important;position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}#rep .bar{display:none}#rep .pg{border:none;border-radius:0;padding:0;margin:0;break-after:page;background:#fff;color:#000}#rep .pg:last-child{break-after:auto}
 header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
 <div class="shell"><aside class="sb"><div class="logo"><span class="lg">K</span><div><b>Kaufcheck</b><div class="small">Immobilien-Wirtschaftlichkeit</div></div></div>
-<div class="nl">Hauptmenü</div><a href="#top" class="on">▣ Überblick</a><a href="#s-angebot">⌂ Angebot und Annahmen</a><a href="#s-stress">⚡ Stresstest</a><a href="#s-grafik" class="adv">◔ Grafik</a><a href="#s-vergleich">⇄ Objekte vergleichen</a><a href="#s-check">☑ Checkliste</a><a href="#" onclick="showReport();return false">⎙ Bericht / PDF</a>
+<div class="nl">Hauptmenü</div><a href="#" data-nav="ueber" class="on">▣ Überblick</a><a href="#" data-nav="annahmen" class="adv">⌂ Annahmen</a><a href="#" data-nav="stress">⚡ Stresstest</a><a href="#" data-nav="grafik" class="adv">◔ Grafik und Verlauf</a><a href="#" data-nav="vergleich">⇄ Objekte vergleichen</a><a href="#" data-nav="check">☑ Checkliste</a><a href="#" onclick="showReport();return false">⎙ Bericht / PDF</a>
 <div class="nl">Werkzeuge</div><a href="baukosten.html">▤ Baukostenrechner</a><div class="sbfoot small">Alle Eingaben bleiben nur in deinem Browser. Überschlagsrechnung, keine Beratung.</div></aside><div class="content">
 <header><div><div class="small">Kaufcheck › Überblick</div><h1>Lohnt sich der Kauf?</h1></div><div class="sp"></div>
 <div class="mode"><button id="mE" onclick="setMode(0)">Einfach</button><button id="mX" onclick="setMode(1)">Experte</button></div><button onclick="beispiel()">Beispiel laden</button><button class="p" onclick="showReport()">⎙ Bericht / PDF</button><button onclick="neu()">Neu</button></header>
 <main id="top">
-<div class="top" style="grid-column:1/-1"><div id="verdict"></div><div class="cards" id="kz"></div></div>
+<div class="top" data-view="ueber"><div id="verdict"></div><div class="cards" id="kz"></div></div>
 <div id="s-angebot">
-<section><h2>1 · Das Angebot <span class="small">(nur diese vier Zahlen sind nötig)</span></h2><div class="g">
+<section data-view="ueber"><h2>1 · Das Angebot <span class="small">(nur diese vier Zahlen sind nötig)</span></h2><div class="g">
 <div style="grid-column:1/-1"><label>Objekt / Adresse</label><input id="name" placeholder="z. B. MFH Musterstr. 5, Melle"></div>
 <div><label>Kaufpreis €</label><input id="kp" class="r" placeholder="450000"></div>
 <div><label>Wohn-/Nutzfläche m²</label><input id="wf" class="r" placeholder="240"></div>
@@ -75,7 +80,7 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div class="adv"><label>Vergleichspreis €/m² (Bodenrichtwert/Marktbericht)</label><input id="vgl" class="r"></div>
 <div class="adv" style="grid-column:1/-1"><label>Quelle Vergleichspreis</label><input id="vglq" placeholder="z. B. Gutachterausschuss 2025, ImmoScout"></div></div></section>
 
-<section class="adv"><h2>2 · Miete und laufende Kosten <span class="small adv">(Annahmen)</span></h2><div class="g">
+<section class="adv" data-view="annahmen"><h2>2 · Miete und laufende Kosten <span class="small adv">(Annahmen)</span></h2><div class="g">
 <div class="adv"><label>Marktmiete €/m² (Mietspiegel)</label><input id="mmar" class="r"></div>
 <div class="adv" style="grid-column:1/-1"><label>Quelle Marktmiete</label><input id="mq" placeholder="z. B. Mietspiegel Ort/Jahr"></div>
 <div class="adv"><label>Rechne mit</label><select id="mmode"><option value="ist">Ist-Miete</option><option value="markt">Marktmiete</option></select></div>
@@ -84,14 +89,14 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div class="adv"><label>Instandhaltungsrücklage €/m² Jahr</label><input id="ihr" class="r" value="12"></div></div>
 <div class="small adv" style="margin-top:6px">Rücklage und Kosten sind Annahmen: bitte an das Objekt anpassen (Alter, Zustand).</div></section>
 
-<section class="adv"><h2>3 · Kaufnebenkosten</h2><div class="g">
+<section class="adv" data-view="annahmen"><h2>3 · Kaufnebenkosten</h2><div class="g">
 <div><label>Bundesland (Grunderwerbsteuer)</label><select id="bl"></select></div>
 <div><label>Grunderwerbsteuer %</label><input id="grest" class="r"></div>
 <div><label>Notar + Grundbuch %</label><input id="not" class="r" value="2"></div>
 <div><label>Makler % (inkl. MwSt.)</label><input id="mak" class="r" value="3,57"></div></div>
 <div class="small" style="margin-top:6px">Steuersätze nach Bundesland bitte aktuell prüfen. Sie können sich ändern.</div></section>
 
-<section class="adv"><h2>4 · Finanzierung und Annahmen</h2><div class="g">
+<section class="adv" data-view="annahmen"><h2>4 · Finanzierung und Annahmen</h2><div class="g">
 <div><label>Zins % p. a.</label><input id="zi" class="r" value="3,8"></div>
 <div><label>Tilgung % p. a.</label><input id="ti" class="r" value="2"></div>
 <div><label>Haltedauer Jahre</label><input id="hd" class="r" value="10"></div>
@@ -105,14 +110,14 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div><label>Abschreibung (AfA) % p. a.</label><input id="afa" class="r" value="2"></div></div></section>
 </div>
 
-<div>
-<section id="s-stress"><h2>Stresstest: Was, wenn es schlechter läuft?</h2><div id="stress"></div><div class="small" style="margin-top:6px">Zeigt, ob das Objekt auch bei höherem Zins, niedrigerer Miete oder mehr Leerstand trägt.</div></section>
-<section><h2>Kaufpreis-Sensitivität (Verhandlungsspielraum)</h2><table id="sens"></table><div class="small" id="maxkp" style="margin-top:8px"></div></section>
-<section class="adv" id="s-grafik"><h2>Grafik: Vermögen, Restschuld und Cashflow</h2><div id="charts"></div></section>
-<section class="adv"><h2>Entwicklung über die Haltedauer</h2><table id="verl"></table></section>
-<div class="small">Überschlagsrechnung vor Steuern, ohne Förderung, Sonderumlagen und Leerstandsrisiken im Einzelfall. Keine Anlage- oder Rechtsberatung. Alle Annahmen stehen links und sind änderbar. Eingaben bleiben nur in deinem Browser.</div>
-</div><section id="s-vergleich" style="grid-column:1/-1"><h2>Objekte vergleichen <button class="p" style="float:right" onclick="saveObj()">+ Objekt speichern</button></h2><div id="objs"></div></section>
-<section id="s-check" style="grid-column:1/-1"><h2>Checkliste fürs Objekt <span class="small" id="clsum"></span></h2><div class="small" style="margin-bottom:8px">Klick auf das Symbol wechselt: ⬜ offen → ✅ geklärt → ⚠️ Problem. Offene Punkte und Probleme erscheinen im Bericht.</div><div id="cl"></div></section>
+<div id="rc">
+<section data-view="stress" id="s-stress"><h2>Stresstest: Was, wenn es schlechter läuft?</h2><div id="stress"></div><div class="small" style="margin-top:6px">Zeigt, ob das Objekt auch bei höherem Zins, niedrigerer Miete oder mehr Leerstand trägt.</div></section>
+<section data-view="stress"><h2>Kaufpreis-Sensitivität (Verhandlungsspielraum)</h2><table id="sens"></table><div class="small" id="maxkp" style="margin-top:8px"></div></section>
+<section class="adv" data-view="grafik" id="s-grafik"><h2>Grafik: Vermögen, Restschuld und Cashflow</h2><div id="charts"></div></section>
+<section class="adv" data-view="grafik"><h2>Entwicklung über die Haltedauer</h2><table id="verl"></table></section>
+<div class="small">Überschlagsrechnung vor Steuern, ohne Förderung, Sonderumlagen und Leerstandsrisiken im Einzelfall. Keine Anlage- oder Rechtsberatung. Alle Annahmen sind im Experten-Modus änderbar. Eingaben bleiben nur in deinem Browser.</div>
+</div><section id="s-vergleich" data-view="vergleich"><h2>Objekte vergleichen <button class="p" style="float:right" onclick="saveObj()">+ Objekt speichern</button></h2><div id="objs"></div></section>
+<section id="s-check" data-view="check"><h2>Checkliste fürs Objekt <span class="small" id="clsum"></span></h2><div class="small" style="margin-bottom:8px">Klick auf das Symbol wechselt: ⬜ offen → ✅ geklärt → ⚠️ Problem. Offene Punkte und Probleme erscheinen im Bericht.</div><div id="cl"></div></section>
 </main></div></div>
 <div id="rep"></div>
 <script>
@@ -201,7 +206,7 @@ function calc(){
  $("kz").innerHTML=[["Gesamtinvestition",nf(m.ges)+" €",`inkl. ${nf(m.nk*100,1)} % Nebenkosten und Sanierung`],["Nettorendite",nf(m.net,2)+" %",`Brutto ${nf(m.bru,2)} % · Faktor ${nf(m.fak,1)}`],
   ["Cashflow / Monat",nf(m.cf0)+" €",`Reinertrag ${nf(m.rein)} €/Jahr · Kapitaldienst ${nf(m.P_)} €/Jahr`],["Eigenkapitalrendite (IRR)",m.irr==null?"–":nf(m.irr*100,1)+" %",`nach ${P.hd} Jahren Verkauf`],
   ["Kaufpreis pro m²",nf(ppm)+" €",P.vgl?`Vergleich ${nf(P.vgl)} €/m² (${nf((ppm/P.vgl-1)*100,1)} %)`:"kein Vergleichspreis"],["Darlehen",nf(m.dar)+" €",`${nf(m.ges>0?m.dar/m.ges*100:0,0)} % Beleihung`],["Cashflow nach Steuern / Monat",nf(m.cfn)+" €",`Jahr 1: ${m.steuer>=0?"Steuer "+nf(m.steuer):"Erstattung "+nf(-m.steuer)} € (Überschlag)|adv`]]
-  .map(([l,v,s])=>{const a=s.endsWith("|adv");if(a)s=s.slice(0,-4);return`<div class="k${a?" adv":""}"><div class="l">${l}</div><div class="v n">${v}</div><div class="s">${s}</div></div>`}).join("");
+  .map(([l,v,s])=>{const a=s.endsWith("|adv")||l=="Kaufpreis pro m²"||l=="Darlehen";if(a)s=s.slice(0,-4);return`<div class="k${a?" adv":""}"><div class="l">${l}</div><div class="v n">${v}</div><div class="s">${s}</div></div>`}).join("");
  let h="<tr><th>Kaufpreis</th><th>Preis</th><th>Nettorendite</th><th>CF/Monat</th><th>IRR</th></tr>";
  [0,-5,-10,-15,-20].forEach(d=>{const k2=kp*(1+d/100),mm=model(k2,P);h+=`<tr><td>${d?d+" %":"Angebot"}</td><td class="n">${nf(k2)} €</td><td class="n">${nf(mm.net,2)} %</td><td class="n">${nf(mm.cf0)} €</td><td class="n">${mm.irr==null?"–":nf(mm.irr*100,1)+" %"}</td></tr>`});
  $("sens").innerHTML=h;drawStress();drawCharts(m,P,kp);
@@ -239,7 +244,10 @@ function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){alert("Bit
  <div class="pg"><h3>Grafik</h3>${$("charts").innerHTML}<h3>Entwicklung über die Haltedauer</h3><table>${$("verl").innerHTML}</table><h3>Annahmen und Eingaben</h3><table>${ann}</table>${rv.vglq?`<div class="small">Quelle Vergleichspreis: ${e(rv.vglq)}</div>`:""}${rv.mq?`<div class="small">Quelle Marktmiete: ${e(rv.mq)}</div>`:""}</div>
  <div class="pg"><h3>Offene Punkte und Risiken (Objektcheck)</h3><ul>${open||"<li>keine</li>"}</ul>${done?`<h3>Geklärt</h3><ul>${done}</ul>`:""}<div class="small" style="margin-top:20px">Alle Werte sind Annahmen des Nutzers bzw. Standardwerte und vor einer Kaufentscheidung zu prüfen. Steuerliche Angaben sind stark vereinfacht. Dieses Dokument ersetzt keine Beratung durch Steuerberater, Gutachter oder Bank.</div></div></div>`;
  $("rep").classList.add("show");$("rep").scrollTop=0}
+function showView(v){document.querySelectorAll("[data-view]").forEach(e=>{e.style.display=e.dataset.view==v?"":"none"});document.querySelectorAll("[data-nav]").forEach(a=>a.classList.toggle("on",a.dataset.nav==v));scrollTo(0,0)}
+document.querySelectorAll("[data-nav]").forEach(a=>a.addEventListener("click",ev=>{ev.preventDefault();showView(a.dataset.nav)}));
+const _sm=setMode;setMode=function(x){_sm(x);if(!x&&["annahmen","grafik"].includes(document.querySelector("[data-nav].on")?.dataset.nav))showView("ueber")};
 F.forEach(f=>$(f).addEventListener("input",calc));
 try{const q=new URLSearchParams(location.search);if(q.get("san")){$("san").value=nf(+q.get("san"),0).replace(/\./g,"");$("sanq").textContent="Übernommen aus dem Baukostenrechner: "+(q.get("sq")||"");setMode(1)}}catch(e){}
-calc();drawObj();drawCL();
+calc();drawObj();drawCL();showView("ueber")
 </script></body></html>
