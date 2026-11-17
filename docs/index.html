@@ -28,6 +28,7 @@ body.simple .adv{display:none!important}.mode{display:flex}.mode button{border-r
 #rep h1{font-size:30px;margin:60px 0 6px}#rep h3{margin:14px 0 6px;font-size:15px}#rep .meta{color:var(--mu)}
 #rep table{margin-bottom:8px}#rep .cards{grid-template-columns:repeat(2,1fr)}
 .cli{display:grid;grid-template-columns:34px 1fr 1.2fr;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid var(--bd)}.cli button{padding:2px 6px;font-size:16px}.cli input{padding:4px 7px}.cg{font-weight:650;margin:10px 0 2px;font-size:13px}
+.cmp td input{min-width:92px;padding:5px 7px}.cmp td:first-child,.cmp th:first-child{min-width:130px;color:var(--mu)}.charts3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
 .empty{text-align:center;padding:10px}.empty button{margin-top:10px}
 
 body{font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:-.005em}
@@ -116,7 +117,7 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <section class="adv" data-view="grafik" id="s-grafik"><h2>Grafik: Vermögen, Restschuld und Cashflow</h2><div id="charts"></div></section>
 <section class="adv" data-view="grafik"><h2>Entwicklung über die Haltedauer</h2><table id="verl"></table></section>
 <div class="small">Überschlagsrechnung vor Steuern, ohne Förderung, Sonderumlagen und Leerstandsrisiken im Einzelfall. Keine Anlage- oder Rechtsberatung. Alle Annahmen sind im Experten-Modus änderbar. Eingaben bleiben nur in deinem Browser.</div>
-</div><section id="s-vergleich" data-view="vergleich"><h2>Objekte vergleichen <button class="p" style="float:right" onclick="saveObj()">+ Objekt speichern</button></h2><div id="objs"></div></section>
+</div><section id="s-vergleich" data-view="vergleich"><h2>Objekte vergleichen <button class="p" style="float:right" onclick="saveObj()">+ Objekt speichern</button></h2><div id="objs"></div><div id="objin"></div><div id="objres" style="margin-top:14px"></div></section>
 <section id="s-check" data-view="check"><h2>Checkliste fürs Objekt <span class="small" id="clsum"></span></h2><div class="small" style="margin-bottom:8px">Klick auf das Symbol wechselt: ⬜ offen → ✅ geklärt → ⚠️ Problem. Offene Punkte und Probleme erscheinen im Bericht.</div><div id="cl"></div></section>
 </main></div></div>
 <div id="rep"></div>
@@ -173,14 +174,26 @@ function saveObj(){const v=readVals();if(!num(v.kp)||!num(v.wf)){alert("Bitte zu
 function persistObj(){try{localStorage.setItem("kcobj",JSON.stringify(OBJ))}catch(e){}}
 function delObj(i){OBJ.splice(i,1);persistObj();drawObj()}
 function loadObj(i){F.forEach(f=>{if(OBJ[i][f]!=null)$(f).value=OBJ[i][f]});calc()}
-function drawObj(){const el=$("objs");if(!OBJ.length){el.innerHTML='<div class="small">Noch keine Objekte gespeichert. Gib ein Angebot ein und klicke auf „Objekt speichern“. So vergleichst du mehrere Angebote nebeneinander.</div>';return}
- const R=OBJ.map(v=>{const J=judge(v);const S=J.m?stress(v):null;return{v,J,S}});
- const best=R.map((r,i)=>[r.J.m?r.J.m.net:-1e9,i]).sort((a,b)=>b[0]-a[0])[0][1];
- const row=(l,fn)=>`<tr><td>${l}</td>${R.map((r,i)=>`<td class="n${i==best&&l=="Nettorendite"?" best":""}">${r.J.m?fn(r):"–"}</td>`).join("")}</tr>`;
- el.innerHTML=`<div style="overflow-x:auto"><table><tr><th></th>${R.map((r,i)=>`<th>${r.v.name||""}<br><button class="x" onclick="loadObj(${i})">laden</button> <button class="x" onclick="delObj(${i})">✕</button></th>`).join("")}</tr>`
- +row("Urteil",r=>r.J.t)+row("Kaufpreis",r=>nf(r.J.kp)+" €")+row("Preis pro m²",r=>nf(r.J.kp/r.J.P.wf)+" €")+row("Nettorendite",r=>nf(r.J.m.net,2)+" %")+row("Cashflow / Monat",r=>nf(r.J.m.cf0)+" €")
- +row("Eigenkapitalrendite",r=>r.J.m.irr==null?"–":nf(r.J.m.irr*100,1)+" %")+row("Cashflow bei Zins +2 %",r=>nf(r.S.sc[2].m.cf0)+" €")+row("Höchstpreis (Ziel-Rendite)",r=>nf(r.J.maxkp)+" €")+"</table></div>"
- +`<div class="small" style="margin-top:6px">Beste Nettorendite: <b>${R[best].v.name}</b>. Alle Objekte sind mit ihren eigenen Annahmen gerechnet.</div>`}
+const EF=[["name","Name","text"],["kp","Kaufpreis €"],["wf","Fläche m²"],["mist","Miete €/m²"],["ek","Eigenkapital €"],["san","Sanierung €"],["zi","Zins %"],["ti","Tilgung %"],["lee","Leerstand %"],["vgl","Vergleichspreis €/m²"]];
+function dupObj(i){OBJ.push({...OBJ[i],name:(OBJ[i].name||"Objekt")+" (Variante)"});persistObj();drawObj()}
+function objEdit(i,f,val){OBJ[i][f]=val;persistObj();drawObjRes()}
+function barChart(title,labels,vals,fmt,best){const n=vals.length,W=Math.max(260,n*92+60),H=170,L=10,T=28,B=34;const lo=Math.min(0,...vals),hi=Math.max(0,...vals)||1,span=(hi-lo)||1;const Y=v=>T+(H-T-B)*(1-(v-lo)/span),bw=Math.min(46,(W-L*2)/n*0.55);
+ let o=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto"><text x="${L}" y="14" font-size="11" fill="currentColor" font-weight="600">${title}</text><line x1="${L}" x2="${W-L}" y1="${Y(0)}" y2="${Y(0)}" stroke="currentColor" opacity=".4"/>`;
+ vals.forEach((v,i)=>{const cx=L+(W-L*2)*(i+.5)/n,isb=i==best,col=v==null?"#bbb":(v<0?"#d04a4a":(isb?"#111":"#9a9a94"));if(v==null)return;o+=`<rect x="${cx-bw/2}" y="${Math.min(Y(v),Y(0))}" width="${bw}" height="${Math.abs(Y(v)-Y(0))}" rx="4" fill="${col}"/><text x="${cx}" y="${v>=0?Y(v)-4:Y(v)+11}" font-size="10" text-anchor="middle" fill="currentColor">${fmt(v)}</text><text x="${cx}" y="${H-14}" font-size="9" text-anchor="middle" fill="currentColor" opacity=".75">${String(labels[i]).slice(0,14)}</text>`});return o+"</svg>"}
+function drawObj(){const el=$("objs");if(!OBJ.length){$("objin").innerHTML="";$("objres").innerHTML="";el.innerHTML='<div class="small">Noch keine Objekte. Gib im Überblick ein Angebot ein und klicke oben auf „+ Objekt speichern“. Danach kannst du hier alle Werte direkt ändern und die Objekte nebeneinander vergleichen.</div>';return}
+ el.innerHTML="";let h='<div style="overflow-x:auto"><table class="cmp"><tr><th></th>'+OBJ.map((v,i)=>`<th><button class="x" onclick="dupObj(${i})" title="Als Variante kopieren">⧉</button> <button class="x" onclick="loadObj(${i})" title="In den Überblick laden">↗</button> <button class="x" onclick="delObj(${i})" title="Löschen">✕</button></th>`).join("")+"</tr>";
+ EF.forEach(([f,l,t])=>{h+=`<tr><td>${l}</td>`+OBJ.map((v,i)=>`<td><input ${t=="text"?"":'class="r" '}value="${String(v[f]??"").replace(/"/g,"&quot;")}" oninput="objEdit(${i},'${f}',this.value)"></td>`).join("")+"</tr>"});
+ $("objin").innerHTML=h+"</table></div>";drawObjRes()}
+function drawObjRes(){if(!OBJ.length)return;const R=OBJ.map(v=>{const J=judge(v);return{v,J,S:J.m?stress(v):null}}),ok=R.filter(r=>r.J.m);
+ const best=ok.length?R.indexOf(ok.sort((a,b)=>b.J.m.net-a.J.m.net)[0]):-1;
+ const row=(l,fn,cl)=>`<tr><td>${l}</td>${R.map((r,i)=>`<td class="n${cl&&i==best?" best":""}">${r.J.m?fn(r):"–"}</td>`).join("")}</tr>`;
+ let h='<div style="overflow-x:auto"><table class="cmp"><tr><th>Ergebnis</th>'+R.map(r=>`<th>${r.v.name||""}</th>`).join("")+"</tr>"
+ +row("Urteil",r=>r.J.t)+row("Preis pro m²",r=>nf(r.J.kp/r.J.P.wf)+" €")+row("Gesamtinvestition",r=>nf(r.J.m.ges)+" €")+row("Nettorendite",r=>nf(r.J.m.net,2)+" %",1)+row("Cashflow / Monat",r=>nf(r.J.m.cf0)+" €")
+ +row("Eigenkapitalrendite (IRR)",r=>r.J.m.irr==null?"–":nf(r.J.m.irr*100,1)+" %")+row("Cashflow bei Zins +2 %",r=>nf(r.S.sc[2].m.cf0)+" €")+row("Höchstpreis für Ziel-Rendite",r=>nf(r.J.maxkp)+" €")+"</table></div>";
+ const lab=R.map(r=>r.v.name||"Objekt"),g=(fn)=>R.map(r=>r.J.m?fn(r):null);
+ h+=`<div class="charts3">${barChart("Nettorendite, %",lab,g(r=>r.J.m.net),x=>nf(x,2),best)}${barChart("Cashflow pro Monat, €",lab,g(r=>r.J.m.cf0),x=>nf(x),-1)}${barChart("Eigenkapitalrendite (IRR), %",lab,g(r=>r.J.m.irr==null?null:r.J.m.irr*100),x=>nf(x,1),-1)}${barChart("Preis pro m², €",lab,g(r=>r.J.kp/r.J.P.wf),x=>nf(x),-1)}</div>`
+ +(best>=0?`<div class="small" style="margin-top:6px">Beste Nettorendite: <b>${R[best].v.name}</b> (schwarz). Jede Änderung oben rechnet sofort neu. Alle Objekte nutzen ihre eigenen Annahmen.</div>`:"");
+ $("objres").innerHTML=h}
 function svgChart(title,years,series,bars){const W=460,H=210,L=58,R=14,T=26,B=28;const all=series.flatMap(x=>x.v).concat(bars?bars.v:[]);let lo=Math.min(0,...all),hi=Math.max(0,...all);if(hi==lo)hi=lo+1;
  const X=i=>L+(W-L-R)*(years.length==1?0.5:i/(years.length-1)),Y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));let o=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto"><text x="${L}" y="14" font-size="11" fill="currentColor" font-weight="600">${title}</text>`;
  for(let k=0;k<=4;k++){const v=lo+(hi-lo)*k/4;o+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="currentColor" opacity=".12"/><text x="${L-4}" y="${Y(v)+3}" font-size="9" fill="currentColor" opacity=".7" text-anchor="end">${nf(v/1000,0)}k</text>`}
