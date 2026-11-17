@@ -154,7 +154,7 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div class="top" data-view="ueber"><div id="verdict"></div><div class="cards" id="kz"></div></div>
 <div id="s-angebot">
 <section data-view="ueber"><h2>1 · Das Angebot <span class="small">(nur diese vier Zahlen sind nötig)</span></h2><div class="g">
-<div style="grid-column:1/-1"><label>Objekt / Adresse</label><input id="name" placeholder="z. B. MFH Musterstr. 5, Melle"></div>
+<div style="grid-column:1/-1"><label>Bezeichnung des Objekts</label><input id="name" placeholder="z. B. MFH Musterstr. 5, Melle"></div>
 <div><label>Status</label><select id="stat"><option value="angebot">Angebot (Kauf prüfen)</option><option value="bestand">Im Bestand (gekauft)</option></select></div>
 <div><label>Kaufpreis €</label><input id="kp" class="r" placeholder="450000"></div>
 <div><label>Wohn-/Nutzfläche m²</label><input id="wf" class="r" placeholder="240"></div>
@@ -164,6 +164,22 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div class="adv"><label>Vergleichspreis €/m² (Bodenrichtwert/Marktbericht)</label><input id="vgl" class="r"></div>
 <div class="adv" style="grid-column:1/-1"><label>Quelle Vergleichspreis</label><input id="vglq" placeholder="z. B. Gutachterausschuss 2025, ImmoScout"></div></div></section>
 
+<section data-view="ueber"><h2>Grunddaten zum Objekt</h2><div class="g">
+<div><label>Objektart</label><select id="typ"><option value="">– bitte wählen –</option><option>Mehrfamilienhaus</option><option>Einfamilienhaus</option><option>Doppelhaushälfte</option><option>Reihenhaus</option><option>Eigentumswohnung</option><option>Wohn- und Geschäftshaus</option><option>Gewerbeobjekt</option><option>Sonstiges</option></select></div>
+<div><label>Straße und Hausnummer</label><input id="adr" placeholder="z. B. Tulpenweg 5"></div>
+<div><label>PLZ und Ort</label><input id="ort" placeholder="z. B. 49324 Melle"></div>
+<div><label>Baujahr</label><input id="bj" class="r" placeholder="z. B. 1975"></div>
+<div><label>Letzte Modernisierung (Jahr)</label><input id="mj" class="r" placeholder="z. B. 2015"></div>
+<div><label>Wohneinheiten</label><input id="we" class="r" value="1"></div>
+<div><label>Zimmer gesamt</label><input id="zim" class="r" placeholder="z. B. 18"></div>
+<div><label>Geschosse</label><input id="gesch" class="r" placeholder="z. B. 3"></div>
+<div><label>Grundstücksfläche m²</label><input id="gf" class="r" value="0"></div>
+<div><label>Heizung</label><select id="hz"><option value="">– bitte wählen –</option><option>Gas</option><option>Öl</option><option>Wärmepumpe</option><option>Fernwärme</option><option>Holz oder Pellets</option><option>Strom</option><option>Sonstige</option></select></div>
+<div><label>Energieeffizienzklasse</label><select id="ekl"><option value="">– bitte wählen –</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
+<div><label>Zustand</label><select id="zst"><option value="">– bitte wählen –</option><option>Neuwertig</option><option>Gepflegt</option><option>Renovierungsbedürftig</option><option>Sanierungsstau</option></select></div>
+<div><label>Keller</label><select id="kel"><option value="">– bitte wählen –</option><option>Ja</option><option>Nein</option><option>Teilweise</option></select></div>
+<div><label>Stellplätze</label><input id="stp" class="r" placeholder="z. B. 6"></div></div>
+<div class="small" id="gdsum" style="margin-top:10px"></div></section>
 <section class="adv" data-view="annahmen"><h2>2 · Miete und Bewirtschaftungskosten <span class="small adv">(getrennt)</span></h2><div class="g">
 <div class="adv"><label>Marktmiete €/m² (Mietspiegel)</label><input id="mmar" class="r"></div>
 <div class="adv" style="grid-column:1/-1"><label>Quelle Marktmiete</label><input id="mq" placeholder="z. B. Mietspiegel Ort/Jahr"></div>
@@ -171,7 +187,6 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div class="adv"><label>Leerstand %</label><input id="lee" class="r" value="3"></div>
 <div class="adv"><label>Mietausfallwagnis % (Zahlungsausfall)</label><input id="mau" class="r" value="2"></div>
 <div class="adv"><label>Verwaltung €/Einheit und Jahr</label><input id="verw" class="r" value="300"></div>
-<div class="adv"><label>Anzahl Einheiten</label><input id="we" class="r" value="1"></div>
 <div class="adv"><label>Instandhaltung €/m² und Jahr</label><input id="ihr" class="r" value="12"></div>
 <div class="adv"><label>Hausgeld nicht umlagefähig €/Monat (nur ETW)</label><input id="hg" class="r" value="0"></div>
 <div class="adv"><label>Sonstige nicht umlagefähige Kosten €/m² Jahr</label><input id="nuk" class="r" value="0"></div></div>
@@ -208,7 +223,6 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div class="small" style="margin-top:6px">Bei Erbbaurecht zahlst du Erbbauzins statt Bodenwert zu kaufen. Er mindert den Ertrag. Die Restlaufzeit begrenzt den Wert beim Verkauf.</div></section>
 <section class="adv" data-view="annahmen"><h2>6 · Ertragswert (Bankensicht)</h2><div class="g">
 <div><label>Bodenrichtwert €/m²</label><input id="bw" class="r" value="0"></div>
-<div><label>Grundstücksfläche m²</label><input id="gf" class="r" value="0"></div>
 <div><label>Liegenschaftszins %</label><input id="lz" class="r" value="3"></div>
 <div><label>Restnutzungsdauer Jahre</label><input id="rnd" class="r" value="50"></div></div>
 <div class="small" style="margin-top:6px">Bodenrichtwert und Liegenschaftszins stammen vom örtlichen Gutachterausschuss. Die Standardwerte sind nur Platzhalter.</div></section>
@@ -237,7 +251,7 @@ const nf=(x,d=0)=>x==null||!isFinite(x)?"–":x.toLocaleString("de-DE",{minimumF
 const num=s=>{s=String(s??"").trim().replace(/\s/g,"");if(!s)return null;if(s.includes(","))s=s.replace(/\./g,"").replace(",",".");const v=parseFloat(s);return isNaN(v)?null:v};
 const BL={"Baden-Württemberg":5,"Bayern":3.5,"Berlin":6,"Brandenburg":6.5,"Bremen":5,"Hamburg":5.5,"Hessen":6,"Mecklenburg-Vorpommern":6,"Niedersachsen":5,"Nordrhein-Westfalen":6.5,"Rheinland-Pfalz":5,"Saarland":6.5,"Sachsen":5.5,"Sachsen-Anhalt":5,"Schleswig-Holstein":6.5,"Thüringen":5};
 $("bl").innerHTML=Object.keys(BL).map(k=>`<option>${k}</option>`).join("");
-const F=["name","kp","wf","san","vgl","vglq","mist","mmar","mq","mmode","lee","nuk","ihr","bl","grest","not","mak","ek","zi","ti","hd","ms","ws","vk","zr","zirr","st","gs","afa","mau","verw","we","hg","gut","erb","ebz","ebl","eba","bw","gf","lz","rnd","stat","kj","mw","zbj"];
+const F=["name","kp","wf","san","vgl","vglq","mist","mmar","mq","mmode","lee","nuk","ihr","bl","grest","not","mak","ek","zi","ti","hd","ms","ws","vk","zr","zirr","st","gs","afa","mau","verw","we","hg","gut","erb","ebz","ebl","eba","bw","gf","lz","rnd","stat","kj","mw","zbj","typ","adr","ort","bj","mj","zim","gesch","hz","ekl","zst","kel","stp"];
 
 if(!$("grest").value)$("grest").value=nf(BL[$("bl").value],1);
 $("bl").addEventListener("change",()=>{$("grest").value=nf(BL[$("bl").value],1);calc()});
@@ -341,7 +355,7 @@ function drawDash(){syncObjUi();const R=OBJ.map(o=>({o,J:judge(o)})),nb=OBJ.filt
  h+=`<div class="row" style="margin-bottom:14px">${[["alle","Alle"],["angebot","Angebote"],["bestand","Im Bestand"]].map(([k,l])=>`<button class="sm ${DF==k?"p":""}" onclick="DF='${k}';drawDash()">${l}</button>`).join("")}</div>`;
  h+='<div class="dgrid">';
  R.filter(r=>DF=="alle"||(DF=="bestand")==(r.o.stat=="bestand")).sort((a,b)=>b.o.upd-a.o.upd).forEach(({o,J})=>{const m=J.m,cmp=inCmp(o.id);
-  h+=`<div class="oc" onclick="openObj('${o.id}')"><div style="display:flex;justify-content:space-between;gap:8px"><div><div class="nm">${esc(o.name||"Ohne Namen")}${o.stat=="bestand"?'<span class="pill">Im Bestand</span>':""}</div><div class="small">${num(o.kp)?nf(num(o.kp))+" €":"kein Kaufpreis"}${num(o.wf)?" · "+nf(num(o.wf))+" m²":""} · geändert ${fmtD(o.upd)}</div></div><button class="x${DELP==o.id?" del":""}" title="Löschen" onclick="event.stopPropagation();delObj('${o.id}')">${DELP==o.id?"Wirklich löschen?":IO.x}</button></div>
+  h+=`<div class="oc" onclick="openObj('${o.id}')"><div style="display:flex;justify-content:space-between;gap:8px"><div><div class="nm">${esc(o.name||"Ohne Namen")}${o.stat=="bestand"?'<span class="pill">Im Bestand</span>':""}</div><div class="small">${[o.typ,o.bj?"Bj. "+o.bj:"",num(o.zim)?o.zim+" Zimmer":"",o.ort].filter(Boolean).map(esc).join(" · ")||"keine Grunddaten"}</div><div class="small">${num(o.kp)?nf(num(o.kp))+" €":"kein Kaufpreis"}${num(o.wf)?" · "+nf(num(o.wf))+" m²":""} · geändert ${fmtD(o.upd)}</div></div><button class="x${DELP==o.id?" del":""}" title="Löschen" onclick="event.stopPropagation();delObj('${o.id}')">${DELP==o.id?"Wirklich löschen?":IO.x}</button></div>
   <div class="vd">${m?J.t:'<span class="small">noch nicht berechenbar</span>'}</div>
   ${m?`<div class="mt"><div><div class="l">Nettorendite</div><div class="v ${m.net>=J.zr?"pos":"neg"}">${nf(m.net,2)} %</div></div><div><div class="l">Cashflow/Monat</div><div class="v ${m.cf0>=0?"pos":"neg"}">${nf(m.cf0)} €</div></div><div><div class="l">Eigenkapitalrendite</div><div class="v ${m.irr==null?"":(m.irr*100>=J.zirr?"pos":"neg")}">${m.irr==null?"–":nf(m.irr*100,1)+" %"}</div></div></div>`:""}
   <div class="ft"><button class="sm" onclick="toggleStat('${o.id}',event)">${o.stat=="bestand"?"Aus Bestand nehmen":"In den Bestand"}</button><button class="${cmp?"p":""} sm" onclick="toggleCmp('${o.id}',event)">${cmp?"Im Vergleich":"Zum Vergleich"}</button></div></div>`});
@@ -423,8 +437,12 @@ function drawEW(m,P,kp){const jm=m.jm,pc=x=>jm?nf(x/jm*100,1)+" %":"";
  if(!P.erb&&(!P.bw||!P.gf))e+='<div class="note">Bodenwert fehlt: Bodenrichtwert und Grundstücksfläche unter „Annahmen“ eintragen, sonst ist der Ertragswert nur grob.</div>';
  if(P.erb)e+=`<div class="note ${P.ebl&&P.ebl<40?"warn":""}">Erbbaurecht: Erbbauzins ${nf(m.ebz0)} € pro Jahr, Restlaufzeit ${P.ebl||"?"} Jahre. ${P.ebl&&P.ebl<40?"Bei unter 40 Jahren Restlaufzeit ist die Finanzierung oft schwierig und der Wert sinkt deutlich. ":""}Der Verkaufswert nach ${P.hd} Jahren ist um den Laufzeitverlust gekürzt.</div>`;
  e+='<div class="small" style="margin-top:8px">Vereinfachtes Ertragswertverfahren. Maßgeblich ist das Gutachten der Bank oder des Gutachterausschusses.</div>';$("ew").innerHTML=e}
+function gdSummary(){const wf=num($("wf").value),we=num($("we").value)||0,zim=num($("zim").value),bj=num($("bj").value),mj=num($("mj").value),Y=new Date().getFullYear(),t=[];
+ if(wf>0&&we>0)t.push("Ø "+nf(wf/we,0)+" m² pro Einheit");if(wf>0&&zim>0)t.push("Ø "+nf(wf/zim,1)+" m² pro Zimmer");if(we>0&&zim>0)t.push("Ø "+nf(zim/we,1)+" Zimmer pro Einheit");
+ if(bj>1700&&bj<=Y+3){const alter=Y-bj,ref=mj>bj?mj:bj,rnd=Math.max(10,Math.round(80-(Y-ref)));t.push("Gebäudealter ca. "+alter+" Jahre");t.push("grobe Restnutzungsdauer ca. "+rnd+" Jahre (80 Jahre Gesamtnutzungsdauer, Modernisierung verlängert)")}
+ $("gdsum").textContent=t.join(" · ")}
 function calc(){
-  const rv=readVals(),P=parseP(rv),kp=num(rv.kp),zr=num(rv.zr)||0,zirr=num(rv.zirr)||0;
+  gdSummary();const rv=readVals(),P=parseP(rv),kp=num(rv.kp),zr=num(rv.zr)||0,zirr=num(rv.zirr)||0;
  saveCur();
  const V=$("verdict");
  if(!kp||!P.wf){V.className="verdict";V.innerHTML='<div class="empty"><div class="t">Lohnt sich der Kauf?</div><div class="small">Trag links Kaufpreis, Fläche, Miete und Eigenkapital ein. Dann bekommst du sofort ein Urteil mit Begründung.</div><button class="p" onclick="beispiel()">Beispiel ausprobieren</button></div>';$("kz").innerHTML=$("sens").innerHTML=$("verl").innerHTML=$("maxkp").innerHTML=$("stress").innerHTML=$("charts").innerHTML=$("ertrag").innerHTML=$("ew").innerHTML="";return}
@@ -471,6 +489,8 @@ function drawCL(){let h="",g="";CL.forEach((c,i)=>{if(c.g!=g){g=c.g;h+=`<div cla
 function persistCL(){saveCur()}
 function saveCL(){persistCL();drawCL()}
 function labelOf(id){const l=$(id).parentElement.querySelector("label");return l?l.childNodes[0].textContent.trim():id}
+function gdTable(v){const sel=id=>v[id]||"";const rows=[["Objektart",sel("typ")],["Adresse",[v.adr,v.ort].filter(Boolean).join(", ")],["Baujahr",v.bj],["Letzte Modernisierung",v.mj],["Wohneinheiten",v.we],["Zimmer",v.zim],["Wohnfläche",num(v.wf)?nf(num(v.wf))+" m²":""],["Grundstück",num(v.gf)?nf(num(v.gf))+" m²":""],["Geschosse",v.gesch],["Heizung",v.hz],["Energieeffizienzklasse",v.ekl],["Zustand",v.zst],["Keller",v.kel],["Stellplätze",v.stp]].filter(r=>r[1]!==""&&r[1]!=null);
+ return rows.length?`<table style="margin-top:24px;max-width:460px">${rows.map(r=>`<tr><td style="color:var(--mu)">${r[0]}</td><td style="text-align:right">${String(r[1]).replace(/</g,"&lt;")}</td></tr>`).join("")}</table>`:""}
 function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){toast("Bitte zuerst Kaufpreis, Fläche und Miete eintragen.");return}
  const d=new Date().toLocaleDateString("de-DE"),e=x=>String(x??"").replace(/</g,"&lt;");
  const ann=F.filter(f=>!["name"].includes(f)&&rv[f]!==""&&$(f)).map(f=>`<tr><td>${e(labelOf(f))}</td><td>${e($(f).tagName=="SELECT"?$(f).selectedOptions[0].text:rv[f])}</td></tr>`).join("");
@@ -478,7 +498,7 @@ function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){toast("Bit
  const done=CL.filter(c=>c.s==1).map(c=>`<li>${e(c.t)}${c.n?" – "+e(c.n):""}</li>`).join("");
  $("rep").innerHTML=`<div class="bar"><button onclick="window.print()" class="p">Drucken / als PDF sichern</button><button onclick="$('rep').classList.remove('show')">Schließen</button></div><div class="sheet">
  <div class="pg"><div class="meta">Kaufcheck Immobilie · Wirtschaftlichkeitsprüfung</div><h1>${e(rv.name||"Objekt")}</h1><div class="meta">Stand ${d}</div>
-  <div style="margin-top:40px">${$("verdict").outerHTML}</div><div class="small" style="margin-top:30px">Überschlagsrechnung vor Steuern. Keine Anlage-, Rechts- oder Steuerberatung.</div></div>
+  ${gdTable(rv)}<div style="margin-top:30px">${$("verdict").outerHTML}</div><div class="small" style="margin-top:30px">Überschlagsrechnung vor Steuern. Keine Anlage-, Rechts- oder Steuerberatung.</div></div>
  <div class="pg"><h3>Kennzahlen</h3><div class="cards">${$("kz").innerHTML}</div><h3>Stresstest</h3>${$("stress").innerHTML}<h3>Ertragsrechnung (Jahr 1)</h3>${$("ertrag").innerHTML}<h3>Ertragswert und Zinsdeckung</h3>${$("ew").innerHTML}<h3>Kaufpreis-Sensitivität</h3><table>${$("sens").innerHTML}</table><div class="small">${$("maxkp").innerHTML}</div></div>
  <div class="pg">${svHtml()}<h3>Grafik</h3>${$("charts").innerHTML}<h3>Entwicklung über die Haltedauer</h3><table>${$("verl").innerHTML}</table><h3>Annahmen und Eingaben</h3><table>${ann}</table>${rv.vglq?`<div class="small">Quelle Vergleichspreis: ${e(rv.vglq)}</div>`:""}${rv.mq?`<div class="small">Quelle Marktmiete: ${e(rv.mq)}</div>`:""}</div>
  <div class="pg"><h3>Offene Punkte und Risiken (Objektcheck)</h3><ul>${open||"<li>keine</li>"}</ul>${done?`<h3>Geklärt</h3><ul>${done}</ul>`:""}<div class="small" style="margin-top:20px">Alle Werte sind Annahmen des Nutzers bzw. Standardwerte und vor einer Kaufentscheidung zu prüfen. Steuerliche Angaben sind stark vereinfacht. Dieses Dokument ersetzt keine Beratung durch Steuerberater, Gutachter oder Bank.</div></div></div>`;
