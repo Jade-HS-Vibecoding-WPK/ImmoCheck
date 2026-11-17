@@ -135,6 +135,11 @@ header{padding:14px 16px 4px!important;gap:8px}header h1{font-size:22px!importan
 .top .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}.k{padding:14px 14px!important}.k .v{font-size:22px!important;margin-top:10px!important}.verdict{padding:18px 16px!important}.verdict .t{font-size:24px!important}
 .g{grid-template-columns:1fr 1fr!important}.dgrid{grid-template-columns:1fr!important}}
 .svt{width:100%;border-collapse:collapse;min-width:760px}.svt th{text-align:left;font-size:12.5px;font-weight:500;color:#9a9a94;padding:6px 6px}.svt td{padding:5px 4px;border-bottom:1px solid #f0f0ee}.svt td input,.svt td select{width:100%;padding:8px 10px}.svt td.r{padding-right:12px;font-weight:600}
+/* Fluchten: feste Labelhöhe, gleiche Feldhöhe */
+.g{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))!important;align-items:start}
+.g>div>label{display:block;min-height:2.95em;line-height:1.45}
+.g input:not([type=checkbox]),.g select{height:44px;box-sizing:border-box;line-height:normal}
+
 @media print{.shell{display:none!important}#rep{display:block!important;position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}#rep .bar{display:none}#rep .pg{border:none;border-radius:0;padding:0;margin:0;break-after:page;background:#fff;color:#000}#rep .pg:last-child{break-after:auto}
 header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
