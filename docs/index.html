@@ -123,6 +123,7 @@ body.hasobj .nl.obj{display:block!important}body.hasobj .mode.obj{display:flex!i
 button.sm{padding:6px 12px;border-radius:9px;font-size:13px}.cmp td input.chg{background:#fff6e3;border-color:#e0a030}
 body.hasobj.simple .sb a.adv{display:none!important}
 body.dv header .obj,body.dv.hasobj header button.obj,body.dv.hasobj .mode.obj{display:none!important}
+.x.del{background:#dc2626!important;color:#fff;width:auto;padding:6px 10px;font-size:12px;font-weight:600}
 @media print{.shell{display:none!important}#rep{display:block!important;position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}#rep .bar{display:none}#rep .pg{border:none;border-radius:0;padding:0;margin:0;break-after:page;background:#fff;color:#000}#rep .pg:last-child{break-after:auto}
 header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
@@ -216,7 +217,6 @@ const F=["name","kp","wf","san","vgl","vglq","mist","mmar","mq","mmode","lee","n
 
 if(!$("grest").value)$("grest").value=nf(BL[$("bl").value],1);
 $("bl").addEventListener("change",()=>{$("grest").value=nf(BL[$("bl").value],1);calc()});
-function neu(){if(confirm("Alle Eingaben löschen?")){try{localStorage.removeItem("kc1")}catch(e){}location.reload()}}
 function irr(cf){let lo=-0.99,hi=1,v=r=>cf.reduce((s,c,t)=>s+c/Math.pow(1+r,t),0);if(v(lo)*v(hi)>0)return null;for(let i=0;i<100;i++){const m=(lo+hi)/2;if(v(lo)*v(m)<=0)hi=m;else lo=m}return(lo+hi)/2}
 function model(kp,P){
  const wf=P.wf,sn=P.san,nk=(P.grest+P.not+P.mak)/100,ges=kp*(1+nk)+sn+P.gut;
@@ -256,6 +256,7 @@ function drawStress(){const S=stress(readVals());const el=$("stress");if(!S){el.
  let k="";if(S.kBE!=null)k+=`Break-even-Kaufpreis (Cashflow ±0): <b>${nf(S.kBE)} €</b> (${nf((S.kBE/S.J.kp-1)*100,1)} % zum Angebot). `;if(S.lBE!=null)k+=`Leerstand darf bis <b>${nf(S.lBE,1)} %</b> steigen. `;if(S.kz!=null)k+=`Der Cashflow wird negativ ab einem Zins von <b>${nf(S.kz,2)} %</b> (aktuell ${nf(S.J.P.zi,2)} %). `;
  if(S.km!=null)k+=`Die Miete darf bis <b>${nf(S.km,2)} €/m²</b> sinken, bevor der Cashflow negativ wird (aktuell ${nf(S.mi,2)} €/m²).`;
  $("stress").innerHTML="<table>"+h+"</table>"+(k?`<div class="note" style="margin-top:8px">${k}</div>`:"")}
+function toast(t){let e=document.getElementById("toast");if(!e){e=document.createElement("div");e.id="toast";e.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:12px;z-index:99;font-size:14px";document.body.appendChild(e)}e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>{e.style.display="none"},3500)}
 const esc=x=>String(x??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
 const uid=()=>Math.random().toString(36).slice(2,9);
 let OBJ=[],CMP=[],CUR=null;try{OBJ=JSON.parse(localStorage.getItem("kcobj")||"[]");CMP=JSON.parse(localStorage.getItem("kccmp")||"[]")}catch(e){}
@@ -270,7 +271,7 @@ function curObj(){return OBJ.find(o=>o.id==CUR)}
 function saveCur(){const o=curObj();if(!o)return;Object.assign(o,readVals());o.cl=CL;o.upd=Date.now();persistObj()}
 function newObj(example){const o={id:uid(),upd:Date.now(),cl:null,...DEF,...(example?EX:{name:"Neues Objekt"})};OBJ.push(o);persistObj();openObj(o.id)}
 function openObj(id,view){const o=OBJ.find(x=>x.id==id);if(!o)return;CUR=id;F.forEach(f=>$(f).value=o[f]??DEF[f]);CL=(o.cl&&o.cl.length==CL0.length)?o.cl:CL0.map(([g,t])=>({g,t,s:0,n:""}));$("sanq").textContent="";calc();drawCL();showView(view||"ueber")}
-function delObj(id){const o=OBJ.find(x=>x.id==id);if(!o||!confirm("Objekt „"+(o.name||"ohne Namen")+"“ wirklich löschen?"))return;OBJ=OBJ.filter(x=>x.id!=id);CMP=CMP.filter(c=>c.id!=id);if(CUR==id)CUR=null;persistObj();persistCmp();syncObjUi();showView("dash")}
+let DELP=null;function delObj(id){if(DELP!=id){DELP=id;drawDash();setTimeout(()=>{if(DELP==id){DELP=null;drawDash()}},4000);return}DELP=null;OBJ=OBJ.filter(x=>x.id!=id);CMP=CMP.filter(c=>c.id!=id);if(CUR==id)CUR=null;persistObj();persistCmp();syncObjUi();showView("dash");toast("Objekt gelöscht")}
 function copyObj(vals){const o={...vals,id:uid(),upd:Date.now(),name:(vals.name||"Objekt")+" (Kopie)",cl:null};OBJ.push(o);persistObj();drawDash();drawCmp()}
 function inCmp(id){return CMP.some(c=>c.id==id)}
 function toggleCmp(id,ev){if(ev)ev.stopPropagation();if(inCmp(id))CMP=CMP.filter(c=>c.id!=id);else CMP.push({id,ov:{}});persistCmp();drawDash()}
@@ -287,7 +288,7 @@ function drawDash(){syncObjUi();const R=OBJ.map(o=>({o,J:judge(o)}));const ok=R.
  <div class="k"><div class="kt"><span class="l">Im Vergleich</span></div><div class="v">${CMP.length}</div><div class="s"><a href="#" onclick="showView('vergleich');return false" style="color:inherit">Vergleich öffnen</a></div></div></div>`;
  h+='<div class="dgrid">';
  R.sort((a,b)=>b.o.upd-a.o.upd).forEach(({o,J})=>{const m=J.m,cmp=inCmp(o.id);
-  h+=`<div class="oc" onclick="openObj('${o.id}')"><div style="display:flex;justify-content:space-between;gap:8px"><div><div class="nm">${esc(o.name||"Ohne Namen")}</div><div class="small">${num(o.kp)?nf(num(o.kp))+" €":"kein Kaufpreis"}${num(o.wf)?" · "+nf(num(o.wf))+" m²":""}</div></div><button class="x" title="Löschen" onclick="event.stopPropagation();delObj('${o.id}')">${IO.x}</button></div>
+  h+=`<div class="oc" onclick="openObj('${o.id}')"><div style="display:flex;justify-content:space-between;gap:8px"><div><div class="nm">${esc(o.name||"Ohne Namen")}</div><div class="small">${num(o.kp)?nf(num(o.kp))+" €":"kein Kaufpreis"}${num(o.wf)?" · "+nf(num(o.wf))+" m²":""}</div></div><button class="x${DELP==o.id?" del":""}" title="Löschen" onclick="event.stopPropagation();delObj('${o.id}')">${DELP==o.id?"Wirklich löschen?":IO.x}</button></div>
   <div class="vd">${m?J.t:'<span class="small">noch nicht berechenbar</span>'}</div>
   ${m?`<div class="mt"><div><div class="l">Nettorendite</div><div class="v ${m.net>=J.zr?"pos":"neg"}">${nf(m.net,2)} %</div></div><div><div class="l">Cashflow/Monat</div><div class="v ${m.cf0>=0?"pos":"neg"}">${nf(m.cf0)} €</div></div><div><div class="l">Eigenkapitalrendite</div><div class="v ${m.irr==null?"":(m.irr*100>=J.zirr?"pos":"neg")}">${m.irr==null?"–":nf(m.irr*100,1)+" %"}</div></div></div>`:""}
   <div class="ft"><span class="small">geändert ${fmtD(o.upd)}</span><button class="${cmp?"p":""} sm" onclick="toggleCmp('${o.id}',event)">${cmp?"Im Vergleich":"Zum Vergleich"}</button></div></div>`});
@@ -390,7 +391,7 @@ function drawCL(){let h="",g="";CL.forEach((c,i)=>{if(c.g!=g){g=c.g;h+=`<div cla
 function persistCL(){saveCur()}
 function saveCL(){persistCL();drawCL()}
 function labelOf(id){const l=$(id).parentElement.querySelector("label");return l?l.childNodes[0].textContent.trim():id}
-function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){alert("Bitte zuerst Kaufpreis, Fläche und Miete eintragen.");return}
+function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){toast("Bitte zuerst Kaufpreis, Fläche und Miete eintragen.");return}
  const d=new Date().toLocaleDateString("de-DE"),e=x=>String(x??"").replace(/</g,"&lt;");
  const ann=F.filter(f=>!["name"].includes(f)&&rv[f]!==""&&$(f)).map(f=>`<tr><td>${e(labelOf(f))}</td><td>${e($(f).tagName=="SELECT"?$(f).selectedOptions[0].text:rv[f])}</td></tr>`).join("");
  const open=CL.filter(c=>c.s!=1).map(c=>`<li>${c.s==2?"Problem":"Offen"}: ${e(c.t)}${c.n?" – "+e(c.n):""}</li>`).join("");

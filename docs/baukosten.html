@@ -89,7 +89,7 @@ let S={ebenen:[{n:"Erdgeschoss",l:"",b:"",f:"",h:"",q:""}],bt:[],};
 const FIELDS=["wf","mi","miq","ans","bnk","gru","aus","bew","mau","zr","bud","name","typ","ort","stand","kat","zus","zusq","reg","fak","fakq"];
 function save(){try{const o={};FIELDS.forEach(f=>o[f]=$(f).value);o.netto=$("netto").checked;o.ebenen=S.ebenen;o.bt=S.bt;localStorage.setItem("bkr1",JSON.stringify(o))}catch(e){}}
 function load(){try{const o=JSON.parse(localStorage.getItem("bkr1")||"null");if(!o)return;FIELDS.forEach(f=>{if(o[f]!=null)$(f).value=o[f]});$("netto").checked=!!o.netto;S.ebenen=o.ebenen||S.ebenen;S.bt=o.bt||[]}catch(e){}}
-function neu(){if(confirm("Alle Eingaben löschen?")){try{localStorage.removeItem("bkr1")}catch(e){}location.reload()}}
+let NEUP=false;function neu(){const b=document.querySelector("header button:last-child");if(!NEUP){NEUP=true;b.textContent="Wirklich alles löschen?";setTimeout(()=>{NEUP=false;b.textContent="Neu"},4000);return}try{localStorage.removeItem("bkr1")}catch(e){}location.reload()}
 function katOptions(){const k=$("kat");k.innerHTML='<option value="">– bitte wählen –</option>'+BKI.map((r,i)=>`<option value="${i}">${r[0]}</option>`).join("")}
 function vorschlag(){const t=($("name").value+" "+$("typ").value);const f=FAM.find(([rx])=>rx.test(t));const el=$("vorschlag");
  if(!f){el.textContent="";return}const opts=BKI.map((r,i)=>[r[0],i]).filter(([n])=>n.toLowerCase().includes(f[1].toLowerCase()));
@@ -165,8 +165,9 @@ function calc(){
  LAST.sum=sum;LAST.bgf=(K&&g!=null&&K[5]!=null)?g*K[5]*f:null;
  vorschlag();save();
 }
+function toast(t){let e=document.getElementById("toast");if(!e){e=document.createElement("div");e.id="toast";e.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:12px;z-index:99;font-size:14px";document.body.appendChild(e)}e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>{e.style.display="none"},3500)}
 let LAST={sum:0,bgf:null};
-function toKauf(w){const v=w=="sum"?LAST.sum:LAST.bgf;if(!v){alert(w=="sum"?"Bitte zuerst Bauteilpositionen mit Menge und Preis eintragen.":"Bitte zuerst Kategorie und Flächen eintragen.");return}
+function toKauf(w){const v=w=="sum"?LAST.sum:LAST.bgf;if(!v){toast(w=="sum"?"Bitte zuerst Bauteilpositionen mit Menge und Preis eintragen.":"Bitte zuerst Kategorie und Flächen eintragen.");return}
  location.href="index.html?san="+Math.round(v)+"&sq="+encodeURIComponent(w=="sum"?"Bauteilsumme ("+($("name").value||"Projekt")+")":"BKI-Mittel über BGF ("+($("name").value||"Projekt")+")")}
 function csv(){const L=[["Projekt",$("name").value,"Planstand",$("stand").value],[],["Ebene","Länge","Breite","Fläche","Höhe","BGF m²","BRI m³","Beleg"]];
  S.ebenen.forEach((e,i)=>L.push([e.n,e.l,e.b,e.f,e.h,$("eg"+i).textContent,$("ei"+i).textContent,e.q]));
