@@ -8,10 +8,10 @@ Wirtschaftlichkeitsprüfung für Immobilien als einzelne Webseite. Läuft komple
 ## Funktionen
 - **Dashboard** mit allen Objekten, Status Angebot oder Bestand, Filter
 - **Kaufberechnung** pro Objekt: Nettorendite, Cashflow, Eigenkapitalrendite, Urteil mit Begründung
-- **Annahmen:** getrennte Bewirtschaftungskosten, Kaufnebenkosten, Finanzierung, Steuer (vereinfacht), Erbbaurecht
-- **Ertrag und Ertragswert** mit Zinsdeckung und Kapitaldienstdeckung
+- **Annahmen** in eingeklappten Gruppen: Miete und Kosten, Kaufnebenkosten, Finanzierung mit Effektivzins, Prognose und Ziele, Sonderfälle (Erbbaurecht, Ertragswert, Steuerwirkung)
+- **Analyse:** Ertragsrechnung, Zinsdeckung, Stresstest mit Kipppunkten, Kaufpreis-Sensitivität, Grafik und Jahresverlauf
 - **Sanierungsrechner** mit eigenen Preisen, Zuschlägen und Übernahme in die Kaufberechnung
-- **Stresstest** mit Kipppunkten, **Grafik und Verlauf**, **Checkliste** fürs Objekt
+- **Checkliste** fürs Objekt
 - **Objektvergleich** aus den Dashboard-Objekten, Werte nur für den Vergleich änderbar
 - **Portfolio** der Bestandsobjekte mit Restschuld, Nettovermögen und Zinsrisiko
 - **Bericht** mit Deckblatt als PDF (Drucken, als PDF sichern)
