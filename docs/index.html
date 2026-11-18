@@ -148,6 +148,7 @@ details[open]>summary::after{transform:rotate(-135deg)}details.grp .in{padding:0
 details.sub{margin-top:16px;border-top:1px solid #f0f0ee;padding-top:4px}details.sub>summary{padding:14px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--mu);font-size:14px;font-weight:600}details.sub>summary::-webkit-details-marker{display:none}
 @media(min-width:901px){.top .cards{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))!important}}
 .lgi{display:block;width:100%;max-width:190px;height:auto;mix-blend-mode:multiply}.sb .logo{flex:none;height:auto;min-height:0;overflow:visible;margin-bottom:10px}.logo{background:#fff!important;border-radius:12px;padding:10px 12px!important}#rep .replogo{height:44px;width:auto;display:block;margin-bottom:18px}@media print{.replogo{height:44px}}
+.msx{margin-top:16px}#msres{margin-top:12px}#msres .mbox{border:1px solid var(--bd);border-radius:14px;padding:14px 16px;display:grid;gap:10px}#msres .mbig{font-size:26px;font-weight:700}#msres .mgr{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}#msres .mgr b{display:block;font-size:15px}
 .erc{color:#dc2626;font-weight:600;font-size:13px;min-height:1.4em;margin-top:10px}
 .kontow{display:grid;gap:16px}.filebtn{display:inline-block;padding:6px 12px;border-radius:9px;background:var(--card);border:1px solid var(--bd);cursor:pointer;font-size:13px;color:var(--tx)}
 button.del{background:#dc2626!important;color:#fff!important;border-color:#dc2626!important}
@@ -180,6 +181,7 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div><label>PLZ und Ort</label><input id="ort" placeholder="z. B. 49324 Melle"></div>
 <div><label>Baujahr</label><input id="bj" class="r" placeholder="z. B. 1975"></div>
 <div><label>Wohneinheiten</label><input id="we" class="r" value="1"></div></div>
+<div class="msx"><div class="row" style="align-items:center;gap:12px"><button type="button" class="sm" id="msbtn" onclick="mietLookup()">Ortsübliche Miete zur Adresse abrufen</button><span class="small">Quelle: Zensus 2022, amtliche Durchschnittsmiete je Gitterzelle</span></div><div id="msres"></div></div>
 <details class="sub"><summary>Weitere Objektdaten</summary><div class="g" style="margin-top:14px">
 <div><label>Letzte Modernisierung (Jahr)</label><input id="mj" class="r" placeholder="z. B. 2015"></div>
 <div><label>Zimmer gesamt</label><input id="zim" class="r" placeholder="z. B. 18"></div>
@@ -302,6 +304,25 @@ function drawStress(){const S=stress(readVals());const el=$("stress");if(!S){el.
  let k="";if(S.kBE!=null)k+=`Break-even-Kaufpreis (Cashflow ±0): <b>${nf(S.kBE)} €</b> (${nf((S.kBE/S.J.kp-1)*100,1)} % zum Angebot). `;if(S.lBE!=null)k+=`Leerstand darf bis <b>${nf(S.lBE,1)} %</b> steigen. `;if(S.kz!=null)k+=`Der Cashflow wird negativ ab einem Zins von <b>${nf(S.kz,2)} %</b> (aktuell ${nf(S.J.P.zi,2)} %). `;
  if(S.km!=null)k+=`Die Miete darf bis <b>${nf(S.km,2)} €/m²</b> sinken, bevor der Cashflow negativ wird (aktuell ${nf(S.mi,2)} €/m²).`;
  $("stress").innerHTML="<table>"+h+"</table>"+(k?`<div class="note" style="margin-top:8px">${k}</div>`:"")}
+async function mietLookup(){const box=$("msres"),btn=$("msbtn"),q=($("adr").value+", "+$("ort").value).replace(/^[,\s]+|[,\s]+$/g,"");
+ if(!$("ort").value.trim()&&!$("adr").value.trim()){box.innerHTML='<div class="erc">Bitte zuerst Straße und PLZ/Ort eintragen.</div>';return}
+ btn.disabled=true;box.innerHTML='<div class="small">Adresse wird gesucht …</div>';
+ try{
+  const g=await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=de&q="+encodeURIComponent(q),{headers:{"Accept-Language":"de"}}).then(r=>r.json());
+  if(!g.length)throw new Error("Die Adresse wurde nicht gefunden. Bitte Schreibweise prüfen.");
+  const lon=+g[0].lon,lat=+g[0].lat,B="https://services2.arcgis.com/jUpNdisbWqRpMo35/arcgis/rest/services/Zensus2022_grid_final/FeatureServer/";
+  box.innerHTML='<div class="small">Mietwerte werden geladen …</div>';
+  let res=null;
+  for(const [L,nm] of [[0,"100-m-Zelle"],[1,"1-km-Zelle"],[2,"10-km-Zelle"]]){
+   const j=await fetch(B+L+"/query?f=json&geometry="+lon+","+lat+"&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&returnGeometry=false&outFields=durchschnMieteQM,Einwohner,durchschnFlaechejeWohn,Leerstandsquote,Eigentuemerquote",{}).then(r=>r.json());
+   const a=j.features&&j.features[0]&&j.features[0].attributes;
+   if(a&&a.durchschnMieteQM!=null){res={a,nm};break}}
+  if(!res)throw new Error("Für diese Lage liegt kein Zensus-Mietwert vor.");
+  const a=res.a,f=(x,d=2)=>x==null?"–":x.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d}),ist=num($("mist").value);
+  let vgl="";if(ist!=null&&ist>0){const d=(ist/a.durchschnMieteQM-1)*100;vgl=`<div class="small">Deine Ist-Miete liegt <b class="${d>=0?"pos":"neg"}">${f(Math.abs(d),1)} % ${d>=0?"über":"unter"}</b> dem Durchschnitt der Umgebung.</div>`}
+  box.innerHTML=`<div class="mbox"><div class="small">${esc(g[0].display_name)}</div><div><div class="small">Durchschnittliche Nettokaltmiete (${res.nm})</div><div class="mbig">${f(a.durchschnMieteQM)} € / m²</div></div><div class="mgr"><div><span class="small">Wohnfläche je Wohnung</span><b>${f(a.durchschnFlaechejeWohn,0)} m²</b></div><div><span class="small">Leerstandsquote</span><b>${f(a.Leerstandsquote,1)} %</b></div><div><span class="small">Eigentümerquote</span><b>${f(a.Eigentuemerquote,1)} %</b></div></div>${vgl}<div class="row"><button type="button" class="sm" onclick="$('mist').value='${String(a.durchschnMieteQM).replace('.',',')}';calc();toast('Als Ist-Miete übernommen')">Als Ist-Miete übernehmen</button></div><div class="small">Zensus-Durchschnitt aller Bestandsmieten (Stand 2022), kein qualifizierter Mietspiegel. Neuvermietungen liegen oft höher. Zellen mit wenigen Wohnungen werden aus Datenschutz auf größere Gebiete erweitert.</div></div>`;
+ }catch(e){box.innerHTML='<div class="erc">'+esc(e.message&&!/fetch|NetworkError/i.test(e.message)?e.message:"Abruf nicht möglich. Bitte Internetverbindung prüfen.")+'</div>'}
+ btn.disabled=false}
 function toast(t){let e=document.getElementById("toast");if(!e){e=document.createElement("div");e.id="toast";e.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:12px;z-index:99;font-size:14px";document.body.appendChild(e)}e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>{e.style.display="none"},3500)}
 const esc=x=>String(x??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
 const uid=()=>Math.random().toString(36).slice(2,9);
