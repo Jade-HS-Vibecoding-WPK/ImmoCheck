@@ -182,12 +182,12 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div><label>PLZ und Ort</label><input id="ort" placeholder="z. B. 49324 Melle"></div>
 <div><label>Baujahr</label><input id="bj" class="r" placeholder="z. B. 1975"></div>
 <div><label>Wohneinheiten</label><input id="we" class="r" value="1"></div></div>
+<div class="msx"><div class="g"><div><label>Bodenrichtwert €/m²</label><input id="brw" class="r" placeholder="wird bei Adresse geladen"></div><div><label>Grundstücksfläche m²</label><input id="gf" class="r" value="0"></div><div><label>Grundstückswert €</label><input id="brwsum" class="r" readonly tabindex="-1"></div></div><input type="hidden" id="brwi"><div class="row" style="align-items:center;gap:12px;margin-top:10px"><button type="button" class="sm" id="brbtn" onclick="brwLookup()">Bodenrichtwert zur Adresse abrufen</button><span class="small" id="brinfo"></span></div></div>
 <div class="msx"><div class="row" style="align-items:center;gap:12px"><button type="button" class="sm" id="msbtn" onclick="mietLookup()">Ortsübliche Miete zur Adresse abrufen</button><span class="small">Quelle: Zensus 2022, amtliche Durchschnittsmiete je Gitterzelle</span></div><div id="msres"></div></div>
 <details class="sub"><summary>Weitere Objektdaten</summary><div class="g" style="margin-top:14px">
 <div><label>Letzte Modernisierung (Jahr)</label><input id="mj" class="r" placeholder="z. B. 2015"></div>
 <div><label>Zimmer gesamt</label><input id="zim" class="r" placeholder="z. B. 18"></div>
 <div><label>Geschosse</label><input id="gesch" class="r" placeholder="z. B. 3"></div>
-<div><label>Grundstücksfläche m²</label><input id="gf" class="r" value="0"></div>
 <div><label>Heizung</label><select id="hz"><option value="">– bitte wählen –</option><option>Gas</option><option>Öl</option><option>Wärmepumpe</option><option>Fernwärme</option><option>Holz oder Pellets</option><option>Strom</option><option>Sonstige</option></select></div>
 <div><label>Energieeffizienzklasse</label><select id="ekl"><option value="">– bitte wählen –</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
 <div><label>Zustand</label><select id="zst"><option value="">– bitte wählen –</option><option>Neuwertig</option><option>Gepflegt</option><option>Renovierungsbedürftig</option><option>Sanierungsstau</option></select></div>
@@ -273,7 +273,7 @@ const nf=(x,d=0)=>x==null||!isFinite(x)?"–":x.toLocaleString("de-DE",{minimumF
 const num=s=>{s=String(s??"").trim().replace(/\s/g,"");if(!s)return null;if(s.includes(","))s=s.replace(/\./g,"").replace(",",".");const v=parseFloat(s);return isNaN(v)?null:v};
 const BL={"Baden-Württemberg":5,"Bayern":3.5,"Berlin":6,"Brandenburg":6.5,"Bremen":5,"Hamburg":5.5,"Hessen":6,"Mecklenburg-Vorpommern":6,"Niedersachsen":5,"Nordrhein-Westfalen":6.5,"Rheinland-Pfalz":5,"Saarland":6.5,"Sachsen":5.5,"Sachsen-Anhalt":5,"Schleswig-Holstein":6.5,"Thüringen":5};
 $("bl").innerHTML=Object.keys(BL).map(k=>`<option>${k}</option>`).join("");
-const F=["name","kp","wf","san","vgl","mist","lee","verw","ihr","hg","bl","grest","not","mak","ek","zi","ti","hd","ms","ws","zr","zirr","erb","ebz","ebl","eba","bw","gf","lz","rnd","ewon","steu","st","gs","afa","we","zb","dis","geb","stat","kj","mw","zbj","typ","adr","ort","bj","mj","zim","gesch","hz","ekl","zst","kel","stp","ssd","hzj","ekw","eaj","dachj","fasj","fenj","elj","ssn"];
+const F=["name","kp","wf","san","vgl","mist","lee","verw","ihr","hg","bl","grest","not","mak","ek","zi","ti","hd","ms","ws","zr","zirr","erb","ebz","ebl","eba","bw","gf","lz","rnd","ewon","steu","st","gs","afa","we","zb","dis","geb","stat","kj","mw","zbj","typ","adr","ort","bj","mj","zim","gesch","hz","ekl","zst","kel","stp","ssd","hzj","ekw","eaj","dachj","fasj","fenj","elj","ssn","brw","brwi"];
 
 if(!$("grest").value)$("grest").value=nf(BL[$("bl").value],1);
 $("bl").addEventListener("change",()=>{$("grest").value=nf(BL[$("bl").value],1);calc()});
@@ -319,6 +319,32 @@ function drawStress(){const S=stress(readVals());const el=$("stress");if(!S){el.
  let k="";if(S.kBE!=null)k+=`Break-even-Kaufpreis (Cashflow ±0): <b>${nf(S.kBE)} €</b> (${nf((S.kBE/S.J.kp-1)*100,1)} % zum Angebot). `;if(S.lBE!=null)k+=`Leerstand darf bis <b>${nf(S.lBE,1)} %</b> steigen. `;if(S.kz!=null)k+=`Der Cashflow wird negativ ab einem Zins von <b>${nf(S.kz,2)} %</b> (aktuell ${nf(S.J.P.zi,2)} %). `;
  if(S.km!=null)k+=`Die Miete darf bis <b>${nf(S.km,2)} €/m²</b> sinken, bevor der Cashflow negativ wird (aktuell ${nf(S.mi,2)} €/m²).`;
  $("stress").innerHTML="<table>"+h+"</table>"+(k?`<div class="note" style="margin-top:8px">${k}</div>`:"")}
+const geoC={};
+async function geocode(q){if(geoC[q])return geoC[q];const g=await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&countrycodes=de&q="+encodeURIComponent(q),{headers:{"Accept-Language":"de"}}).then(r=>r.json());if(!g.length)throw new Error("Die Adresse wurde nicht gefunden. Bitte Schreibweise prüfen.");return geoC[q]={lat:+g[0].lat,lon:+g[0].lon,state:(g[0].address||{}).state||"",name:g[0].display_name}}
+const addrQ=()=>($("adr").value+", "+$("ort").value).replace(/^[,\s]+|[,\s]+$/g,"");
+const EZ={B:"baureifes Land",E:"Bauerwartungsland",R:"Rohbauland",LF:"Land-/Forstwirtschaft",SF:"sonstige Fläche"};
+function pip(pt,ring){let c=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){const[a,b]=ring[i],[x,y]=ring[j];if((a>pt[0])!=(x>pt[0])&&pt[1]<(y-b)*(pt[0]-a)/(x-a)+b)c=!c}return c}
+const posL=e=>{const n=e.textContent.trim().split(/\s+/).map(Number),r=[];for(let i=0;i+1<n.length;i+=2)r.push([n[i],n[i+1]]);return r};
+async function brwNI(lat,lon){const d=0.0003,u="https://opendata.lgln.niedersachsen.de/doorman/noauth/boris_wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=boris:BR_BodenrichtwertZonal&COUNT=50&SRSNAME=urn:ogc:def:crs:EPSG::4326&BBOX="+[lat-d,lon-d,lat+d,lon+d].join(",")+",urn:ogc:def:crs:EPSG::4326";
+ const x=new DOMParser().parseFromString(await fetch(u).then(r=>r.text()),"text/xml"),T=(m,t)=>{const e=m.getElementsByTagName(t)[0];return e?e.textContent.trim():""},hit=[];
+ for(const m of x.getElementsByTagName("wfs:member")){let inside=false;for(const pg of m.getElementsByTagName("gml:Polygon")){const ex=pg.getElementsByTagName("gml:exterior")[0];if(!ex||!pip([lat,lon],posL(ex.getElementsByTagName("gml:posList")[0])))continue;if([...pg.getElementsByTagName("gml:interior")].some(h=>pip([lat,lon],posL(h.getElementsByTagName("gml:posList")[0]))))continue;inside=true}
+  const w=parseFloat(T(m,"boris:bodenrichtwert"));if(inside&&!isNaN(w))hit.push({w,st:T(m,"boris:stichtag"),nu:T(m.getElementsByTagName("boris:nutzung")[0]||m,"boris:art"),ez:T(m,"boris:entwicklungszustand"),zn:T(m,"boris:bodenrichtwertzoneName"),gm:T(m.getElementsByTagName("boris:gemeinde")[0]||m,"boris:name")})}
+ hit.sort((a,b)=>b.st.localeCompare(a.st));return hit[0]||null}
+async function brwNRW(lat,lon){const L="0,2,3,5,6,8,9,11,12,14,15,17,18,20,21",d=0.0003,u="https://www.wms.nrw.de/boris/wms_nw_brw?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS="+L+"&QUERY_LAYERS="+L+"&CRS=EPSG:4326&BBOX="+[lat-d,lon-d,lat+d,lon+d].join(",")+"&WIDTH=101&HEIGHT=101&I=50&J=50&INFO_FORMAT=application/geo%2Bjson&FEATURE_COUNT=20";
+ const t=(await fetch(u).then(r=>r.text())).replace(/[\u0000-\u001f]/g," "),j=JSON.parse(t),hit=[];
+ for(const f of j.features||[]){const p=f.properties||{},w=parseFloat(String(p.BRW||"").replace(",","."));if(!isNaN(w)&&w>0)hit.push({w,st:p.STAG||"",nu:(p.NUTA||"").trim(),ez:(p.ENTW||"").trim(),zn:"",gm:p.GENA||""})}
+ hit.sort((a,b)=>b.st.localeCompare(a.st));return hit[0]||null}
+async function brwLookup(){const inf=$("brinfo"),btn=$("brbtn");if(!$("ort").value.trim()){inf.innerHTML='<span class="neg">Bitte zuerst Straße und PLZ/Ort eintragen.</span>';return}
+ btn.disabled=true;inf.textContent="Bodenrichtwert wird geladen …";$("brw").value="";$("brwi").value="";calc();
+ try{const g=await geocode(addrQ());let r=null;
+  if(g.state=="Niedersachsen")r=await brwNI(g.lat,g.lon);else if(g.state=="Nordrhein-Westfalen")r=await brwNRW(g.lat,g.lon);
+  else{inf.innerHTML='Für '+esc(g.state||"dieses Bundesland")+' ist der Abruf noch nicht eingebaut. Bitte <a href="https://www.bodenrichtwerte-boris.de/boris-d/" target="_blank" rel="noopener" style="color:var(--ac)">im Bodenrichtwertportal</a> nachschlagen und den Wert eintragen.';btn.disabled=false;return}
+  if(!r){inf.textContent="Für diese Lage wurde keine Bodenrichtwertzone gefunden. Bitte Wert selbst eintragen.";btn.disabled=false;return}
+  $("brw").value=String(r.w).replace(".",",");
+  const info=["Stand "+(r.st||"?").split("-").reverse().join("."),r.nu&&"Nutzung "+r.nu,EZ[r.ez]||r.ez,r.zn||r.gm].filter(Boolean).join(" · ");$("brwi").value=info;inf.textContent=info;calc()
+ }catch(e){inf.textContent=/Adresse/.test(e.message)?e.message:"Abruf nicht möglich. Bitte Internetverbindung prüfen oder Wert selbst eintragen."}
+ btn.disabled=false}
+['adr','ort'].forEach(i=>$(i).addEventListener("change",()=>{if($("adr").value.trim()&&$("ort").value.trim())brwLookup()}));
 async function mietLookup(){const box=$("msres"),btn=$("msbtn"),q=($("adr").value+", "+$("ort").value).replace(/^[,\s]+|[,\s]+$/g,"");
  if(!$("ort").value.trim()&&!$("adr").value.trim()){box.innerHTML='<div class="erc">Bitte zuerst Straße und PLZ/Ort eintragen.</div>';return}
  btn.disabled=true;box.innerHTML='<div class="small">Adresse wird gesucht …</div>';
@@ -403,7 +429,7 @@ function delAll(){const b=$("kdel");if(b.dataset.s!="1"){b.dataset.s="1";b.textC
  OBJ.forEach(o=>dkDelAll(o.id));OBJ=[];CMP=[];CUR=null;persistObj();persistCmp();syncObjUi();showView("dash");toast("Alle Daten gelöscht")}
 function saveCur(){const o=curObj();if(!o)return;Object.assign(o,readVals());o.cl=CL;o.sv=SV;o.upd=Date.now();persistObj()}
 function newObj(example){const o={id:uid(),upd:Date.now(),cl:null,...DEF,...(example?EX:{name:"Neues Objekt"})};OBJ.push(o);persistObj();openObj(o.id)}
-function openObj(id,view){const o=OBJ.find(x=>x.id==id);if(!o)return;CUR=id;F.forEach(f=>$(f).value=o[f]??DEF[f]);CL=(o.cl&&o.cl.length==CL0.length)?o.cl:CL0.map(([g,t])=>({g,t,s:0,n:""}));SV=o.sv?JSON.parse(JSON.stringify(o.sv)):SV0();$("sanq").textContent="";calc();drawCL();showView(view||"ueber")}
+function openObj(id,view){const o=OBJ.find(x=>x.id==id);if(!o)return;CUR=id;F.forEach(f=>$(f).value=o[f]??DEF[f]);$("brinfo").textContent=$("brwi").value;CL=(o.cl&&o.cl.length==CL0.length)?o.cl:CL0.map(([g,t])=>({g,t,s:0,n:""}));SV=o.sv?JSON.parse(JSON.stringify(o.sv)):SV0();$("sanq").textContent="";calc();drawCL();showView(view||"ueber")}
 let DELP=null;function delObj(id){if(DELP!=id){DELP=id;drawDash();setTimeout(()=>{if(DELP==id){DELP=null;drawDash()}},4000);return}DELP=null;OBJ=OBJ.filter(x=>x.id!=id);CMP=CMP.filter(c=>c.id!=id);dkDelAll(id);if(CUR==id)CUR=null;persistObj();persistCmp();syncObjUi();showView("dash");toast("Objekt gelöscht")}
 function copyObj(vals){const o={...vals,id:uid(),upd:Date.now(),name:(vals.name||"Objekt")+" (Kopie)",cl:null};OBJ.push(o);persistObj();drawDash();drawCmp()}
 let DF="alle";function toggleStat(id,ev){if(ev)ev.stopPropagation();const o=OBJ.find(x=>x.id==id);o.stat=o.stat=="bestand"?"angebot":"bestand";persistObj();drawDash()}
@@ -509,6 +535,8 @@ function drawEW(m,P,kp){const jm=m.jm,pc=x=>jm?nf(x/jm*100,1)+" %":"";
 function gdSummary(){const wf=num($("wf").value),we=num($("we").value)||0,zim=num($("zim").value),bj=num($("bj").value),mj=num($("mj").value),Y=new Date().getFullYear(),t=[];
  if(wf>0&&we>0)t.push("Ø "+nf(wf/we,0)+" m² pro Einheit");if(wf>0&&zim>0)t.push("Ø "+nf(wf/zim,1)+" m² pro Zimmer");if(we>0&&zim>0)t.push("Ø "+nf(zim/we,1)+" Zimmer pro Einheit");
  if(bj>1700&&bj<=Y+3){const alter=Y-bj,ref=mj>bj?mj:bj,rnd=Math.max(10,Math.round(80-(Y-ref)));t.push("Gebäudealter ca. "+alter+" Jahre");t.push("grobe Restnutzungsdauer ca. "+rnd+" Jahre (80 Jahre Gesamtnutzungsdauer, Modernisierung verlängert)")}
+ const brw=num($("brw").value),gfl=num($("gf").value),kpp=num($("kp").value);$("brwsum").value=(brw>0&&gfl>0)?nf(brw*gfl,0):"";
+ if(brw>0&&gfl>0&&kpp>0)t.push("Grundstückswert ca. "+nf(brw*gfl,0)+" € ("+nf(brw*gfl/kpp*100,0)+" % vom Kaufpreis)");
  const hzj=num($("hzj").value),eaj=num($("eaj").value);
  if(hzj>1900&&hzj<=Y){const a=Y-hzj;t.push("Heizung "+a+" Jahre alt"+(a>=20?" (Austausch einplanen)":""))}
  if(eaj>2000){t.push(eaj<Y?"Energieausweis abgelaufen":"Energieausweis gültig bis "+eaj)}
@@ -580,7 +608,7 @@ function drawCL(){let h="",g="";CL.forEach((c,i)=>{if(c.g!=g){g=c.g;h+=`<div cla
 function persistCL(){saveCur()}
 function saveCL(){persistCL();drawCL()}
 function labelOf(id){const l=$(id).parentElement.querySelector("label");return l?l.childNodes[0].textContent.trim():id}
-function gdTable(v){const sel=id=>v[id]||"";const rows=[["Objektart",sel("typ")],["Adresse",[v.adr,v.ort].filter(Boolean).join(", ")],["Baujahr",v.bj],["Letzte Modernisierung",v.mj],["Wohneinheiten",v.we],["Zimmer",v.zim],["Wohnfläche",num(v.wf)?nf(num(v.wf))+" m²":""],["Grundstück",num(v.gf)?nf(num(v.gf))+" m²":""],["Geschosse",v.gesch],["Heizung",v.hz],["Energieeffizienzklasse",v.ekl],["Zustand",v.zst],["Keller",v.kel],["Stellplätze",v.stp],["Sanierungsstand",v.ssd],["Heizung eingebaut",v.hzj],["Energiekennwert",num(v.ekw)?nf(num(v.ekw),0)+" kWh/(m²·a)":""],["Energieausweis gültig bis",v.eaj],["Dach erneuert",v.dachj],["Fassade / Dämmung",v.fasj],["Fenster erneuert",v.fenj],["Elektrik / Leitungen",v.elj],["Sanierungsnotizen",v.ssn]].filter(r=>r[1]!==""&&r[1]!=null);
+function gdTable(v){const sel=id=>v[id]||"";const rows=[["Objektart",sel("typ")],["Adresse",[v.adr,v.ort].filter(Boolean).join(", ")],["Baujahr",v.bj],["Letzte Modernisierung",v.mj],["Wohneinheiten",v.we],["Zimmer",v.zim],["Wohnfläche",num(v.wf)?nf(num(v.wf))+" m²":""],["Grundstück",num(v.gf)?nf(num(v.gf))+" m²":""],["Bodenrichtwert",num(v.brw)?nf(num(v.brw))+" €/m²"+(v.brwi?" ("+v.brwi+")":""):""],["Grundstückswert (Bodenrichtwert × Fläche)",num(v.brw)&&num(v.gf)?nf(num(v.brw)*num(v.gf),0)+" €":""],["Geschosse",v.gesch],["Heizung",v.hz],["Energieeffizienzklasse",v.ekl],["Zustand",v.zst],["Keller",v.kel],["Stellplätze",v.stp],["Sanierungsstand",v.ssd],["Heizung eingebaut",v.hzj],["Energiekennwert",num(v.ekw)?nf(num(v.ekw),0)+" kWh/(m²·a)":""],["Energieausweis gültig bis",v.eaj],["Dach erneuert",v.dachj],["Fassade / Dämmung",v.fasj],["Fenster erneuert",v.fenj],["Elektrik / Leitungen",v.elj],["Sanierungsnotizen",v.ssn]].filter(r=>r[1]!==""&&r[1]!=null);
  return rows.length?`<table style="margin-top:24px;max-width:460px">${rows.map(r=>`<tr><td style="color:var(--mu)">${r[0]}</td><td style="text-align:right">${String(r[1]).replace(/</g,"&lt;")}</td></tr>`).join("")}</table>`:""}
 function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){toast("Bitte zuerst Kaufpreis, Fläche und Miete eintragen.");return}
  const d=new Date().toLocaleDateString("de-DE"),e=x=>String(x??"").replace(/</g,"&lt;");
