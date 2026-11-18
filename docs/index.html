@@ -183,7 +183,7 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div><label>PLZ und Ort</label><input id="ort" placeholder="z. B. 49324 Melle"></div>
 <div><label>Baujahr</label><input id="bj" class="r" placeholder="z. B. 1975"></div>
 <div><label>Wohneinheiten</label><input id="we" class="r" value="1"></div></div>
-<div class="msx"><div class="g"><div><label>Bodenrichtwert €/m²</label><input id="brw" class="r" placeholder="wird bei Adresse geladen"></div><div><label>Grundstücksfläche m²</label><input id="gf" class="r" value="0"></div><div><label>Grundstückswert €</label><input id="brwsum" class="r" readonly tabindex="-1"></div></div><input type="hidden" id="brwi"><div class="row" style="align-items:center;gap:12px;margin-top:10px"><button type="button" class="sm" id="brbtn" onclick="brwLookup()">Bodenrichtwert zur Adresse abrufen</button><span class="small" id="brinfo"></span></div></div>
+<div class="msx"><div class="g"><div><label>Bodenrichtwert €/m²</label><input id="brw" class="r" placeholder="wird bei Adresse geladen"></div><div><label>Grundstücksfläche m² (Flurstück)</label><input id="gf" class="r" value="0"></div><div><label>Grundstückswert €</label><input id="brwsum" class="r" readonly tabindex="-1"></div></div><input type="hidden" id="brwi"><div class="row" style="align-items:center;gap:12px;margin-top:10px"><button type="button" class="sm" id="brbtn" onclick="brwLookup()">Bodenrichtwert zur Adresse abrufen</button><span class="small" id="brinfo"></span></div></div>
 <div class="msx"><div class="row" style="align-items:center;gap:12px"><button type="button" class="sm" id="msbtn" onclick="mietLookup()">Ortsübliche Miete zur Adresse abrufen</button><span class="small">Quelle: Zensus 2022, amtliche Durchschnittsmiete je Gitterzelle</span></div><div id="msres"></div></div>
 <details class="sub"><summary>Weitere Objektdaten</summary><div class="g" style="margin-top:14px">
 <div><label>Letzte Modernisierung (Jahr)</label><input id="mj" class="r" placeholder="z. B. 2015"></div>
@@ -341,11 +341,12 @@ async function brwNRW(lat,lon){const L="0,2,3,5,6,8,9,11,12,14,15,17,18,20,21",d
 async function brwLookup(){const inf=$("brinfo"),btn=$("brbtn");if(!$("ort").value.trim()){inf.innerHTML='<span class="neg">Bitte zuerst Straße und PLZ/Ort eintragen.</span>';return}
  btn.disabled=true;inf.textContent="Bodenrichtwert wird geladen …";$("brw").value="";$("brwi").value="";calc();
  try{const g=await geocode(addrQ());let r=null;
+  if(WFSB[g.state]){try{const k=g.lat+","+g.lon,P=PARC[k]||(PARC[k]=await parcelInfo(g));if(P.polys){$("gf").value=String(Math.round(P.flaeche));inf.textContent="Flurstücksfläche "+fN(P.flaeche)+" m² übernommen …"}}catch(e){}}
   if(g.state=="Niedersachsen")r=await brwNI(g.lat,g.lon);else if(g.state=="Nordrhein-Westfalen")r=await brwNRW(g.lat,g.lon);
   else{inf.innerHTML='Für '+esc(g.state||"dieses Bundesland")+' ist der Abruf noch nicht eingebaut. Bitte <a href="https://www.bodenrichtwerte-boris.de/boris-d/" target="_blank" rel="noopener" style="color:var(--ac)">im Bodenrichtwertportal</a> nachschlagen und den Wert eintragen.';btn.disabled=false;return}
   if(!r){inf.textContent="Für diese Lage wurde keine Bodenrichtwertzone gefunden. Bitte Wert selbst eintragen.";btn.disabled=false;return}
   $("brw").value=String(r.w).replace(".",",");
-  const info=["Stand "+(r.st||"?").split("-").reverse().join("."),r.nu&&"Nutzung "+r.nu,EZ[r.ez]||r.ez,r.zn||r.gm].filter(Boolean).join(" · ");$("brwi").value=info;inf.textContent=info;calc()
+  const info=[(WFSB[g.state]&&PARC[g.lat+","+g.lon]&&PARC[g.lat+","+g.lon].polys)?"Fläche aus Flurstück":"","Stand "+(r.st||"?").split("-").reverse().join("."),r.nu&&"Nutzung "+r.nu,EZ[r.ez]||r.ez,r.zn||r.gm].filter(Boolean).join(" · ");$("brwi").value=info;inf.textContent=info;calc()
  }catch(e){inf.textContent=/Adresse/.test(e.message)?e.message:"Abruf nicht möglich. Bitte Internetverbindung prüfen oder Wert selbst eintragen."}
  btn.disabled=false}
 ['adr','ort'].forEach(i=>$(i).addEventListener("change",()=>{if($("adr").value.trim()&&$("ort").value.trim())brwLookup()}));
