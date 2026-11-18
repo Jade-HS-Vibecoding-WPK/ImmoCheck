@@ -1,4 +1,4 @@
-# Kaufklar
+# ImmoCheck
 
 Wirtschaftlichkeitsprüfung für Immobilien als einzelne Webseite. Läuft komplett im Browser, ohne Installation, ohne KI und ohne Server. Alle Eingaben bleiben im Browser des Nutzers.
 
@@ -21,3 +21,5 @@ Einstellungen, Pages, Quelle `main`, Ordner `/docs`.
 
 ## Hinweis
 Überschlagsrechnung vor Steuern. Standardwerte (Steuersätze, Zuschläge, Liegenschaftszins, Abschreibung) sind Annahmen und vor einer Entscheidung zu prüfen. Keine Anlage-, Rechts- oder Steuerberatung.
+
+Live: https://jade-hs-vibecoding-wpk.github.io/ImmoCheck/
