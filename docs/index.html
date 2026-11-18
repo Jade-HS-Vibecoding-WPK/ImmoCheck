@@ -192,7 +192,17 @@ header button,.noprint{display:none!important}body{background:#fff;color:#000}ma
 <div><label>Energieeffizienzklasse</label><select id="ekl"><option value="">– bitte wählen –</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
 <div><label>Zustand</label><select id="zst"><option value="">– bitte wählen –</option><option>Neuwertig</option><option>Gepflegt</option><option>Renovierungsbedürftig</option><option>Sanierungsstau</option></select></div>
 <div><label>Keller</label><select id="kel"><option value="">– bitte wählen –</option><option>Ja</option><option>Nein</option><option>Teilweise</option></select></div>
-<div><label>Stellplätze</label><input id="stp" class="r" placeholder="z. B. 6"></div></div></details>
+<div><label>Stellplätze</label><input id="stp" class="r" placeholder="z. B. 6"></div>
+<div><label>Sanierungsstand</label><select id="ssd"><option value="">– bitte wählen –</option><option>Unsaniert</option><option>Teilsaniert</option><option>Weitgehend saniert</option><option>Kernsaniert</option></select></div>
+<div><label>Heizung eingebaut (Jahr)</label><input id="hzj" class="r" placeholder="z. B. 2004"></div>
+<div><label>Energiekennwert kWh/(m²·a)</label><input id="ekw" class="r" placeholder="z. B. 145"></div>
+<div><label>Energieausweis gültig bis (Jahr)</label><input id="eaj" class="r" placeholder="z. B. 2032"></div>
+<div><label>Dach erneuert (Jahr)</label><input id="dachj" class="r" placeholder="z. B. 1998"></div>
+<div><label>Fassade / Dämmung (Jahr)</label><input id="fasj" class="r" placeholder="z. B. 2010"></div>
+<div><label>Fenster erneuert (Jahr)</label><input id="fenj" class="r" placeholder="z. B. 2012"></div>
+<div><label>Elektrik / Leitungen (Jahr)</label><input id="elj" class="r" placeholder="z. B. 1985"></div>
+<div style="grid-column:1/-1"><label>Notizen zum Sanierungsstand</label><input id="ssn" placeholder="z. B. Bäder 2019 neu, Treppenhaus steht an"></div>
+</div></details>
 <div class="small" id="gdsum" style="margin-top:12px"></div></section>
 
 <details class="grp" data-view="annahmen" open><summary>Miete und Kosten</summary><div class="in"><div class="g">
@@ -263,7 +273,7 @@ const nf=(x,d=0)=>x==null||!isFinite(x)?"–":x.toLocaleString("de-DE",{minimumF
 const num=s=>{s=String(s??"").trim().replace(/\s/g,"");if(!s)return null;if(s.includes(","))s=s.replace(/\./g,"").replace(",",".");const v=parseFloat(s);return isNaN(v)?null:v};
 const BL={"Baden-Württemberg":5,"Bayern":3.5,"Berlin":6,"Brandenburg":6.5,"Bremen":5,"Hamburg":5.5,"Hessen":6,"Mecklenburg-Vorpommern":6,"Niedersachsen":5,"Nordrhein-Westfalen":6.5,"Rheinland-Pfalz":5,"Saarland":6.5,"Sachsen":5.5,"Sachsen-Anhalt":5,"Schleswig-Holstein":6.5,"Thüringen":5};
 $("bl").innerHTML=Object.keys(BL).map(k=>`<option>${k}</option>`).join("");
-const F=["name","kp","wf","san","vgl","mist","lee","verw","ihr","hg","bl","grest","not","mak","ek","zi","ti","hd","ms","ws","zr","zirr","erb","ebz","ebl","eba","bw","gf","lz","rnd","ewon","steu","st","gs","afa","we","zb","dis","geb","stat","kj","mw","zbj","typ","adr","ort","bj","mj","zim","gesch","hz","ekl","zst","kel","stp"];
+const F=["name","kp","wf","san","vgl","mist","lee","verw","ihr","hg","bl","grest","not","mak","ek","zi","ti","hd","ms","ws","zr","zirr","erb","ebz","ebl","eba","bw","gf","lz","rnd","ewon","steu","st","gs","afa","we","zb","dis","geb","stat","kj","mw","zbj","typ","adr","ort","bj","mj","zim","gesch","hz","ekl","zst","kel","stp","ssd","hzj","ekw","eaj","dachj","fasj","fenj","elj","ssn"];
 
 if(!$("grest").value)$("grest").value=nf(BL[$("bl").value],1);
 $("bl").addEventListener("change",()=>{$("grest").value=nf(BL[$("bl").value],1);calc()});
@@ -499,6 +509,9 @@ function drawEW(m,P,kp){const jm=m.jm,pc=x=>jm?nf(x/jm*100,1)+" %":"";
 function gdSummary(){const wf=num($("wf").value),we=num($("we").value)||0,zim=num($("zim").value),bj=num($("bj").value),mj=num($("mj").value),Y=new Date().getFullYear(),t=[];
  if(wf>0&&we>0)t.push("Ø "+nf(wf/we,0)+" m² pro Einheit");if(wf>0&&zim>0)t.push("Ø "+nf(wf/zim,1)+" m² pro Zimmer");if(we>0&&zim>0)t.push("Ø "+nf(zim/we,1)+" Zimmer pro Einheit");
  if(bj>1700&&bj<=Y+3){const alter=Y-bj,ref=mj>bj?mj:bj,rnd=Math.max(10,Math.round(80-(Y-ref)));t.push("Gebäudealter ca. "+alter+" Jahre");t.push("grobe Restnutzungsdauer ca. "+rnd+" Jahre (80 Jahre Gesamtnutzungsdauer, Modernisierung verlängert)")}
+ const hzj=num($("hzj").value),eaj=num($("eaj").value);
+ if(hzj>1900&&hzj<=Y){const a=Y-hzj;t.push("Heizung "+a+" Jahre alt"+(a>=20?" (Austausch einplanen)":""))}
+ if(eaj>2000){t.push(eaj<Y?"Energieausweis abgelaufen":"Energieausweis gültig bis "+eaj)}
  $("gdsum").textContent=t.join(" · ")}
 function effZins(D,zi,ti,years,dis,geb){const z=zi/1200,rate=D*(zi+ti)/1200,n=years*12;let b=D,zs=0;for(let i=0;i<n;i++){const zz=b*z;zs+=zz;b=Math.max(0,b+zz-rate)}
  const D0=D*(1-(dis+geb)/100),f=r=>{let pv=0,df=1;for(let t=1;t<=n;t++){df/=(1+r);pv+=rate*df}return D0-pv-b*df};
@@ -567,7 +580,7 @@ function drawCL(){let h="",g="";CL.forEach((c,i)=>{if(c.g!=g){g=c.g;h+=`<div cla
 function persistCL(){saveCur()}
 function saveCL(){persistCL();drawCL()}
 function labelOf(id){const l=$(id).parentElement.querySelector("label");return l?l.childNodes[0].textContent.trim():id}
-function gdTable(v){const sel=id=>v[id]||"";const rows=[["Objektart",sel("typ")],["Adresse",[v.adr,v.ort].filter(Boolean).join(", ")],["Baujahr",v.bj],["Letzte Modernisierung",v.mj],["Wohneinheiten",v.we],["Zimmer",v.zim],["Wohnfläche",num(v.wf)?nf(num(v.wf))+" m²":""],["Grundstück",num(v.gf)?nf(num(v.gf))+" m²":""],["Geschosse",v.gesch],["Heizung",v.hz],["Energieeffizienzklasse",v.ekl],["Zustand",v.zst],["Keller",v.kel],["Stellplätze",v.stp]].filter(r=>r[1]!==""&&r[1]!=null);
+function gdTable(v){const sel=id=>v[id]||"";const rows=[["Objektart",sel("typ")],["Adresse",[v.adr,v.ort].filter(Boolean).join(", ")],["Baujahr",v.bj],["Letzte Modernisierung",v.mj],["Wohneinheiten",v.we],["Zimmer",v.zim],["Wohnfläche",num(v.wf)?nf(num(v.wf))+" m²":""],["Grundstück",num(v.gf)?nf(num(v.gf))+" m²":""],["Geschosse",v.gesch],["Heizung",v.hz],["Energieeffizienzklasse",v.ekl],["Zustand",v.zst],["Keller",v.kel],["Stellplätze",v.stp],["Sanierungsstand",v.ssd],["Heizung eingebaut",v.hzj],["Energiekennwert",num(v.ekw)?nf(num(v.ekw),0)+" kWh/(m²·a)":""],["Energieausweis gültig bis",v.eaj],["Dach erneuert",v.dachj],["Fassade / Dämmung",v.fasj],["Fenster erneuert",v.fenj],["Elektrik / Leitungen",v.elj],["Sanierungsnotizen",v.ssn]].filter(r=>r[1]!==""&&r[1]!=null);
  return rows.length?`<table style="margin-top:24px;max-width:460px">${rows.map(r=>`<tr><td style="color:var(--mu)">${r[0]}</td><td style="text-align:right">${String(r[1]).replace(/</g,"&lt;")}</td></tr>`).join("")}</table>`:""}
 function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){toast("Bitte zuerst Kaufpreis, Fläche und Miete eintragen.");return}
  const d=new Date().toLocaleDateString("de-DE"),e=x=>String(x??"").replace(/</g,"&lt;");
