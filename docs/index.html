@@ -24,7 +24,7 @@ body.simple .adv{display:none!important}.mode{display:flex}.mode button{border-r
 .hi{display:inline-block;width:15px;height:15px;border-radius:50%;background:var(--ac2);color:var(--ac);font-size:10px;text-align:center;line-height:15px;margin-left:4px;cursor:help;position:relative;font-style:normal}
 .hi:hover::after,.hi:focus::after{content:attr(data-t);position:absolute;left:0;top:19px;z-index:9;width:240px;background:var(--tx);color:var(--bg);padding:8px 10px;border-radius:7px;font-size:12px;line-height:1.35;font-weight:400}
 .best{background:var(--ok);font-weight:700}#rep{display:none}#rep.show{display:block;position:fixed;inset:0;background:var(--bg);overflow:auto;z-index:50;padding:16px}
-#rep .bar{max-width:820px;margin:0 auto 10px;display:flex;gap:8px;justify-content:flex-end}#rep .sheet{max-width:820px;margin:0 auto}
+#rep .rbar{max-width:820px;margin:0 auto 10px;display:flex;gap:8px;justify-content:flex-end}#rep .sheet{max-width:820px;margin:0 auto}
 #rep .pg{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:26px 30px;margin-bottom:14px}
 #rep h1{font-size:30px;margin:60px 0 6px}#rep h3{margin:14px 0 6px;font-size:15px}#rep .meta{color:var(--mu)}
 #rep table{margin-bottom:8px}#rep .cards{grid-template-columns:repeat(2,1fr)}
@@ -150,14 +150,14 @@ details.sub{margin-top:16px;border-top:1px solid #f0f0ee;padding-top:4px}details
 #auth{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:center;padding:20px;overflow:auto}
 #auth .ac{background:var(--card);border-radius:24px;padding:32px;width:100%;max-width:420px}
 #auth .tabs{display:flex;background:var(--bg);border-radius:12px;padding:4px;margin:20px 0 6px}#auth .tabs button{flex:1;border:0;background:transparent;border-radius:9px;padding:9px;font-weight:600}#auth .tabs button.on{background:#111;color:#fff}
-#auth form>label{margin-top:14px}#auth label.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx);margin-top:14px}#auth label.chk input{width:auto;height:auto}
+#auth form>label{margin-top:14px}#auth #pw2w label{margin-top:14px}#auth label.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx);margin-top:14px}#auth label.chk input{width:auto;height:auto}
 .erc{color:#dc2626;font-weight:600;font-size:13px;min-height:1.4em;margin-top:10px}
 body.locked .shell{visibility:hidden}
 .kontow{display:grid;gap:16px}.filebtn{display:inline-block;padding:6px 12px;border-radius:9px;background:var(--card);border:1px solid var(--bd);cursor:pointer;font-size:13px;color:var(--tx)}
 button.del{background:#dc2626!important;color:#fff!important;border-color:#dc2626!important}
 @media(prefers-color-scheme:dark){#auth .tabs button.on{background:#f1f1ef;color:#111}}
 @media print{#auth{display:none!important}}
-@media print{.shell{display:none!important}#rep{display:block!important;position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}#rep .bar{display:none}#rep .pg{border:none;border-radius:0;padding:0;margin:0;break-after:page;background:#fff;color:#000}#rep .pg:last-child{break-after:auto}
+@media print{.shell{display:none!important}#rep{display:block!important;position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}#rep .rbar{display:none}#rep .pg{border:none;border-radius:0;padding:0;margin:0;break-after:page;background:#fff;color:#000}#rep .pg:last-child{break-after:auto}
 header button,.noprint{display:none!important}body{background:#fff;color:#000}main{display:block}section,.verdict{break-inside:avoid}input,select{border:none;background:none;appearance:none;padding:0}}
 </style></head><body>
 <div id="auth" class="hid"><div class="ac"><div class="logo" style="padding:0"><span class="lg"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 15L16 6l10.5 9"/><path d="M9 13.5V25h14V13.5"/><path d="M12.6 19.3l2.6 2.6 4.4-4.9"/></svg></span><div><b>Kaufklar</b><div class="small">Kaufentscheidung in Zahlen</div></div></div>
@@ -570,7 +570,7 @@ function showReport(){calc();const rv=readVals(),J=judge(rv);if(!J.m){toast("Bit
  const ann=F.filter(f=>!["name"].includes(f)&&rv[f]!==""&&$(f)).map(f=>`<tr><td>${e(labelOf(f))}</td><td>${e($(f).tagName=="SELECT"?$(f).selectedOptions[0].text:rv[f])}</td></tr>`).join("");
  const open=CL.filter(c=>c.s!=1).map(c=>`<li>${c.s==2?"Problem":"Offen"}: ${e(c.t)}${c.n?" – "+e(c.n):""}</li>`).join("");
  const done=CL.filter(c=>c.s==1).map(c=>`<li>${e(c.t)}${c.n?" – "+e(c.n):""}</li>`).join("");
- $("rep").innerHTML=`<div class="bar"><button onclick="window.print()" class="p">Drucken / als PDF sichern</button><button onclick="$('rep').classList.remove('show')">Schließen</button></div><div class="sheet">
+ $("rep").innerHTML=`<div class="rbar"><button onclick="window.print()" class="p">Drucken / als PDF sichern</button><button onclick="$('rep').classList.remove('show')">Schließen</button></div><div class="sheet">
  <div class="pg"><div class="meta">Kaufklar · Wirtschaftlichkeitsprüfung</div><h1>${e(rv.name||"Objekt")}</h1><div class="meta">Stand ${d}</div>
   ${gdTable(rv)}<div style="margin-top:30px">${$("verdict").outerHTML}</div><div class="small" style="margin-top:30px">Überschlagsrechnung vor Steuern. Keine Anlage-, Rechts- oder Steuerberatung.</div></div>
  <div class="pg"><h3>Kennzahlen</h3><div class="cards">${$("kz").innerHTML}${$("kz2").innerHTML}</div><h3>Stresstest</h3>${$("stress").innerHTML}<h3>Ertragsrechnung (Jahr 1)</h3>${$("ertrag").innerHTML}<h3>Ertragswert und Zinsdeckung</h3>${$("ew").innerHTML}<h3>Kaufpreis-Sensitivität</h3><table>${$("sens").innerHTML}</table><div class="small">${$("maxkp").innerHTML}</div></div>
