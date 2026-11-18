@@ -6,9 +6,9 @@ Referenz: `docs/index.html` in diesem Repository ist eine voll funktionierende E
 Web-App für Immobilien-Käufer. Man legt Objekte an (Kaufangebote oder Bestand), bekommt pro Objekt ein Urteil (Kaufen, Nur mit Verhandlung, Nicht kaufen) mit Begründung, rechnet Sanierung, Stresstest und Ertrag, vergleicht Objekte und überblickt den Bestand im Portfolio. Alles auf Deutsch.
 
 ## Was zu ersetzen ist
-1. **Konten:** In der Einzeldatei gibt es lokale Konten im Browser (Passwort als Hash in localStorage). Ersetze das durch echte Anmeldung mit E-Mail und Passwort über Supabase Auth: Registrieren, Anmelden, Abmelden, Passwort ändern, Passwort vergessen (E-Mail-Link), Konto löschen. Passwort mindestens 8 Zeichen.
+1. **Konten:** Die Einzeldatei hat keine Anmeldung. Ergänze echte Anmeldung mit E-Mail und Passwort über Supabase Auth: Anmeldeseite mit Registrieren und Anmelden, Abmelden, Passwort ändern, Passwort vergessen (E-Mail-Link), Konto löschen (eigene Seite „Konto“). Passwort mindestens 8 Zeichen.
 2. **Daten:** Statt localStorage Supabase-Datenbank. Jeder Nutzer sieht nur seine eigenen Daten (Row Level Security auf `user_id = auth.uid()`).
-3. **Export und Import** der Objekte als JSON (gibt es in der Einzeldatei unter „Konto“) beibehalten.
+3. **Export und Import** der Objekte als JSON (gibt es in der Einzeldatei unter „Daten sichern“) beibehalten.
 
 ## Datenmodell (Supabase)
 - `objects`: `id uuid`, `user_id uuid`, `name text`, `status text` (angebot oder bestand), `data jsonb` (alle Eingabefelder, siehe unten), `checklist jsonb`, `renovation jsonb`, `created_at`, `updated_at`
@@ -45,11 +45,11 @@ Standardwerte: `lee 5`, `verw 300`, `ihr 12`, `not 2`, `mak 3,57`, `zi 3,8`, `ti
 - Eingabeprüfung: Kaufpreis und Fläche größer 0, Miete und Eigenkapital nicht negativ, Prozentfelder (Leerstand, Zins, Tilgung, Steuern, Gebühren, Steuersatz, Gebäudeanteil, AfA) zwischen 0 und 100. Bei Fehlern „Bitte Eingaben prüfen“ mit Liste statt Zahlen.
 
 ## Seiten und Navigation (wie in der Einzeldatei)
-- Anmeldeseite (Anmelden, Registrieren).
+- Anmeldeseite (Anmelden, Registrieren), neu in Lovable.
 - Dashboard: Kennzahlen, Filter (Alle, Angebote, Im Bestand), Objektkarten mit Urteil und drei Zahlen, „In den Bestand“, „Zum Vergleich“, Löschen mit Zwei-Klick-Bestätigung (kein Browser-Dialog), Karte „Neues Objekt“.
 - Portfolio.
 - Objekte vergleichen: Objekte aus dem Dashboard auswählen, „Letzte 3 Objekte hinzufügen“, Eingaben direkt änderbar (nur für den Vergleich, gelb markiert, Zurücksetzen, als neues Objekt speichern), Ergebnisse mit Balken in einer Tabelle mit fester Spaltenbreite, nichts darf versetzt sein.
-- Konto: Passwort ändern, Export, Import, Konto löschen.
+- Konto (neu): Passwort ändern, Export, Import, Konto löschen.
 - Pro Objekt: Kaufberechnung (Urteil, fünf Kennzahlen, Angebot, Objektdaten), Annahmen (fünf aufklappbare Gruppen plus Bestand), Sanierungsrechner, Analyse (weitere Kennzahlen, Ertragsrechnung, Zinsdeckung, Stresstest, Kaufpreis-Sensitivität, Grafik, Jahresverlauf), Checkliste (16 Prüfpunkte mit Status offen, geklärt, Problem und Notiz).
 - Bericht als PDF per Druckansicht: Deckblatt mit Grunddaten und Urteil, Kennzahlen und Stresstest, Sanierung, Verlauf und Annahmen, offene Punkte.
 
