@@ -1,4 +1,4 @@
-# Auftrag für Lovable: Kaufcheck Immobilie
+# Auftrag für Lovable: Kaufklar
 
 Referenz: `docs/index.html` in diesem Repository ist eine voll funktionierende Einzeldatei (HTML, CSS, JavaScript) mit der gesamten Oberfläche und allen Berechnungen. Baue die App in React, TypeScript und Tailwind **genau so nach**: gleiche Rechenwege, gleiche Texte, gleiches Design. Lies die Datei zuerst vollständig. Ersetze nur die Teile, die in der Einzeldatei provisorisch sind (siehe „Was zu ersetzen ist“).
 

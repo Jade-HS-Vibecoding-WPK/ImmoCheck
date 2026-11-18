@@ -1,4 +1,4 @@
-# Kaufcheck Immobilie
+# Kaufklar
 
 Wirtschaftlichkeitsprüfung für Immobilien als einzelne Webseite. Läuft komplett im Browser, ohne Installation, ohne KI und ohne Server. Alle Eingaben bleiben im Browser des Nutzers.
 
