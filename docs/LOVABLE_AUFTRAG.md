@@ -17,7 +17,7 @@ Web-App für Immobilien-Käufer. Man legt Objekte an (Kaufangebote oder Bestand)
 
 ### Eingabefelder (`data`)
 Angebot: `name`, `stat`, `kp` (Kaufpreis), `wf` (Wohnfläche), `mist` (Ist-Miete €/m² Monat), `ek` (Eigenkapital), `zi` (Zins %), `ti` (Tilgung %), `san` (Sanierung €).
-Objektdaten: `typ`, `adr`, `ort`, `bj`, `we` (Wohneinheiten), `mj`, `zim`, `gesch`, `gf` (Grundstück m²), `hz`, `ekl`, `zst`, `kel`, `stp`.
+Objektdaten: `typ`, `adr`, `ort`, `bj`, `we` (Wohneinheiten), `mj`, `zim`, `gesch`, `gf` (Flurstücksfläche m²), `hz`, `ekl`, `zst`, `kel`, `stp`, `ssd` (Sanierungsstand), `hzj` (Heizung eingebaut), `ekw` (Energiekennwert), `eaj` (Energieausweis bis), `dachj`, `fasj`, `fenj`, `elj` (Erneuerungsjahre), `ssn` (Notizen), `brw` (Bodenrichtwert €/m²), `brwi` (Info zum Bodenrichtwert). Grundstückswert = `brw` × `gf`.
 Miete und Kosten: `lee` (Leerstand und Mietausfall %), `verw` (€ pro Einheit und Jahr), `ihr` (Instandhaltung €/m² und Jahr), `hg` (Hausgeld nicht umlagefähig €/Monat, nur bei Eigentumswohnung), `vgl` (Vergleichspreis €/m²).
 Kauf: `bl` (Bundesland), `grest`, `not`, `mak` (je %).
 Finanzierung: `zb` (Zinsbindung Jahre), `dis` (Disagio %), `geb` (Gebühr %).
@@ -65,3 +65,9 @@ Heller Grauton als Hintergrund, weiße Karten mit großen Rundungen, schwarze Ha
 
 ## Später (nicht jetzt bauen)
 Objekt per Link oder Text anlegen (Inserat auslesen), Suchprofile mit E-Mail-Benachrichtigung, automatische Vorbewertung eingehender Inserate. Kein Massen-Crawling von Portalen wegen Nutzungsbedingungen und Rechtslage.
+
+## Zusätzliche Funktionen (bereits in der Einzeldatei)
+- **Adressdaten:** Nominatim-Geocoding. Ortsübliche Miete aus Zensus 2022 (ArcGIS FeatureServer `Zensus2022_grid_final`, Feld `durchschnMieteQM`, Ebenen 100 m, 1 km, 10 km als Rückfall). Bodenrichtwert und Flurstück/Gebäude für Niedersachsen (`opendata.lgln.niedersachsen.de/doorman/noauth/boris_wfs`, `alkis_wfs_einfach`, `alkis_wms`) und NRW (`www.wms.nrw.de/boris/wms_nw_brw`, `www.wfs.nrw.de/geobasis/wfs_nw_alkis_vereinfacht`, `wms_nw_alkis`). GRZ (Ist) = bebaute Fläche des Flurstücks geteilt durch Flurstücksfläche, per Rasterabtastung.
+- **Objektseite (nur Bestand):** Foto, Kennzahlen, Karte mit Umschaltung Karte, Luftbild (Esri) und Flurkarte, Flurstück rot und Gebäude orange (Leaflet 1.9.4).
+- **Dokumente (nur Bestand):** Upload mit Kategorie, Öffnen, Download, Löschen. In Lovable in Supabase Storage mit RLS ablegen.
+- **Bericht:** DIN A4 (`@page size A4`), Deckblatt mit Foto, Lageseite mit Flurkarte und Luftbild, Seitenzahlen.
