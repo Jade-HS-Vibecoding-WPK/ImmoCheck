@@ -48,8 +48,5 @@ Objekte liegen im `localStorage`, Dokumente und Fotos in der IndexedDB des Brows
 ## Veröffentlichen mit GitHub Pages
 Einstellungen, Pages, Quelle `main`, Ordner `/docs`.
 
-## Weiterentwicklung
-`docs/LOVABLE_AUFTRAG.md` beschreibt, wie die Einzeldatei in Lovable mit Anmeldung (E-Mail und Passwort) und Datenbank nachgebaut werden kann.
-
 ## Hinweis
 Überschlagsrechnung vor Steuern. Standardwerte (Steuersätze, Zuschläge, Liegenschaftszins, Abschreibung) sind Annahmen und vor einer Entscheidung zu prüfen. Zensus-Mieten sind Durchschnitte, kein qualifizierter Mietspiegel. Die GRZ ist aus dem Kataster berechnet und ersetzt nicht den Bebauungsplan. Keine Anlage-, Rechts- oder Steuerberatung.
